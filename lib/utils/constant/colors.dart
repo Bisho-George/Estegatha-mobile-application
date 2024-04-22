@@ -23,6 +23,10 @@ class ConstantColors {
   static const Color buttonSecondary = Color(0xFF6C757D);
   static const Color buttonDisabled = Color(0xFFC4C4C4);
 
+  // text input colors
+  static const Color textInputPrimary = Color(0xFF03045E);
+  static const Color textInputBorder = Color(0xFFCFCFCF);
+
   // Border colors
   static const Color borderPrimary = Color(0xFF03045E);
   static const Color borderSecondary = Color(0xFFE6E6E6);
