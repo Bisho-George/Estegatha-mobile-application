@@ -9,7 +9,7 @@ library;
 
 class ConstantImages {
   // -- App Logo
-  static const String AppLogo = "";
+  static const String AppLogo = "assets/logo.png";
 
   // -- OnBoarding Images
   static const String onBoardingImage1 = "";
@@ -18,4 +18,9 @@ class ConstantImages {
 
   //Profile
   static const String user = "";
+
+  // Sign in
+  static const String signInPng = "assets/Welcome.png";
+  static const String forgetPassword = "assets/Forgot_password.png";
+  static const String mailSentPng = "assets/mail_sent.png";
 }
