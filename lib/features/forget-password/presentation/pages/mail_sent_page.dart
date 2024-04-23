@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:estegatha/features/sign-in/presentation/pages/sing_in_page.dart';
+import 'package:estegatha/features/sign-in/presentation/pages/sign_in_page.dart';
 import 'package:estegatha/utils/common/widgets/custom_elevated_button.dart';
 import 'package:estegatha/utils/constant/image_strings.dart';
 import 'package:flutter/cupertino.dart';

@@ -23,4 +23,9 @@ class ConstantImages {
   static const String signInPng = "assets/Welcome.png";
   static const String forgetPassword = "assets/Forgot_password.png";
   static const String mailSentPng = "assets/mail_sent.png";
+
+  // Sign up
+  static const String signUpPng = "assets/sign_up.png";
+
+
 }

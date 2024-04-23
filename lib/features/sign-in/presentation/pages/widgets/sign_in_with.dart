@@ -1,5 +1,5 @@
 import 'package:estegatha/features/sign-in/presentation/pages/sign_in_with_phone_page.dart';
-import 'package:estegatha/features/sign-in/presentation/pages/sing_in_page.dart';
+import 'package:estegatha/features/sign-in/presentation/pages/sign_in_page.dart';
 import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
 import 'package:flutter/material.dart';
