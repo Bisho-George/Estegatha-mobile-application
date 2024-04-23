@@ -1,6 +1,9 @@
-import 'package:estegatha/authentication/presentation/pages/landing.dart';
-import 'package:estegatha/components/buttons.dart';
+import 'package:estegatha/features/forget-password/presentation/veiw_models/forget-password/forget_password_cubit.dart';
+import 'package:estegatha/features/sign-in/presentation/pages/sign_in_page.dart';
+import 'package:estegatha/features/sign-in/presentation/veiw_models/login_cubit/login_cubit.dart';
+import 'package:estegatha/features/sign-up/cubit/date_picker/date_picker_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
   runApp(const MyApp());
@@ -9,12 +12,23 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: LandingIntro(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<LoginCubit>(
+          create: (context) => LoginCubit(),
+        ),
+        BlocProvider<ForgetPasswordCubit>(
+          create: (context) => ForgetPasswordCubit(),
+        ),
+        // Add more providers as needed
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        home: SignInPage(),
+      ),
     );
   }
 }
