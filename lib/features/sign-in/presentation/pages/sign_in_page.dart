@@ -3,6 +3,7 @@ import 'package:estegatha/features/sign-in/presentation/pages/widgets/sign_in_fo
 import 'package:estegatha/features/sign-in/presentation/pages/widgets/sign_in_header.dart';
 import 'package:estegatha/features/sign-in/presentation/pages/widgets/sign_in_with.dart';
 import 'package:estegatha/features/sign-in/presentation/veiw_models/login_cubit/login_cubit.dart';
+import 'package:estegatha/features/sign-up/presentation/views/personal_info.dart';
 import 'package:estegatha/home_page.dart';
 import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
@@ -86,6 +87,10 @@ class SignInPage extends StatelessWidget {
                             TextButton(
                               onPressed: () {
                                 // TODO: Navigate to sign up page
+                                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                  return SignUpView();
+                                }));
+
                               },
                               child: const Text(
                                 "Create Account",

@@ -27,6 +27,34 @@ class Validation {
     return null;
   }
 
+  static String? validateDefaultFields(String? fieldType, String? value) {
+    if (value == null || value.isEmpty) {
+      return '$fieldType is required';
+    }
+    return null;
+  }
+
+  static String? validateBirthdate(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your birthday';
+    }
+
+    // Check if the entered value is in a valid date format
+    try {
+      DateTime birthday = DateTime.parse(value);
+      // Check if the entered date is not in the future
+      if (birthday.isAfter(DateTime.now())) {
+        return 'Birthday cannot be in the future';
+      }
+      // Optionally, you can add more validation rules, such as minimum age
+
+    } catch (e) {
+      return 'Please enter a valid date (YYYY-MM-DD)';
+    }
+
+    return null; // Return null if validation passes
+  }
+
   static String? validatePassword(String? value) {
     if (value == null || value.isEmpty) {
       return 'Password is required';
