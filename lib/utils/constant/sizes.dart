@@ -17,6 +17,7 @@ class ConstantSizes {
   static const double iconSm = 16.0;
   static const double iconMd = 24.0;
   static const double iconLg = 32.0;
+  static const double iconXL = 64.0;
 
   // Font sizes
   static const double fontSizeSm = 14.0;
@@ -34,6 +35,7 @@ class ConstantSizes {
   static const FontWeight fontWeightRegular = FontWeight.w400;
   static const FontWeight fontWeightSemiBold = FontWeight.w600;
   static const FontWeight fontWeightBold = FontWeight.w700;
+  static const FontWeight fontWeightExtraBold = FontWeight.w800;
 
   // Button sizes
   static const double buttonHeight = 64.0;

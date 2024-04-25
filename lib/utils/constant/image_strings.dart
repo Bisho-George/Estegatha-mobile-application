@@ -9,12 +9,13 @@ library;
 
 class ConstantImages {
   // -- App Logo
-  static const String AppLogo = "assets/logo.png";
+  static const String AppLogo2 = "assets/logo.png";
+  static const String AppLogo = "assets/logo2.png";
 
   // -- OnBoarding Images
-  static const String onBoardingImage1 = "";
-  static const String onBoardingImage2 = "";
-  static const String onBoardingImage3 = "";
+  static const String onBoardingImage1 = "assets/landing_1.png";
+  static const String onBoardingImage2 = "assets/landing_2.png";
+  static const String onBoardingImage3 = "assets/check.png";
 
   //Profile
   static const String user = "";
