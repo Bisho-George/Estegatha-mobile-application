@@ -1,10 +1,12 @@
 import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CustomTextField extends StatefulWidget {
   final TextEditingController? controller;
   final void Function(String)? onChanged;
+  final void Function()? onPressed;
   final String? labelText;
   final String? hintText;
   final String? Function(String?)? validator;
@@ -12,6 +14,9 @@ class CustomTextField extends StatefulWidget {
   final Icon? prefixIcon;
   final Widget? suffixIcon;
   final TextInputType? keyboardType;
+  final TextAlign? textAlign;
+  final List<TextInputFormatter>? inputFormatters;
+
 
   const CustomTextField({
     super.key,
@@ -24,6 +29,10 @@ class CustomTextField extends StatefulWidget {
     this.prefixIcon,
     this.suffixIcon,
     this.keyboardType,
+    this.onPressed,
+    this.textAlign,
+    this.inputFormatters
+
   });
 
   @override
@@ -37,7 +46,10 @@ class _MyWidgetState extends State<CustomTextField> {
       keyboardType: widget.keyboardType,
       obscureText: widget.obscureText!,
       controller: widget.controller,
+      onTap: widget.onPressed,
       onChanged: widget.onChanged,
+      textAlign: widget.textAlign ?? TextAlign.left,
+      inputFormatters: widget.inputFormatters,
       validator: widget.validator,
       decoration: InputDecoration(
         prefixIconColor: ConstantColors.darkGrey,

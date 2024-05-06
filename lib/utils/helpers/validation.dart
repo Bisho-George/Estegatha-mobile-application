@@ -41,19 +41,36 @@ class Validation {
 
     // Check if the entered value is in a valid date format
     try {
-      DateTime birthday = DateTime.parse(value);
+      // Split the date string by '/' and rearrange it to 'MM-DD-YYYY' format
+      List<String> dateParts = value.toString().split('/');
+      if (dateParts.length != 3) {
+        throw const FormatException('Invalid date format');
+      }
+
+      int year = int.parse(dateParts[2]);
+      int month = int.parse(dateParts[0]);
+      int day = int.parse(dateParts[1]);
+
+      // Construct a DateTime object without time components
+      DateTime birthday = DateTime(year, month, day);
+
       // Check if the entered date is not in the future
       if (birthday.isAfter(DateTime.now())) {
         return 'Birthday cannot be in the future';
       }
+
+      print("successfully");
       // Optionally, you can add more validation rules, such as minimum age
 
-    } catch (e) {
-      return 'Please enter a valid date (YYYY-MM-DD)';
+    } on FormatException {
+      return 'Please enter a valid date (MM/DD/YYYY)';
     }
 
     return null; // Return null if validation passes
   }
+
+
+
 
   static String? validatePassword(String? value) {
     if (value == null || value.isEmpty) {

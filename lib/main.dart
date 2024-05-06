@@ -3,7 +3,9 @@ import 'package:estegatha/features/landing/presentation/pages/landing1.dart';
 import 'package:estegatha/features/landing/presentation/pages/landing2.dart';
 import 'package:estegatha/features/sign-in/presentation/pages/sign_in_page.dart';
 import 'package:estegatha/features/sign-in/presentation/veiw_models/login_cubit/login_cubit.dart';
-import 'package:estegatha/features/sign-up/cubit/date_picker/date_picker_cubit.dart';
+import 'package:estegatha/features/sign-up/presentation/views/personal_info_view.dart';
+import 'package:estegatha/features/sign-up/presentation/views/test_view.dart';
+import 'package:estegatha/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -32,6 +34,8 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         home: LandingIntro(),
+        initialRoute: PersonalInfoView.routeName,
+        routes: routes,
       ),
     );
   }
