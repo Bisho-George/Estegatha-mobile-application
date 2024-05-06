@@ -37,6 +37,9 @@ dependencies:
   intl_phone_field: ^3.2.0
   google_maps_flutter: ^2.6.1
   geolocator: ^11.0.0
+  equatable: ^2.0.5
+  http: ^1.2.1
+  flutter_screenutil: ^5.9.0
 
 dev_dependencies:
   flutter_test:
@@ -65,7 +68,6 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
-
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

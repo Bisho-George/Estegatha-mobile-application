@@ -31,6 +31,7 @@ class ConstantSizes {
   static const FontWeight fontWeightRegular = FontWeight.w400;
   static const FontWeight fontWeightSemiBold = FontWeight.w600;
   static const FontWeight fontWeightBold = FontWeight.w700;
+  static const FontWeight fontWeightExtraBold = FontWeight.w800;
 
   // Button sizes
   static const double buttonHeight = 18.0;

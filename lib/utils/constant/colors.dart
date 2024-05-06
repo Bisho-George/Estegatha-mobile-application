@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 class ConstantColors {
   // App theme colors
   static const Color primary = Color(0xFF03045E);
+  static const Color secondary = Color(0xFF83C1CE);
 
   // Text colors
   static const Color textPrimary = Color(0xFF03045E);
@@ -46,4 +47,6 @@ class ConstantColors {
   static const Color softGrey = Color(0xFFF4F4F4);
   static const Color lightGrey = Color(0xFFF9F9F9);
   static const Color white = Color(0xFFFFFFFF);
+
+  static const Color iconPrimary = Color(0xFF9DB2CE);
 }

@@ -27,5 +27,8 @@ class ConstantImages {
   // Sign up
   static const String signUpPng = "assets/sign_up.png";
 
-
+  static const String organizationBoarding = "assets/organization_boarding.png";
+  static const String organizationTrackIcon = "assets/org_track_icon.png";
+  static const String organizationHealthIcon = "assets/org_health_icon.png";
+  static const String organizationPostIcon = "assets/org_post_icon.png";
 }

@@ -3,16 +3,20 @@ import 'package:estegatha/utils/constant/sizes.dart';
 import 'package:flutter/material.dart';
 
 class CustomElevatedButton extends StatelessWidget {
-  const CustomElevatedButton({
+  CustomElevatedButton({
     super.key,
     required this.onPressed,
     required this.labelText,
     this.formKey,
+    this.focusNode,
+    this.isPrimary = true,
   });
 
   final GlobalKey<FormState>? formKey;
   final void Function() onPressed;
   final String labelText;
+  FocusNode? focusNode;
+  final bool isPrimary;
 
   @override
   Widget build(BuildContext context) {
