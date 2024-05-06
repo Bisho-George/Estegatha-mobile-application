@@ -1,3 +1,4 @@
+import 'package:estegatha/features/sos/presentation/pages/cancel_sos_pin.dart';
 import 'package:estegatha/features/sos/presentation/widgets/cancel_alert_button.dart';
 import 'package:estegatha/utils/common/styles/text_styles.dart';
 import 'package:estegatha/utils/common/widgets/custom_elevated_button.dart';
@@ -26,7 +27,14 @@ class CancelSos extends StatelessWidget {
           flex: 40,
         ),
         CancelAlertButton(
-          onTap: (){},
+          onTap: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CancelSosPin(),
+              ),
+            );
+          },
         ),
         Spacer(
           flex: 50,

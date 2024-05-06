@@ -1,3 +1,4 @@
+import 'package:estegatha/features/sos/presentation/pages/cancel_sos.dart';
 import 'package:estegatha/utils/common/widgets/custom_app_bar.dart';
 import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
@@ -20,15 +21,25 @@ class SendSos extends StatelessWidget {
               flex: 50,
             ),
             CircleAvatar(
-              radius: 125,
+              radius: 115,
               backgroundColor: ConstantColors.borderSecondary,
-              child: CircleAvatar(
-                radius: 100,
-                backgroundColor: ConstantColors.primary,
-                child: Text(
-                  'Tap to send SOS',
-                  style: Styles.getWhiteMedium(),
-                  textAlign: TextAlign.center,
+              child: GestureDetector(
+                onTap: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CancelSos(),
+                    ),
+                  );
+                },
+                child: CircleAvatar(
+                  radius: 100,
+                  backgroundColor: ConstantColors.primary,
+                  child: Text(
+                    'Tap to send SOS',
+                    style: Styles.getWhiteMedium(),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
             ),

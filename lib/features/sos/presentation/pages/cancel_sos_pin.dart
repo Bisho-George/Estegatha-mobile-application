@@ -27,7 +27,7 @@ class CancelSosPin extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 25),
               child: Text(
-                'After 10 seconds, your SOS and location will be sent to your organization and emergency contacts.',
+                'If no PIN entered, your SOS and location will be sent to your organization and emergency contacts.',
                 style: Styles.getDefaultPrimary(
                   fontSize: ConstantSizes.fontSizeLg,
                 ),

@@ -3,8 +3,9 @@ import 'package:flutter/services.dart';
 
 import '../../../../utils/constant/colors.dart';
 class PinField extends StatelessWidget {
-  PinField({super.key, this.textColor = ConstantColors.primary});
+  PinField({super.key, this.textColor = ConstantColors.primary, this.index = 0});
   Color textColor;
+  int index;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -14,7 +15,12 @@ class PinField extends StatelessWidget {
       child: TextFormField(
         onChanged: (value) {
           if (value.length == 1) {
-            FocusScope.of(context).nextFocus();
+            if(index < 3){
+              FocusScope.of(context).nextFocus();
+            }
+            else{
+              FocusScope.of(context).unfocus();
+            }
           }
           else{
             FocusScope.of(context).previousFocus();
