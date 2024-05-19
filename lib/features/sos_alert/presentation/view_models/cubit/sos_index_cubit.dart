@@ -11,4 +11,9 @@ class SosIndexCubit extends Cubit<SosIndexState> {
   void changeIndex(int index) {
     emit(SosIndexChange(index));
   }
+  @override
+  Future<void> close() {
+    pageController?.dispose();
+    return super.close();
+  }
 }
