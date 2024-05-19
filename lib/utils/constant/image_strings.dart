@@ -26,6 +26,14 @@ class ConstantImages {
 
   // Sign up
   static const String signUpPng = "assets/sign_up.png";
+  static const String googleMapsIcon = "assets/google_maps_icon.png";
+
+  // Sos Alert
+  static const String sosAlert1 = "assets/sos1.png";
+  static const String sosAlert2 = "assets/sos2.png";
+  static const String sosAlert3 = "assets/sos3.png";
+  static const String sosAlert4 = "assets/sos4.png";
+
 
 
 }

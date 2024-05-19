@@ -1,5 +1,8 @@
-import 'package:estegatha/features/sign-up/presentation/views/personal_info_view.dart';
+import 'package:estegatha/features/sign-up/domain/models/personal_info_model.dart';
+import 'package:estegatha/features/sign-up/presentation/view_models/sign_up_cubit.dart';
+import 'package:estegatha/features/sign-up/presentation/views/email_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 import '../../../../../utils/common/widgets/custom_elevated_button.dart';
@@ -9,10 +12,10 @@ import '../../../../../utils/constant/sizes.dart';
 import '../../../../../utils/helpers/validation.dart';
 import '../../view_models/date_picker_view_model.dart';
 import '../../view_models/sign_up_view_model.dart';
+
 class PersonalInfoForm extends StatelessWidget {
   SignUpViewModel data = SignUpViewModel();
   DatePickerViewModel datepickerVM = DatePickerViewModel();
-
 
   PersonalInfoForm({super.key});
 
@@ -68,10 +71,59 @@ class PersonalInfoForm extends StatelessWidget {
               height: ConstantSizes.spaceBtwInputFields,
             ),
             IntlPhoneField(
-              decoration: const InputDecoration(
-                labelText: 'Phone Number',
+              decoration: InputDecoration(
+                prefixIconColor: ConstantColors.darkGrey,
+                suffixIconColor: ConstantColors.darkGrey,
+                labelText: "Phone Number",
+                labelStyle: const TextStyle(
+                  fontSize: ConstantSizes.fontSizeMd,
+                  color: ConstantColors.darkGrey,
+                ),
+                hintStyle: const TextStyle(
+                  fontSize: ConstantSizes.fontSizeMd,
+                  color: ConstantColors.darkGrey,
+                ),
+                errorStyle: const TextStyle(
+                  fontStyle: FontStyle.normal,
+                ),
+                floatingLabelStyle: TextStyle(
+                  color: ConstantColors.primary.withOpacity(0.8),
+                ),
                 border: OutlineInputBorder(
-                  borderSide: BorderSide(),
+                  borderRadius:
+                  BorderRadius.circular(ConstantSizes.inputFieldRadius),
+                  borderSide: const BorderSide(
+                      width: 1, color: ConstantColors.textInputBorder),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius:
+                  BorderRadius.circular(ConstantSizes.inputFieldRadius),
+                  borderSide: const BorderSide(
+                      width: 1, color: ConstantColors.textInputBorder),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius:
+                  BorderRadius.circular(ConstantSizes.inputFieldRadius),
+                  borderSide: const BorderSide(
+                    width: 1,
+                    color: ConstantColors.borderPrimary,
+                  ),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderRadius:
+                  BorderRadius.circular(ConstantSizes.inputFieldRadius),
+                  borderSide: const BorderSide(
+                    width: 1,
+                    color: ConstantColors.warning,
+                  ),
+                ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderRadius:
+                  BorderRadius.circular(ConstantSizes.inputFieldRadius),
+                  borderSide: const BorderSide(
+                    width: 2,
+                    color: ConstantColors.warning,
+                  ),
                 ),
               ),
               initialCountryCode: 'EG',
@@ -91,12 +143,18 @@ class PersonalInfoForm extends StatelessWidget {
                   if (data.personalInfoFormKey.currentState!.validate()) {
                     // Parse the birthdayController.text to DateTime
                     DateTime? birthday =
-                        datepickerVM.parseDate(data.birthdayController.text);
-                    // data.user.firstName = data.firstNameController.text;
-                    // data.user.lastName = data.lastNameController.text;
-                    // data.user.birthday = birthday;
-                    // data.user.phoneNumber = data.phoneController.text;
-                    Navigator.pushNamed(context, 'sign-up/email');
+                    datepickerVM.parseDate(data.birthdayController.text);
+                    PersonalInfoModel personalInfo = PersonalInfoModel(
+                      firstName: data.firstNameController.text,
+                      lastName: data.lastNameController.text,
+                      birthday: birthday,
+                      phoneNumber: data.phoneController.text,
+                    );
+                    BlocProvider.of<SignUpCubit>(context)
+                        .updatePersonalInfo((personalInfo));
+
+                    // Navigate to the email page
+                    Navigator.pushNamed(context, EmailView.routeName);
                   }
                 },
                 labelText: "Next"),

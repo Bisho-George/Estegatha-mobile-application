@@ -18,6 +18,7 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class SignInPage extends StatelessWidget {
   SignInPage({super.key});
+  static const String routeName = 'sign-in';
 
   bool isLoading = false;
 
