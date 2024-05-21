@@ -2,10 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../../utils/constant/colors.dart';
+
 class PinField extends StatelessWidget {
-  PinField({super.key, this.textColor = ConstantColors.primary, this.index = 0});
-  Color textColor;
-  int index;
+  final TextEditingController controller;
+  final Color textColor;
+  final int index;
+
+  PinField({
+    Key? key,
+    required this.controller,
+    this.textColor = ConstantColors.primary,
+    this.index = 0,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -13,6 +22,7 @@ class PinField extends StatelessWidget {
       width: 64,
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: TextFormField(
+        controller: controller,
         onChanged: (value) {
           if (value.length == 1) {
             if(index < 3){

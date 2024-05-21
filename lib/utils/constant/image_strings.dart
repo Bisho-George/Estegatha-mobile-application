@@ -32,4 +32,9 @@ class ConstantImages {
   static const String organizationTrackIcon = "assets/org_track_icon.png";
   static const String organizationHealthIcon = "assets/org_health_icon.png";
   static const String organizationPostIcon = "assets/org_post_icon.png";
+  // Sos Alert
+  static const String sosAlert1 = "assets/sos1.png";
+  static const String sosAlert2 = "assets/sos2.png";
+  static const String sosAlert3 = "assets/sos3.png";
+  static const String sosAlert4 = "assets/sos4.png";
 }

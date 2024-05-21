@@ -11,7 +11,7 @@ import '../../../sign-in/presentation/pages/sign_in_page.dart';
 
 class LandingIntro extends StatelessWidget {
   const LandingIntro({super.key});
-
+  static const String routeName = '/landing/intro';
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);

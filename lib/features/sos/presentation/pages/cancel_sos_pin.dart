@@ -1,4 +1,5 @@
 import 'package:estegatha/features/sos/presentation/widgets/pin_field.dart';
+import 'package:estegatha/features/sos/presentation/widgets/pin_input.dart';
 import 'package:estegatha/utils/common/widgets/custom_app_bar.dart';
 import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
@@ -37,14 +38,12 @@ class CancelSosPin extends StatelessWidget {
             Spacer(
               flex: 50,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                PinField(),
-                PinField(),
-                PinField(),
-                PinField(),
-              ],
+            PinInput(
+              onChange: (pin) {
+                if (pin.length == 4) {
+
+                }
+              },
             ),
             Spacer(
               flex: 100,

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:estegatha/features/sign-up/presentation/view_models/sign_up_view_model.dart';
 import 'package:estegatha/features/sign-up/presentation/views/widgets/progress_indicator.dart';
 import 'package:estegatha/features/sign-up/presentation/views/widgets/sign_up_header.dart';
+import 'package:estegatha/features/sos/presentation/pages/sos_alert_intro.dart';
 import 'package:estegatha/utils/constant/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -59,7 +60,7 @@ class AddressView extends StatelessWidget {
                       height: ConstantSizes.spaceBtwItems,
                     ),
                     CustomElevatedButton(onPressed: () {
-
+                      Navigator.push(context,   MaterialPageRoute(builder: (context) => SosAlertIntro()));
                     }, labelText: "Next"),
                     const SizedBox(
                       height: ConstantSizes.spaceBtwItems,

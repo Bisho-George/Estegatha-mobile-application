@@ -1,4 +1,8 @@
+import 'package:estegatha/features/organization/presentation/view/create/create_organization_page.dart';
+import 'package:estegatha/features/sos/presentation/pages/cancel_sos.dart';
+import 'package:estegatha/features/sos/presentation/pages/cancel_sos_pin.dart';
 import 'package:estegatha/features/sos/presentation/widgets/pin_field.dart';
+import 'package:estegatha/features/sos/presentation/widgets/pin_input.dart';
 import 'package:estegatha/utils/common/styles/text_styles.dart';
 import 'package:estegatha/utils/common/widgets/custom_app_bar.dart';
 import 'package:estegatha/utils/common/widgets/custom_elevated_button.dart';
@@ -7,9 +11,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class CreatePin extends StatelessWidget {
+class CreatePin extends StatefulWidget {
   const CreatePin({super.key});
+  static const String routeName = '/sos/create-pin';
 
+  @override
+  State<CreatePin> createState() => _CreatePinState();
+}
+
+class _CreatePinState extends State<CreatePin> {
+  double opacity = 0.6;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,22 +50,28 @@ class CreatePin extends StatelessWidget {
           Spacer(
             flex: 20,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              PinField(),
-              PinField(),
-              PinField(),
-              PinField(),
-            ],
+          PinInput(
+            onChange: (pin){
+              if(pin.length == 4) {
+                setState(() {
+                  opacity = 1;
+                });
+              } else if(pin.length < 4){
+                setState(() {
+                  opacity = 0.6;
+                });
+              }
+            },
           ),
           Spacer(
             flex: 80,
           ),
           Opacity(
-            opacity: 0.6,
+            opacity: opacity,
             child: CustomElevatedButton(
-                onPressed: (){},
+                onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => CancelSos()));
+                },
                 labelText: 'Save PIN',
             ),
           ),
