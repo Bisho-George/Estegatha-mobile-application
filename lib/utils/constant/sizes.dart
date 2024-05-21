@@ -1,3 +1,4 @@
+import 'package:estegatha/responsive/size_config.dart';
 import 'package:flutter/material.dart';
 
 /// This class contains all the sizes used in the app.

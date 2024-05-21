@@ -1,3 +1,4 @@
+import 'package:estegatha/features/sign-in/presentation/pages/sign_in_page.dart';
 import 'package:estegatha/features/sign-up/presentation/views/personal_info_view.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
@@ -114,7 +115,11 @@ class PersonalInfoForm extends StatelessWidget {
                       fontSize: ConstantSizes.fontSizeMd),
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                      return SignInPage();
+                    }));
+                  },
                   child: const Text("Sign in",
                       style: TextStyle(
                           color: ConstantColors.textPrimary,

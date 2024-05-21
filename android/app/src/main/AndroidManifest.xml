@@ -14,6 +14,9 @@
         android:label="estegatha"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyD_Ab-wz4GHy7mtxwbzDmOiAetck1ARukQ" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

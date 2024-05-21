@@ -1,6 +1,6 @@
 import 'package:estegatha/features/landing/domain/models/permissions.dart';
 import 'package:estegatha/features/landing/presentation/widgets/permission_widget.dart';
-import 'package:estegatha/features/sign-up/presentation/views/personal_info.dart';
+import 'package:estegatha/features/sign-up/presentation/views/personal_info_view.dart';
 import 'package:estegatha/utils/common/styles/text_styles.dart';
 import 'package:estegatha/utils/common/widgets/custom_elevated_button.dart';
 import 'package:estegatha/utils/constant/image_strings.dart';
@@ -51,11 +51,15 @@ class Landing2 extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: CustomElevatedButton(
                   onPressed: () async {
-                    await Permissions().grantPermissions();
+                    try {
+                      await Permissions().grantPermissions();
+                    }catch(e){
+                      print(e);
+                    }
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SignUpView(),
+                        builder: (context) => PersonalInfoView(),
                       ),
                     );
                   },
@@ -67,7 +71,7 @@ class Landing2 extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SignUpView(),
+                      builder: (context) => PersonalInfoView(),
                     ),
                   );
                 },

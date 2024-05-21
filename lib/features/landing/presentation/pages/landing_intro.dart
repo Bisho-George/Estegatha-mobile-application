@@ -1,4 +1,5 @@
 import 'package:estegatha/features/landing/presentation/pages/landing1.dart';
+import 'package:estegatha/responsive/size_config.dart';
 import 'package:estegatha/utils/common/styles/text_styles.dart';
 import 'package:estegatha/utils/common/widgets/custom_elevated_button.dart';
 import 'package:estegatha/utils/constant/image_strings.dart';
@@ -13,9 +14,10 @@ class LandingIntro extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.only(top: 50),
+        padding: EdgeInsets.only(top: responsiveHeight(70)),
         width: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -32,7 +34,7 @@ class LandingIntro extends StatelessWidget {
           children: [
             Container(
               alignment: Alignment.topLeft,
-              padding: EdgeInsets.only(left: 28.0),
+              padding: EdgeInsets.only(left: responsiveWidth(28.0)),
               child: Text(
                 'More Safety,',
                 style: Styles.getWhiteMedium()
@@ -40,18 +42,18 @@ class LandingIntro extends StatelessWidget {
             ),
             Container(
               alignment: Alignment.topRight,
-              padding: EdgeInsets.only(right: 28.0),
+              padding: EdgeInsets.only(right: responsiveWidth(28.0)),
               child: Text(
                 'More confident',
                 style: Styles.getWhiteMedium()
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 32),
+              padding: EdgeInsets.only(top: responsiveHeight(48), bottom: responsiveHeight(12.0)),
               child: Image.asset(
                 ConstantImages.AppLogo,
-                width: 200.0,
-                height: 200.0,
+                width: responsiveWidth(200.0),
+                height: responsiveHeight(200.0),
               ),
             ),
             Text(
@@ -59,7 +61,7 @@ class LandingIntro extends StatelessWidget {
               style: Styles.getWhiteLarge()
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 100.0, bottom: 14.0),
+              padding: EdgeInsets.only(top: responsiveHeight(120.0), bottom: responsiveHeight(14.0)),
               child: CustomElevatedButton(
                 labelText: "Get Started",
                 onPressed: (){
@@ -94,7 +96,7 @@ class LandingIntro extends StatelessWidget {
                       )
                   )
                 ],
-            )
+            ),
           ],
         ),
       ),
