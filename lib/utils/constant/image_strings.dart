@@ -34,6 +34,21 @@ class ConstantImages {
   static const String sosAlert3 = "assets/sos3.png";
   static const String sosAlert4 = "assets/sos4.png";
 
+  // Home
+  static const String organizationIcon = "assets/organization_icon.png";
+  static const String marker = "assets/marker.png";
+
+
+  // bottom navigation bar
+  static const String homeIcon = "assets/home_icon.svg";
+  static const String safetyIcon = "assets/safety_icon.svg";
+  static const String catalogIcon = "assets/catalog_icon.svg";
+  static const String settingsIcon = "assets/settings_icon.svg";
+
+  // draggableScrollableSheet
+  static const String peopleIcon = "assets/people_icon.svg";
+  static const String buildingIcon = "assets/building_icon.svg";
+  static const String wayIcon = "assets/way_icon.svg";
 
 
 }

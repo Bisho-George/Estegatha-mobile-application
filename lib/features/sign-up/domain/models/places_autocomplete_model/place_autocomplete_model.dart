@@ -32,23 +32,23 @@ class PlaceModel {
       structuredFormatting: json['structured_formatting'] == null
           ? null
           : StructuredFormatting.fromJson(
-              json['structured_formatting'] as Map<String, dynamic>),
+          json['structured_formatting'] as Map<String, dynamic>),
       terms: (json['terms'] as List<dynamic>?)
           ?.map((e) => Term.fromJson(e as Map<String, dynamic>))
           .toList(),
       types:
-          (json['types'] as List<dynamic>?)?.map((e) => e.toString()).toList(),
+      (json['types'] as List<dynamic>?)?.map((e) => e.toString()).toList(),
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'description': description,
-        'matched_substrings':
-            matchedSubstrings?.map((e) => e.toJson()).toList(),
-        'place_id': placeId,
-        'reference': reference,
-        'structured_formatting': structuredFormatting?.toJson(),
-        'terms': terms?.map((e) => e.toJson()).toList(),
-        'types': types,
-      };
+    'description': description,
+    'matched_substrings':
+    matchedSubstrings?.map((e) => e.toJson()).toList(),
+    'place_id': placeId,
+    'reference': reference,
+    'structured_formatting': structuredFormatting?.toJson(),
+    'terms': terms?.map((e) => e.toJson()).toList(),
+    'types': types,
+  };
 }

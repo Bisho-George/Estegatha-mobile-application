@@ -14,7 +14,7 @@ class ConstantColors {
   // Background colors
   static const Color light = Color(0xFFF6F6F6);
   static const Color primaryBackground = Color(0xFFF3F5FF);
-  static const Color secondaryBackground = Color(0xCC03045E);
+  static const Color secondaryBackground = Color(0xFF83C1CE);
 
   // Background Container colors
   static const Color lightContainer = Color(0xFFF6F6F6);

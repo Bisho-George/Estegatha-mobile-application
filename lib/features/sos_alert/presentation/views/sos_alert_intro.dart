@@ -1,5 +1,4 @@
 import 'package:estegatha/features/sos_alert/presentation/view_models/cubit/sos_index_cubit.dart';
-import 'package:estegatha/features/sos_alert/presentation/view_models/sos_alert_into_view_model.dart';
 import 'package:estegatha/features/sos_alert/presentation/views/widgets/moving_dot.dart';
 import 'package:estegatha/utils/common/widgets/custom_elevated_button.dart';
 import 'package:estegatha/utils/constant/colors.dart';
@@ -11,9 +10,6 @@ import '../../../../utils/constant/sos_alert_constants.dart';
 
 class SosAlertIntro extends StatelessWidget {
   SosAlertIntro({super.key});
-
-  final SosAlertIntroViewModel sosAlertIntroViewModel =
-  SosAlertIntroViewModel();
 
   static const String routeName = '/sos-alert-intro';
 
@@ -140,7 +136,7 @@ class SosAlertIntro extends StatelessWidget {
                         },
                         labelText: contents[index].buttonText!,
                       )
-                          : SizedBox(height: ConstantSizes.defaultSpace * 2),
+                          : const SizedBox(height: ConstantSizes.defaultSpace * 2),
                     ],
                   ),
                 );

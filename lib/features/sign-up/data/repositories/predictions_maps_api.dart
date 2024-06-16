@@ -1,12 +1,10 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
-
 import '../../domain/models/places_autocomplete_model/place_autocomplete_model.dart';
 
 class PredictionsMapsApi {
   final String _baseUrl = 'https://maps.googleapis.com/maps/api/place';
-  final String apiKey = "AIzaSyD_Ab-wz4GHy7mtxwbzDmOiAetck1ARukQ";
+  final String apiKey = "AIzaSyCuTilAfnGfkZtIx0T3qf-eOmWZ_N2LpoY";
 
   Future<List<PlaceModel>> getPredictions({required String input}) async {
     final dio = Dio();
@@ -14,12 +12,12 @@ class PredictionsMapsApi {
       var response = await dio.get('$_baseUrl/autocomplete/json?key=$apiKey&input=$input');
 
       if (response.statusCode == 200) {
-        var data = jsonDecode(response.data)['predictions'] as List;
-        List<PlaceModel> places = [];
+        print('Response data: ${response.data}');
 
-        for (var item in data) {
-          places.add(PlaceModel.fromJson(item));
-        }
+        var data = jsonDecode(response.data);
+        var predictions = data['predictions'] as List<dynamic>;
+        List<PlaceModel> places = predictions.map((e) => PlaceModel.fromJson(e as Map<String, dynamic>)).toList();
+
         return places;
       } else {
         throw Exception('Failed to load predictions');
@@ -29,5 +27,4 @@ class PredictionsMapsApi {
       throw Exception('Failed to fetch predictions. Check your network connection.');
     }
   }
-
 }

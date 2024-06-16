@@ -16,7 +16,7 @@ class AddressTextFieldCubit extends Cubit<AddressTextFieldState> {
   TextEditingController get controller => _controller;
 
   void _onTextChanged() {
-    updatePredictions(_controller.text);
+    updatePredictions(_controller.text.toString());
   }
 
   void updatePredictions(String input) async {

@@ -55,9 +55,11 @@ class AddressView extends StatelessWidget {
                                   AddressTextField(
                                     controller: cubit.controller,
                                     onChanged: (val) {
-                                      BlocProvider.of<AddressTextFieldCubit>(
-                                              context)
-                                          .updatePredictions(val);
+                                      if (val.toString().isNotEmpty) {
+                                        BlocProvider.of<AddressTextFieldCubit>(
+                                                context)
+                                            .updatePredictions(val.toString());
+                                      }
                                     },
                                   ),
                                 ],
@@ -172,8 +174,7 @@ class AddressView extends StatelessWidget {
                                                                         .primary,
                                                                 FontAwesomeIcons
                                                                     .circleRight),
-                                                            onPressed: () {
-                                                            },
+                                                            onPressed: () {},
                                                           ));
                                                     },
                                                     separatorBuilder:
