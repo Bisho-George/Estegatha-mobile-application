@@ -12,7 +12,7 @@ class CancelSosPin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar.buildAppBar('SOS'),
+      appBar: CustomAppBar.buildAppBar(title: 'SOS'),
       body: Container(
         width: double.infinity,
         child: Column(

@@ -3,22 +3,20 @@ import 'package:flutter/material.dart';
 import '../../constant/colors.dart';
 import '../styles/text_styles.dart';
 class CustomAppBar {
-  static AppBar buildAppBar(String title) {
+  static AppBar buildAppBar({required String title, List<Widget> actions = const []}) {
     return AppBar(
-      elevation: 0,
+      actions: actions,
       backgroundColor: ConstantColors.white,
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(0),
         child: Container(
           decoration: const BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                blurRadius: 4,
-                color: Color(0x19000000),
-                offset: Offset(0, 1.50),
-                spreadRadius: 0,
-              )
-            ],
+            border: Border(
+              bottom: BorderSide(
+                color: Color(0xFFEDEDED),
+                width: 1,
+              ),
+            ),
           ),
         ),
       ),

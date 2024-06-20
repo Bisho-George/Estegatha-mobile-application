@@ -1,5 +1,6 @@
 import 'package:estegatha/features/forget-password/presentation/pages/forget_password_page.dart';
 import 'package:estegatha/features/sign-in/presentation/veiw_models/login_cubit/login_cubit.dart';
+import 'package:estegatha/utils/common/widgets/custom_elevated_button.dart';
 import 'package:estegatha/utils/common/widgets/custom_text_field.dart';
 import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
@@ -83,24 +84,8 @@ class _SignInFormState extends State<SignInForm> {
             ),
             SizedBox(
               width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  elevation: 0,
-                  foregroundColor: ConstantColors.light,
-                  backgroundColor: ConstantColors.primary,
-                  disabledForegroundColor: ConstantColors.darkGrey,
-                  disabledBackgroundColor: ConstantColors.buttonDisabled,
-                  side: const BorderSide(color: ConstantColors.primary),
-                  padding: const EdgeInsets.symmetric(
-                      vertical: ConstantSizes.buttonHeight),
-                  textStyle: const TextStyle(
-                      fontSize: ConstantSizes.fontSizeMd,
-                      color: ConstantColors.textWhite,
-                      fontWeight: FontWeight.w600),
-                  shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(ConstantSizes.buttonRadius)),
-                ),
+              child: CustomElevatedButton(
+                labelText: "Login",
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
                     if (widget.signInWithPhone == true) {
@@ -116,7 +101,6 @@ class _SignInFormState extends State<SignInForm> {
                     }
                   }
                 },
-                child: const Text('Login'),
               ),
             ),
             Row(

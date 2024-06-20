@@ -16,8 +16,8 @@ class Member {
 
   factory Member.fromJson(Map<String, dynamic> json) {
     return Member(
-      id: json['memberId'], // If id is null, assign 0
-      name: json['name'] ?? '', // If name is null, assign an empty string
+      id: json['userId'], // If id is null, assign 0
+      name: json['username'] ?? '', // If name is null, assign an empty string
       email: json['email'] ?? '', // If email is null, assign an empty string
       password:
           json['password'] ?? '', // If password is null, assign an empty string

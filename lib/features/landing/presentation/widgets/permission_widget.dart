@@ -1,4 +1,5 @@
 import 'package:estegatha/features/landing/domain/models/permissions.dart';
+import 'package:estegatha/responsive/size_config.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../utils/common/styles/text_styles.dart';
@@ -41,6 +42,9 @@ class PermissionWidget extends StatelessWidget {
               ),
             ],
           ),
+        ),
+        SizedBox(
+          height: responsiveHeight(10),
         ),
       ],
     );

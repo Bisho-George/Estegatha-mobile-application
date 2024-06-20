@@ -16,9 +16,7 @@ class Organization {
     return Organization(
       id: json['id'],
       name: json['name'],
-      code: json['code'],
-      memberIds:
-          json['memberIds'] != null ? List<int>.from(json['memberIds']) : null,
+      code: json['organizationCode'],
     );
   }
 }

@@ -65,11 +65,9 @@ class LandingIntro extends StatelessWidget {
               child: CustomElevatedButton(
                 labelText: "Get Started",
                 onPressed: (){
-                  Navigator.push(
+                  Navigator.pushNamed(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => Landing1(),
-                    ),
+                    Landing1.routeName
                   );
                 },
               ),

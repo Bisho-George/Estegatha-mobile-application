@@ -13,7 +13,7 @@ import 'landing2.dart';
 
 class Landing1 extends StatelessWidget {
   const Landing1({super.key});
-
+  static String routeName = '/landing1';
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -36,9 +36,9 @@ class Landing1 extends StatelessWidget {
           padding: EdgeInsets.only(top: responsiveHeight(60.0)),
           child: CustomElevatedButton(
             onPressed: () {
-              Navigator.push(
+              Navigator.pushNamed(
                 context,
-                MaterialPageRoute(builder: (context) => Landing2()),
+                Landing2.routeName
               );
             },
             labelText: 'Get started',

@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 
 class CancelSos extends StatelessWidget {
   const CancelSos({super.key});
-
+  static String routeName = '/sos/cancel-sos';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
