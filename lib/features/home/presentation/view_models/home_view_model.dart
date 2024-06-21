@@ -39,14 +39,43 @@ class HomeCubit extends Cubit<HomeState> {
     final position = await Geolocator.getCurrentPosition();
     emit(state.copyWith(position: position));
   }
+
+  void setGoogleMapController(GoogleMapController controller) {
+    googleMapController = controller;
+  }
+
   void showToggleBar() {
     emit(state.copyWith(isAppBarVisible: true));
   }
+
   void hideToggleBar() {
     emit(state.copyWith(isAppBarVisible: false));
   }
+
   void updateZoom(double zoom) {
     emit(state.copyWith(zoom: zoom));
   }
 
+  void animateCamera() {
+    googleMapController?.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: LatLng(
+            state.position!.latitude,
+            state.position!.longitude,
+          ),
+          zoom: state.zoom,
+          bearing: state.bearing,
+        ),
+      ),
+    );
+  }
+
+  void updateScrollPosition(double position) {
+    if (position > 0.5 && state.isButtonVisible) {
+      emit(state.copyWith(isButtonVisible: false));
+    } else if (position <= 0.5 && !state.isButtonVisible) {
+      emit(state.copyWith(isButtonVisible: true));
+    }
+  }
 }

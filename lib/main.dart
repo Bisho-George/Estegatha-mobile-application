@@ -2,6 +2,8 @@ import 'package:estegatha/features/forget-password/presentation/veiw_models/forg
 import 'package:estegatha/features/home/presentation/views/home_view.dart';
 import 'package:estegatha/features/sign-in/presentation/veiw_models/login_cubit/login_cubit.dart';
 import 'package:estegatha/features/sign-up/presentation/view_models/sign_up_cubit.dart';
+import 'package:estegatha/features/sign-up/presentation/views/personal_info_view.dart';
+import 'package:estegatha/features/sos_alert/presentation/views/sos_alert_intro.dart';
 import 'package:estegatha/routes.dart';
 import 'package:estegatha/utils/constant/colors.dart';
 import 'package:flutter/material.dart';

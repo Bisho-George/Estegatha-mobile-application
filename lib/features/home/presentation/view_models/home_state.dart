@@ -1,3 +1,4 @@
+
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -8,6 +9,7 @@ class HomeState {
   final double bearing;
   final bool isAppBarVisible;
   final double zoom;
+  final bool isButtonVisible;
 
   HomeState({
     this.position,
@@ -16,6 +18,7 @@ class HomeState {
     this.bearing = 0,
     this.isAppBarVisible = false,
     this.zoom = 15,  // Default zoom level
+    this.isButtonVisible = true,
   });
 
   HomeState copyWith({
@@ -25,6 +28,7 @@ class HomeState {
     double? bearing,
     bool? isAppBarVisible,
     double? zoom,
+    bool? isButtonVisible,
   }) {
     return HomeState(
       position: position ?? this.position,
@@ -33,7 +37,7 @@ class HomeState {
       bearing: bearing ?? this.bearing,
       isAppBarVisible: isAppBarVisible ?? this.isAppBarVisible,
       zoom: zoom ?? this.zoom,
+      isButtonVisible: isButtonVisible ?? this.isButtonVisible,
     );
   }
 }
-

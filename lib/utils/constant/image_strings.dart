@@ -37,6 +37,12 @@ class ConstantImages {
   // Home
   static const String organizationIcon = "assets/organization_icon.png";
   static const String marker = "assets/marker.png";
+  static const String warningIcon = "assets/warning_icon.svg";
+  static const String gpsIcon = "assets/gps_icon.svg";
+  static const String safetySolidIcon = "assets/safety_solid_icon.svg";
+  static const String settingsAppbarIcon = "assets/settings_appbar.svg";
+  static const String organizationArrowIcon = "assets/arrow_organization.svg";
+  static const String messagesIcon = "assets/messages_icon.svg";
 
 
   // bottom navigation bar
@@ -49,6 +55,9 @@ class ConstantImages {
   static const String peopleIcon = "assets/people_icon.svg";
   static const String buildingIcon = "assets/building_icon.svg";
   static const String wayIcon = "assets/way_icon.svg";
+
+  // dangerous dialogs
+  static const String dialogIcon = "assets/dialog_icon.svg";
 
 
 }

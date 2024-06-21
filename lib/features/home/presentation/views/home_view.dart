@@ -1,9 +1,13 @@
+import 'package:estegatha/features/home/presentation/views/widgets/dangerous_dialog.dart';
 import 'package:estegatha/features/home/presentation/views/widgets/draggable_scroll_sheet.dart';
+import 'package:estegatha/features/home/presentation/views/widgets/google_map.dart';
+import 'package:estegatha/utils/constant/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../utils/common/widgets/bottom_navbar.dart';
+import '../../../../utils/common/widgets/bottom_navbar_fab.dart';
 import '../../../../utils/constant/colors.dart';
 import '../../../../utils/constant/image_strings.dart';
 import '../view_models/home_state.dart';
@@ -16,126 +20,263 @@ class HomeView extends StatefulWidget {
   _HomeViewState createState() => _HomeViewState();
 }
 
-class _HomeViewState extends State<HomeView> {
+class _HomeViewState extends State<HomeView>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<Offset> _slideAnimation;
+  bool _isButtonVisible = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+    _slideAnimation = Tween<Offset>(
+      begin: Offset.zero,
+      end: Offset(0, 1),
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+  }
+
+  void _onScroll(double position) {
+    if (position > 0.36 && _isButtonVisible) {
+      _animationController.forward();
+      setState(() {
+        _isButtonVisible = false;
+      });
+    } else if (position <= 0.36 && !_isButtonVisible) {
+      _animationController.reverse();
+      setState(() {
+        _isButtonVisible = true;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => HomeCubit(),
-      child: Scaffold(
-        body: BlocConsumer<HomeCubit, HomeState>(
-          listener: (context, state) async {
-            if (state.position != null) {
-              BlocProvider.of<HomeCubit>(context)
-                  .googleMapController
-                  ?.animateCamera(
-                    CameraUpdate.newCameraPosition(
-                      CameraPosition(
-                        target: LatLng(
-                          state.position!.latitude,
-                          state.position!.longitude,
+      child: SafeArea(
+        child: Scaffold(
+          body: BlocConsumer<HomeCubit, HomeState>(
+            listener: (context, state) async {
+              if (state.position != null) {
+                BlocProvider.of<HomeCubit>(context).animateCamera();
+              }
+            },
+            builder: (context, state) {
+              return Stack(
+                children: [
+                  GoogleMapView(),
+                  Positioned(
+                      top: 40,
+                      left: 20,
+                      right: 20,
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                color: ConstantColors.white,
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                              child: IconButton(
+                                icon: SvgPicture.asset(
+                                    ConstantImages.settingsAppbarIcon),
+                                onPressed: () {},
+                              ),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: ConstantColors.white,
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                              // padding: EdgeInsets.symmetric(horizontal: ConstantSizes.defaultSpace),
+                              child: IconButton(
+                                icon: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: ConstantSizes.defaultSpace),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                     Text("graduation project", style: TextStyle(
+                                        color: ConstantColors.primary,
+                                        fontSize: ConstantSizes.fontSizeMd,
+                                        fontWeight: ConstantSizes.fontWeightSemiBold,
+                                      ),),
+                                        SizedBox(width: ConstantSizes.spaceBtwItems,),
+                                        SvgPicture.asset(ConstantImages.organizationArrowIcon),
+
+                                    ],
+                                  ),
+                                ),
+                                onPressed: () {},
+                              ),
+                            ),
+                            Container(
+                                decoration: BoxDecoration(
+                                  color: ConstantColors.white,
+                                  borderRadius: BorderRadius.circular(50),
+                                ),
+                                child: IconButton(onPressed: () {}, icon: SvgPicture.asset(ConstantImages.messagesIcon)))
+                          ])),
+                  if (state.position != null && state.customMarker != null)
+                    AnimatedPositioned(
+                      duration: Duration(milliseconds: 300),
+                      top: state.isAppBarVisible ? 0 : -100,
+                      left: 0,
+                      right: 0,
+                      child: AppBar(
+                        leading: IconButton(
+                          icon: Icon(Icons.arrow_back),
+                          onPressed: () {
+                            context.read<HomeCubit>().hideToggleBar();
+                            context.read<HomeCubit>().updateZoom(15);
+                          },
                         ),
-                        zoom: state.zoom,
-                        bearing: state.bearing,
+                        title: Text('Bishoy'),
                       ),
                     ),
-                  );
-            }
-          },
-          builder: (context, state) {
-            return Stack(
-              children: [
-                GoogleMap(
-                  onMapCreated: (controller) {
-                    BlocProvider.of<HomeCubit>(context).googleMapController =
-                        controller;
-                  },
-                  initialCameraPosition: CameraPosition(
-                    target: LatLng(0, 0),
-                    zoom: state.position != null ? 15 : 1,
-                    bearing: state.bearing,
-                  ),
-                  compassEnabled: true,
-                  myLocationButtonEnabled: true,
-                  markers: state.position != null && state.customMarker != null
-                      ? {
-                          Marker(
-                            markerId: const MarkerId('userLocation'),
-                            position: LatLng(
-                              state.position!.latitude,
-                              state.position!.longitude,
+                  Positioned(
+                    bottom: 350,
+                    left: 10,
+                    child: SlideTransition(
+                      position: _slideAnimation,
+                      child: AnimatedOpacity(
+                        opacity: _isButtonVisible ? 1.0 : 0.0,
+                        duration: Duration(milliseconds: 300),
+                        child: IconButton(
+                          onPressed: () {
+                            //TODO: Implement Safety
+                          },
+                          icon: Container(
+                            decoration: BoxDecoration(
+                              color: ConstantColors.white,
+                              borderRadius: BorderRadius.circular(50),
                             ),
-                            icon: state.isAppBarVisible
-                                ? state.scaledMarker!
-                                : state.customMarker!,
-                            rotation: state.bearing,
-                            onTap: () {
-                              context.read<HomeCubit>().showToggleBar();
-                              BlocProvider.of<HomeCubit>(context)
-                                  .updateZoom(16);
-                            },
+                            padding: EdgeInsets.symmetric(
+                              horizontal: ConstantSizes.defaultSpace,
+                              vertical: 10,
+                            ),
+                            child: Row(
+                              children: [
+                                SvgPicture.asset(
+                                  fit: BoxFit.cover,
+                                  ConstantImages.safetySolidIcon,
+                                ),
+                                SizedBox(
+                                  width: ConstantSizes.spaceBtwItems,
+                                ),
+                                Text(
+                                  "Safety",
+                                  style: TextStyle(
+                                    color: ConstantColors.primary,
+                                    fontSize: ConstantSizes.fontSizeMd,
+                                    fontWeight:
+                                        ConstantSizes.fontWeightSemiBold,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        }
-                      : {},
-                  myLocationEnabled: true,
-                ),
-                if (state.position != null && state.customMarker != null) ...[
-                  AnimatedPositioned(
-                    duration: Duration(milliseconds: 300),
-                    top: state.isAppBarVisible ? 0 : -100,
-                    left: 0,
-                    right: 0,
-                    child: AppBar(
-                      leading: IconButton(
-                        icon: Icon(Icons.arrow_back),
-                        onPressed: () {
-                          context.read<HomeCubit>().hideToggleBar();
-                          BlocProvider.of<HomeCubit>(context).updateZoom(15);
-                        },
+                        ),
                       ),
-                      title: Text('Bishoy'),
                     ),
                   ),
                   Positioned(
-                    height: 400,
+                    bottom: 350,
+                    right: 10,
+                    child: Column(
+                      children: [
+                        SlideTransition(
+                          position: _slideAnimation,
+                          child: AnimatedOpacity(
+                            opacity: _isButtonVisible ? 1.0 : 0.0,
+                            duration: Duration(milliseconds: 300),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: ConstantColors.white,
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                              child: IconButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => DangerousDialog(),
+                                  );
+                                },
+                                icon: SvgPicture.asset(
+                                  fit: BoxFit.cover,
+                                  ConstantImages.warningIcon,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: ConstantSizes.spaceBtwItems),
+                        SlideTransition(
+                          position: _slideAnimation,
+                          child: AnimatedOpacity(
+                            opacity: _isButtonVisible ? 1.0 : 0.0,
+                            duration: Duration(milliseconds: 300),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: ConstantColors.white,
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                              child: IconButton(
+                                onPressed: () {},
+                                icon: SvgPicture.asset(
+                                  fit: BoxFit.cover,
+                                  ConstantImages.gpsIcon,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Positioned(
                     left: 0,
                     right: 0,
                     bottom: 0,
-                    child: Column(
-                      children: [DraggableScrollSheet(), BottomNavBar()],
+                    child:
+                        NotificationListener<DraggableScrollableNotification>(
+                      onNotification: (notification) {
+                        _onScroll(notification.extent);
+                        return true;
+                      },
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * .88,
+                            child: DraggableScrollSheet(),
+                          ),
+                          BottomNavBar(),
+                        ],
+                      ),
                     ),
                   ),
                   Positioned(
-                    bottom: 90,
+                    bottom: 30,
                     // Adjusted to not overlap with BottomNavBar and DraggableScrollSheet
                     left: MediaQuery.of(context).size.width / 2 - 30,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: ConstantColors.primary,
-                        borderRadius: BorderRadius.circular(50),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 10,
-                            blurRadius: 10,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: FloatingActionButton(
-                        clipBehavior: Clip.none,
-                        backgroundColor: ConstantColors.secondaryBackground,
-                        onPressed: () {},
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        child: Image.asset(ConstantImages.organizationIcon),
-                      ),
-                    ),
+                    child: BottomNavBarFAB(),
                   ),
                 ],
-              ],
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );
