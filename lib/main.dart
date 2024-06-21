@@ -1,38 +1,84 @@
+import 'dart:convert';
+
 import 'package:estegatha/features/forget-password/presentation/veiw_models/forget-password/forget_password_cubit.dart';
+import 'package:estegatha/features/organization/domain/models/member.dart';
+import 'package:estegatha/features/organization/presentation/view_model/organization_cubit.dart';
 import 'package:estegatha/features/sign-in/presentation/pages/sign_in_page.dart';
 import 'package:estegatha/features/sign-in/presentation/veiw_models/login_cubit/login_cubit.dart';
-import 'package:estegatha/features/sign-up/presentation/views/personal_info_view.dart';
-import 'package:estegatha/features/sign-up/presentation/views/test_view.dart';
-import 'package:estegatha/routes.dart';
+import 'package:estegatha/features/sign-in/presentation/veiw_models/user_cubit.dart';
+import 'package:estegatha/main_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MultiBlocProvider(
+  runApp(
+    MultiBlocProvider(
       providers: [
+        BlocProvider<UserCubit>(
+          create: (context) => UserCubit(),
+        ),
         BlocProvider<LoginCubit>(
           create: (context) => LoginCubit(),
         ),
         BlocProvider<ForgetPasswordCubit>(
           create: (context) => ForgetPasswordCubit(),
         ),
-        // Add more providers as needed
+        BlocProvider<OrganizationCubit>(
+          create: (context) => OrganizationCubit(),
+        ),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        home: SignInPage(),
-        initialRoute: PersonalInfoView.routeName,
-        routes: routes,
-      ),
+      child: const MyApp(),
+    ),
+  );
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final ValueNotifier<bool> isUserLoggedIn = ValueNotifier<bool>(false);
+
+  @override
+  void initState() {
+    super.initState();
+    checkUserLoggedIn();
+  }
+
+  Future<void> checkUserLoggedIn() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userJson = prefs.getString('user');
+
+    if (userJson != null) {
+      print("User object from shared preferences => $userJson");
+      final user = Member.fromJson(jsonDecode(userJson));
+      BlocProvider.of<UserCubit>(context).setUser(user);
+      isUserLoggedIn.value = true;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<bool>(
+      valueListenable: isUserLoggedIn,
+      builder: (context, isLoggedIn, child) {
+        return ScreenUtilInit(
+          designSize: const Size(360, 690),
+          minTextAdapt: true,
+          splitScreenMode: true,
+          builder: (_, child) => MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Flutter Demo',
+            home: isLoggedIn ? const MainNavMenu() : SignInPage(),
+          ),
+        );
+      },
     );
   }
 }

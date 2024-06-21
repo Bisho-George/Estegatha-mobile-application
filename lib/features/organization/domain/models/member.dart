@@ -1,29 +1,53 @@
 class Member {
   final int id;
-  final String name;
+  final String username;
   final String email;
-  final String password;
-  // can have list of organization IDs
-  final List<int>? organizationIds;
+  final String? phone;
+  final String? address;
+  final String? image;
+  final String? sosPin;
+  final String accessToken;
+
+  // // can have list of organization IDs
+  // final List<int>? organizationIds;
 
   Member({
     required this.id,
-    required this.name,
+    required this.username,
     required this.email,
-    required this.password,
-    List<int>? organizationIds,
-  }) : organizationIds = organizationIds ?? [];
+    required this.accessToken,
+    this.phone,
+    this.address,
+    this.image,
+    this.sosPin,
+  });
 
   factory Member.fromJson(Map<String, dynamic> json) {
     return Member(
-      id: json['memberId'], // If id is null, assign 0
-      name: json['name'] ?? '', // If name is null, assign an empty string
-      email: json['email'] ?? '', // If email is null, assign an empty string
-      password:
-          json['password'] ?? '', // If password is null, assign an empty string
-      organizationIds: json['organizationIds'] != null
-          ? List<int>.from(json['organizationIds'])
-          : null,
+      id: json['id'],
+      username: json['username'] ?? '',
+      email: json['email'] ?? '',
+      phone: json['phone'] ?? '',
+      address: json['address'] ?? '',
+      image: json['image'] ?? '',
+      sosPin: json['sosPin'] ?? '',
+      accessToken: json['tokens']["accessToken"] ?? '',
     );
+  }
+
+  // implement to json method
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'username': username,
+      'email': email,
+      'phone': phone,
+      'address': address,
+      'image': image,
+      'sosPin': sosPin,
+      'tokens': {
+        'accessToken': accessToken,
+      },
+    };
   }
 }

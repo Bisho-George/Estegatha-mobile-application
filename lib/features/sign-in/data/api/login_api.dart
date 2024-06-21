@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 const uri = kIsWeb ? 'http://127.0.0.1:8080' : 'http://10.0.2.2:8080';
 
-class LoginHttpClient {
+class SignInHttpClient {
   static String authBaseUrl = '$uri/auth';
   static Future<http.Response> login(
       String url, String email, String password) async {

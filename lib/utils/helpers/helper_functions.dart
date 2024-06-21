@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HelperFunctions {
   static bool isDarkMode(BuildContext context) {
@@ -21,5 +24,19 @@ class HelperFunctions {
     }
 
     return null;
+  }
+
+  static Future<String> getAccessToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    final user = prefs.getString('user');
+    if (user == null) {
+      throw Exception('User not found in SharedPreferences');
+    }
+    final userJson = jsonDecode(user);
+    final accessToken = userJson['tokens']['accessToken'];
+    if (accessToken == null) {
+      throw Exception('Access token is null');
+    }
+    return accessToken;
   }
 }

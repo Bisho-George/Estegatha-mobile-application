@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -19,17 +18,19 @@ class UserCubit extends Cubit<UserState> {
     emit(UserLoading());
 
     try {
-      final response = await LoginHttpClient.getUserById(id);
+      final response = await SignInHttpClient.getUserById(id);
 
       if (response.statusCode == 200) {
         final responseBody = jsonDecode(response.body);
         final member = Member(
-          id: responseBody['memberId'],
-          name: responseBody['name'].toString(),
+          id: responseBody['id'],
+          username: responseBody['username'].toString(),
           email: responseBody['email'].toString(),
-          password: responseBody['password'].toString(),
-          organizationIds:
-              List<int>.from(responseBody['organizationIds'].map((x) => x)),
+          address: responseBody['address'].toString(),
+          phone: responseBody['phone'].toString(),
+          image: responseBody['image'].toString(),
+          sosPin: responseBody['sosPin'].toString(),
+          accessToken: responseBody['tokens']["accessToken"].toString(),
         );
 
         emit(UserSuccess(member));

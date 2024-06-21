@@ -2,6 +2,7 @@
 
 import 'package:estegatha/features/organization/domain/models/member.dart';
 import 'package:estegatha/features/organization/domain/models/organization.dart';
+import 'package:estegatha/features/organization/domain/models/organizationMember.dart';
 import 'package:estegatha/features/organization/domain/models/post.dart';
 import 'package:flutter/material.dart';
 
@@ -26,6 +27,12 @@ class OrganizationCreationSuccess extends OrganizationState {
   const OrganizationCreationSuccess(this.organization) : super(organization);
 }
 
+class OrganizationDetailSuccess extends OrganizationState {
+  final Organization organization;
+
+  const OrganizationDetailSuccess(this.organization) : super(organization);
+}
+
 class OrganizationSuccess extends OrganizationState {
   final List<Member> members;
   final List<Post> posts;
@@ -39,6 +46,14 @@ class OrganizationLoading extends OrganizationState {
   const OrganizationLoading() : super(null);
 }
 
+class JoinOrganizationLoading extends OrganizationState {
+  const JoinOrganizationLoading() : super(null);
+}
+
+class OrganizationMembersLoading extends OrganizationState {
+  const OrganizationMembersLoading() : super(null);
+}
+
 class OrganizationFailure extends OrganizationState {
   final String errMessage;
 
@@ -46,15 +61,13 @@ class OrganizationFailure extends OrganizationState {
 }
 
 class OrganizationMembersSuccess extends OrganizationState {
-  final List<Member> members;
+  final List<OrganizationMember> members;
 
-  OrganizationMembersSuccess(this.members) : super(null);
+  const OrganizationMembersSuccess(this.members) : super(null);
 }
 
 class OrganizationJoinSuccess extends OrganizationState {
-  final Member member;
-
-  OrganizationJoinSuccess(this.member) : super(null);
+  const OrganizationJoinSuccess() : super(null);
 }
 
 class PostSuccess extends OrganizationState {
