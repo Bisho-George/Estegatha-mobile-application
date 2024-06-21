@@ -1,24 +1,45 @@
 class Organization {
-  final int id;
-  final String name;
-  final String code;
-  // can have list of member IDs
-  final List<int>? memberIds;
+  int? id;
+  String? name;
+  String? type;
+  String? organizationCode;
+  String? joinToken;
+  int? organizationSize;
+  // Null organizationBoundaries;
+  // Post? posts;
 
   Organization({
-    required this.id,
-    required this.name,
-    required this.code,
-    this.memberIds,
+    this.id,
+    this.name,
+    this.type,
+    this.organizationCode,
+    this.joinToken,
+    this.organizationSize,
+    // this.organizationBoundaries,
+    // this.posts
   });
 
-  factory Organization.fromJson(Map<String, dynamic> json) {
-    return Organization(
-      id: json['id'],
-      name: json['name'],
-      code: json['code'],
-      memberIds:
-          json['memberIds'] != null ? List<int>.from(json['memberIds']) : null,
-    );
+  Organization.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    type = json['type'];
+    organizationCode = json['organizationCode'];
+    joinToken = json['joinToken'];
+    organizationSize = json['organizationSize'];
+    // organizationBoundaries = json['organizationBoundaries'];
+    // posts = json['posts'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    data['type'] = this.type;
+    data['organizationCode'] = this.organizationCode;
+    data['joinToken'] = this.joinToken;
+    data['organizationSize'] = this.organizationSize;
+    // data['organizationBoundaries'] = this.organizationBoundaries;
+    // data['posts'] = this.posts;
+    return data;
   }
 }

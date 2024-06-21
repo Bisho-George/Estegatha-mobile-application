@@ -93,6 +93,7 @@ class _SignInFormState extends State<SignInForm> {
             ),
             CustomElevatedButton(
               onPressed: () {
+                print("login Pressed");
                 if (formKey.currentState!.validate()) {
                   if (widget.signInWithPhone == true) {
                     BlocProvider.of<LoginCubit>(context).loginWithPhone(

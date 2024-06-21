@@ -8,6 +8,8 @@ import 'package:estegatha/utils/constant/sizes.dart';
 import 'package:estegatha/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class CreateOrganizationPage extends StatefulWidget {
@@ -29,7 +31,6 @@ class CreateOrganizationPageState extends State<CreateOrganizationPage> {
     "Field Trip Group",
     "University"
   ];
-
   bool isLoading = false;
 
   final GlobalKey<FormState> formKey = GlobalKey();
@@ -39,38 +40,39 @@ class CreateOrganizationPageState extends State<CreateOrganizationPage> {
     return BlocListener<OrganizationCubit, OrganizationState>(
       listener: (context, state) {
         if (state is OrganizationLoading) {
-          isLoading = true;
-        } else if (state is OrganizationCreationSuccess) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return InviteToOrganizationPage(
-                  name: BlocProvider.of<OrganizationCubit>(context)
-                      .state
-                      .organization!
-                      .name,
-                );
-              },
-            ),
-          );
-        } else if (state is OrganizationFailure) {
-          HelperFunctions.showSnackBar(context, state.errMessage);
+          setState(() {
+            isLoading = true;
+          });
+        } else {
+          setState(() {
+            isLoading = false;
+          });
+
+          if (state is OrganizationCreationSuccess) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => InviteToOrganizationPage(
+                  name: state.organization.name!,
+                  organizationCode: state.organization.organizationCode!,
+                ),
+              ),
+            );
+          } else if (state is OrganizationFailure) {
+            HelperFunctions.showSnackBar(context, state.errMessage);
+          }
         }
       },
       child: ModalProgressHUD(
-        inAsyncCall: context.select(
-            (OrganizationCubit cubit) => cubit.state is OrganizationLoading),
+        inAsyncCall: isLoading,
         child: Scaffold(
           appBar: PreferredSize(
-            preferredSize: Size.fromHeight(80.0),
+            preferredSize: Size.fromHeight(80.0.r),
             child: AppBar(
               leading: IconButton(
                 icon: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  child: const Icon(
-                    Icons.arrow_back,
-                  ),
+                  padding: EdgeInsets.symmetric(vertical: 16.h),
+                  child: const Icon(Icons.arrow_back),
                 ),
                 onPressed: () {
                   Navigator.pop(context);
@@ -80,7 +82,7 @@ class CreateOrganizationPageState extends State<CreateOrganizationPage> {
                 color: ConstantColors.primary,
               ),
               flexibleSpace: Padding(
-                padding: EdgeInsets.symmetric(vertical: 20),
+                padding: EdgeInsets.symmetric(vertical: 20.h),
                 child: Container(
                   decoration: const BoxDecoration(
                     color: ConstantColors.white,
@@ -100,9 +102,10 @@ class CreateOrganizationPageState extends State<CreateOrganizationPage> {
                           padding: EdgeInsets.only(
                             left: ConstantSizes.defaultSpace * 2,
                             right: ConstantSizes.defaultSpace * 2,
-                            top: 20,
+                            top: 20.h,
                           ),
                           child: Form(
+                            key: formKey,
                             child: SizedBox(
                               height: ConstantSizes.appBarHeight * 2,
                               child: TextFormField(
@@ -116,21 +119,19 @@ class CreateOrganizationPageState extends State<CreateOrganizationPage> {
                                   hintText: 'Name your organization',
                                   hintStyle: TextStyle(
                                     color: ConstantColors.darkGrey,
-                                    fontSize: ConstantSizes.fontSizeLg,
+                                    fontSize: ConstantSizes.fontSizeLg.sp,
                                     fontWeight: ConstantSizes.fontWeightRegular,
                                   ),
                                   border: InputBorder.none,
                                 ),
                                 style: TextStyle(
                                   color: ConstantColors.primary,
-                                  fontSize: ConstantSizes.fontSizeLg,
+                                  fontSize: ConstantSizes.fontSizeLg.sp,
                                 ),
                                 onChanged: (value) {
-                                  setState(
-                                    () {
-                                      organizationName = value;
-                                    },
-                                  );
+                                  setState(() {
+                                    organizationName = value;
+                                  });
                                 },
                               ),
                             ),
@@ -148,16 +149,16 @@ class CreateOrganizationPageState extends State<CreateOrganizationPage> {
             child: Column(
               children: [
                 SizedBox(
-                  width: 22,
-                  height: 22,
+                  width: 22.w,
+                  height: 22.h,
                   child: Stack(
                     children: [
                       Positioned(
                         left: 0,
                         top: 0,
                         child: Container(
-                          width: 20,
-                          height: 20,
+                          width: 20.w,
+                          height: 20.h,
                           decoration: const ShapeDecoration(
                             color: ConstantColors.primary,
                             shape: OvalBorder(),
@@ -165,11 +166,11 @@ class CreateOrganizationPageState extends State<CreateOrganizationPage> {
                         ),
                       ),
                       Positioned(
-                        left: 6,
-                        top: 6,
+                        left: 6.r,
+                        top: 6.r,
                         child: Container(
-                          width: 8,
-                          height: 8,
+                          width: 8.w,
+                          height: 8.h,
                           decoration: const ShapeDecoration(
                             color: Colors.grey,
                             shape: OvalBorder(),
@@ -179,22 +180,20 @@ class CreateOrganizationPageState extends State<CreateOrganizationPage> {
                     ],
                   ),
                 ),
-                SizedBox(height: ConstantSizes.sm),
+                SizedBox(height: ConstantSizes.sm.h),
                 SizedBox(
-                  width: 180,
+                  width: 180.w,
                   child: Text(
                     textAlign: TextAlign.center,
                     "Choose a name for your new organization",
                     style: TextStyle(
                       color: ConstantColors.darkGrey,
-                      fontSize: ConstantSizes.fontSizeMd,
+                      fontSize: ConstantSizes.fontSizeMd.sp,
                     ),
                   ),
                 ),
-                SizedBox(height: ConstantSizes.spaceBtwItems),
-                const SectionHeading(
-                  title: "Suggestions",
-                ),
+                SizedBox(height: ConstantSizes.spaceBtwItems.h),
+                const SectionHeading(title: "Suggestions"),
                 Expanded(
                   child: SingleChildScrollView(
                     child: Column(

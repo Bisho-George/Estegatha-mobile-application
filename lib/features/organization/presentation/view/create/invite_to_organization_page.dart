@@ -1,23 +1,21 @@
-import 'package:estegatha/features/organization/presentation/view_model/organization_cubit.dart';
 import 'package:estegatha/utils/common/widgets/custom_elevated_button.dart';
 import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class InviteToOrganizationPage extends StatelessWidget {
-  static const String id = 'home_page';
+  static const String id = 'invite_to_organization_page';
 
-  const InviteToOrganizationPage({super.key, required this.name});
+  const InviteToOrganizationPage(
+      {super.key, required this.name, required this.organizationCode});
 
   final String name;
+  final String organizationCode;
 
   @override
   Widget build(BuildContext context) {
-    final String code =
-        BlocProvider.of<OrganizationCubit>(context).state.organization!.code;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -33,7 +31,7 @@ class InviteToOrganizationPage extends StatelessWidget {
           child: Column(
             children: <Widget>[
               Text(
-                'invite members to the $name organization',
+                'Invite members to the $name organization',
                 style: TextStyle(
                   color: ConstantColors.primary,
                   fontSize: ConstantSizes.headingMd.sp,
@@ -54,7 +52,7 @@ class InviteToOrganizationPage extends StatelessWidget {
               ),
               SizedBox(height: (ConstantSizes.spaceBtwSections.h)),
               SizedBox(
-                width: 300.w, // your custom width
+                width: 300.w,
                 height: 200.h,
                 child: Card(
                   shape: RoundedRectangleBorder(
@@ -68,7 +66,7 @@ class InviteToOrganizationPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          '${code.substring(0, code.length ~/ 2)}-${BlocProvider.of<OrganizationCubit>(context).state.organization!.code.substring(code.length ~/ 2)}',
+                          '${organizationCode.substring(0, organizationCode.length ~/ 2).toUpperCase()}-${organizationCode.substring(organizationCode.length ~/ 2).toUpperCase()}',
                           style: TextStyle(
                             letterSpacing: 2,
                             color: ConstantColors.primary,
@@ -81,8 +79,7 @@ class InviteToOrganizationPage extends StatelessWidget {
                           'This code is valid for 24 hours.',
                           style: TextStyle(
                             color: ConstantColors.primary,
-                            fontSize: ConstantSizes
-                                .fontSizeMd, // your custom font size
+                            fontSize: ConstantSizes.fontSizeMd,
                           ),
                         ),
                         SizedBox(height: ConstantSizes.defaultSpace.h),
@@ -90,7 +87,10 @@ class InviteToOrganizationPage extends StatelessWidget {
                           padding: EdgeInsets.symmetric(
                               horizontal: ConstantSizes.defaultSpace.w * 2),
                           child: CustomElevatedButton(
-                              onPressed: () {}, labelText: "Send Code"),
+                              onPressed: () {
+                                // Add functionality for sending the code
+                              },
+                              labelText: "Send Code"),
                         )
                       ],
                     ),

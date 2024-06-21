@@ -11,7 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class OTPForm extends StatefulWidget {
-  const OTPForm({Key? key}) : super(key: key);
+  const OTPForm({super.key});
 
   @override
   _OTPFormState createState() => _OTPFormState();
@@ -89,8 +89,8 @@ class _OTPFormState extends State<OTPForm> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => FinalJoinOrganizationPage(
-                      orgId: 7,
+                    builder: (context) => const FinalJoinOrganizationPage(
+                      orgId: 16,
                     ),
                   ),
                 );

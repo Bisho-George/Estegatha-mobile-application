@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:estegatha/features/organization/domain/api/organization_api.dart';
 import 'package:estegatha/features/organization/domain/models/organization.dart';
 import 'package:estegatha/features/organization/domain/models/organizationMember.dart';
@@ -20,6 +19,7 @@ class OrganizationCubit extends Cubit<OrganizationState> {
       emit(const OrganizationLoading());
 
       try {
+        print("Enter try block");
         final res = await OrganizationHttpClient.createOrganization(
             name, type = 'default');
 
@@ -47,7 +47,7 @@ class OrganizationCubit extends Cubit<OrganizationState> {
 
       try {
         final response = await OrganizationHttpClient.joinOrganizationByCode(
-            code, 7); //TODO: orgId => static value for now
+            code, 16); //TODO: orgId => static value for now
 
         if (response.statusCode == 200) {
           emit(const OrganizationJoinSuccess());
