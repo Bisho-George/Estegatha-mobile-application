@@ -1,6 +1,8 @@
 import 'package:estegatha/features/organization/domain/models/organization.dart';
 import 'package:estegatha/features/organization/domain/models/organizationMember.dart';
 import 'package:estegatha/features/organization/presentation/view_model/organization_cubit.dart';
+import 'package:estegatha/home_page.dart';
+import 'package:estegatha/utils/common/widgets/custom_elevated_button.dart';
 import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
 import 'package:flutter/cupertino.dart';
@@ -48,7 +50,6 @@ class FinalJoinOrganizationPage extends StatelessWidget {
                         fontWeight: ConstantSizes.fontWeightBold,
                       ),
                     ),
-
                     const Text(
                       "Here's how is waiting for you:",
                       style: TextStyle(
@@ -56,11 +57,9 @@ class FinalJoinOrganizationPage extends StatelessWidget {
                         fontSize: ConstantSizes.fontSizeLg,
                       ),
                     ),
-
                     const SizedBox(
-                      height: ConstantSizes.spaceBtwSections,
+                      height: ConstantSizes.spaceBtwSections * 4,
                     ),
-
                     FutureBuilder<List<OrganizationMember>>(
                       future: context
                           .read<OrganizationCubit>()
@@ -68,44 +67,42 @@ class FinalJoinOrganizationPage extends StatelessWidget {
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return const CircularProgressIndicator(); // Show loading spinner
+                          return const CircularProgressIndicator();
                         } else if (snapshot.hasError) {
-                          return Text(
-                              'Error: ${snapshot.error}'); // Show error message
+                          return Text('Error: ${snapshot.error}');
                         } else {
-                          // Assuming data is successfully loaded
                           final members = snapshot.data ?? [];
                           return Expanded(
-                            child: ListView.builder(
+                            child: GridView.builder(
+                              shrinkWrap: true,
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                childAspectRatio: 2,
+                                crossAxisSpacing: 0,
+                                mainAxisSpacing: 5,
+                              ),
                               itemCount: members.length,
                               itemBuilder: (context, index) {
                                 final member = members[index];
-                                return ListTile(
-                                  leading: Container(
-                                    height:
-                                        100, // Specify the height of the circle
-                                    width:
-                                        100, // Specify the width of the circle
-                                    decoration: BoxDecoration(
-                                      color: ConstantColors
-                                          .primary, // Use your primary color here
+                                return GridTile(
+                                  child: Container(
+                                    height: 50,
+                                    width: 50,
+                                    decoration: const BoxDecoration(
+                                      color: ConstantColors.primary,
                                       shape: BoxShape.circle,
                                     ),
                                     child: Center(
                                       child: Text(
-                                        member.username![0]
-                                            .toUpperCase(), // Display the first letter of the member's name
-                                        style: TextStyle(
-                                          color: ConstantColors
-                                              .white, // Use your text color here
-                                          fontSize: ConstantSizes
-                                              .headingLg, // Use your font size here
+                                        member.username![0].toUpperCase(),
+                                        style: const TextStyle(
+                                          color: ConstantColors.white,
+                                          fontSize: 20,
                                         ),
                                       ),
                                     ),
                                   ),
-                                  title: Text(member.username!),
-                                  // Add more member details here
                                 );
                               },
                             ),
@@ -113,61 +110,43 @@ class FinalJoinOrganizationPage extends StatelessWidget {
                         }
                       },
                     ),
-
                     const SizedBox(
                       height: ConstantSizes.spaceBtwSections * 2,
                     ),
-
-                    // Column(
-                    //   crossAxisAlignment: CrossAxisAlignment.center,
-                    //   children: [
-                    //     CustomElevatedButton(
-                    //         onPressed: () {
-                    //           final userCubit = context.read<UserCubit>();
-                    //           final user =
-                    //               (userCubit.state as UserSuccess).user;
-                    //           final updatedOrganizationIds =
-                    //               List<int>.from(user.organizationIds ?? []);
-
-                    //           final updatedUser = Member(
-                    //             id: user.id,
-                    //             name: user.name,
-                    //             email: user.email,
-                    //             password: user.password,
-                    //             organizationIds: updatedOrganizationIds,
-                    //           );
-
-                    //           userCubit.setUser(updatedUser);
-                    //           // pop all pages before navigating to the organization detail page
-                    //           Navigator.pop(context);
-                    //           // Navigator.pushReplacement(
-                    //           //   context,
-                    //           //   MaterialPageRoute(
-                    //           //     builder: (context) => OrganizationDetailPage(
-                    //           //       organizationId: org.id,
-                    //           //     ),
-                    //           //   ),
-                    //           // );
-                    //           Navigator.pushReplacement(
-                    //             context,
-                    //             MaterialPageRoute(
-                    //               builder: (context) => HomePage(),
-                    //             ),
-                    //           );
-                    //         },
-                    //         labelText: "Join"),
-                    //     const SizedBox(
-                    //       height: ConstantSizes.md,
-                    //     ),
-                    //     CustomElevatedButton(
-                    //       onPressed: () {
-                    //         Navigator.pop(context);
-                    //       },
-                    //       labelText: "Cancel",
-                    //       isPrimary: false,
-                    //     ),
-                    //   ],
-                    // ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        CustomElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              // Navigator.pushReplacement(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //     builder: (context) => OrganizationDetailPage(
+                              //       organizationId: org.id,
+                              //     ),
+                              //   ),
+                              // );
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => HomePage(),
+                                ),
+                              );
+                            },
+                            labelText: "Join"),
+                        const SizedBox(
+                          height: ConstantSizes.md,
+                        ),
+                        CustomElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          labelText: "Cancel",
+                          isPrimary: false,
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
