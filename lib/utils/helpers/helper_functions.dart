@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:estegatha/features/organization/domain/models/member.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -38,5 +39,15 @@ class HelperFunctions {
       throw Exception('Access token is null');
     }
     return accessToken;
+  }
+
+  // static to get user object from shared preferences
+  static Future<Member> getUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    final user = prefs.getString('user');
+    if (user == null) {
+      throw Exception('User not found in SharedPreferences');
+    }
+    return jsonDecode(user);
   }
 }
