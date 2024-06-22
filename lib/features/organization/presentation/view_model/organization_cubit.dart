@@ -3,10 +3,13 @@ import 'package:estegatha/features/organization/domain/api/organization_api.dart
 import 'package:estegatha/features/organization/domain/models/organization.dart';
 import 'package:estegatha/features/organization/domain/models/organizationMember.dart';
 import 'package:estegatha/features/organization/domain/models/post.dart';
+import 'package:estegatha/features/organization/presentation/view_model/user_organizations_cubit.dart'
+    as userOrgCubit;
 import 'package:estegatha/features/sign-in/data/api/user_http_client.dart';
 import 'package:estegatha/features/sign-in/presentation/veiw_models/user_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'organization_state.dart';
 
@@ -17,13 +20,10 @@ class OrganizationCubit extends Cubit<OrganizationState> {
       {required String name, String? type}) async {
     final userCubit = context.read<UserCubit>();
 
-    print("User state: ${userCubit.state}");
     if (userCubit.state is UserLoaded) {
-      // final userId = (userCubit.state as UserLoaded).user.id;
       emit(const OrganizationLoading());
 
       try {
-        print("Enter try block");
         final res = await OrganizationHttpClient.createOrganization(
             name, type = 'default');
 
@@ -32,6 +32,9 @@ class OrganizationCubit extends Cubit<OrganizationState> {
           final organization = Organization.fromJson(responseBody);
 
           emit(OrganizationCreationSuccess(organization));
+
+          // update the user organizations
+          updateOrganizationsList(context);
         } else {
           emit(const OrganizationFailure(
               errMessage: "Something went wrong, try again!"));
@@ -41,6 +44,15 @@ class OrganizationCubit extends Cubit<OrganizationState> {
         emit(const OrganizationFailure(
             errMessage: "Failed to create organization!"));
       }
+    }
+  }
+
+  Future<void> updateOrganizationsList(BuildContext context) async {
+    final userId = BlocProvider.of<UserCubit>(context).getCurrentUser()?.id;
+    if (userId != null) {
+      context
+          .read<userOrgCubit.UserOrganizationsCubit>()
+          .getUserOrganizations(userId);
     }
   }
 

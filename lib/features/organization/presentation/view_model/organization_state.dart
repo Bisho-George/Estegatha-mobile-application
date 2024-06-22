@@ -98,3 +98,9 @@ class UserOrganizationsSuccess extends OrganizationState {
 
   const UserOrganizationsSuccess(this.organizations) : super(null);
 }
+
+class CurrentOrganizationId extends OrganizationState {
+  final int organizationId;
+
+  const CurrentOrganizationId(this.organizationId) : super(null);
+}

@@ -37,17 +37,15 @@ class OrganizationDetailPage extends StatelessWidget {
   final int organizationId;
 
   const OrganizationDetailPage({super.key, required this.organizationId});
-
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
-
     context.read<OrganizationCubit>().getOrganizationById(organizationId);
+    SizeConfig().init(context);
 
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        appBar: OrganizationAppBar(),
+        appBar: CustomOrganizationAppBar(organizationId: organizationId),
         body: TabBarView(
           children: [
             // First tab content => Track location
@@ -55,7 +53,6 @@ class OrganizationDetailPage extends StatelessWidget {
               children: [
                 BlocBuilder<OrganizationCubit, OrganizationState>(
                   builder: (context, state) {
-                    print("State: $state");
                     if (state is OrganizationLoading) {
                       return const Center(child: CircularProgressIndicator());
                     } else if (state is OrganizationFailure) {

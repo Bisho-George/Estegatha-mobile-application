@@ -1,11 +1,23 @@
+import 'package:estegatha/features/organization/domain/models/organization.dart';
+import 'package:estegatha/features/organization/presentation/view_model/organization_cubit.dart';
+import 'package:estegatha/features/organization/presentation/view_model/organization_state.dart';
+
 import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/image_strings.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:estegatha/features/organization/presentation/view_model/user_organizations_cubit.dart'
+    as user_cubit;
 
 class OrganizationAppBar extends StatelessWidget
     implements PreferredSizeWidget {
+  final String organizationName;
+  final List<Organization> organizations;
+
+  const OrganizationAppBar(
+      {super.key, required this.organizationName, required this.organizations});
   @override
   Size get preferredSize => Size.fromHeight(124.r);
 
@@ -52,18 +64,16 @@ class OrganizationAppBar extends StatelessWidget
                     borderRadius: BorderRadius.circular(30.0.r),
                   ),
                   child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: 'Graduation project',
+                    child: DropdownButton<Organization>(
+                      value: organizations.firstWhere(
+                          (org) => org.name == organizationName,
+                          orElse: () => organizations.first),
                       dropdownColor: ConstantColors.grey,
-                      items: <String>[
-                        'Graduation project',
-                        'Organization 2',
-                        'Organization 3'
-                      ].map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
+                      items: organizations.map((Organization organization) {
+                        return DropdownMenuItem<Organization>(
+                          value: organization,
                           child: Text(
-                            value,
+                            organization.name!,
                             style: TextStyle(
                                 fontSize: ConstantSizes.fontSizeMd.sp,
                                 fontWeight: ConstantSizes.fontWeightSemiBold,
@@ -71,8 +81,9 @@ class OrganizationAppBar extends StatelessWidget
                           ),
                         );
                       }).toList(),
-                      onChanged: (_) {
+                      onChanged: (Organization? selectedOrganization) {
                         // Handle organization selection
+                        // You might need to update the state with the selected organization's name
                       },
                     ),
                   ),
@@ -137,4 +148,47 @@ class OrganizationAppBar extends StatelessWidget
       ),
     );
   }
+}
+
+class CustomOrganizationAppBar extends StatelessWidget
+    implements PreferredSizeWidget {
+  final int organizationId;
+
+  const CustomOrganizationAppBar({Key? key, required this.organizationId})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<user_cubit.UserOrganizationsCubit,
+        user_cubit.UserOrganizationsState>(
+      builder: (context, userState) {
+        List<Organization> organizations = [];
+        if (userState is user_cubit.UserOrganizationsSuccess) {
+          organizations = userState.organizations;
+        }
+
+        return BlocBuilder<OrganizationCubit, OrganizationState>(
+          builder: (context, orgState) {
+            String organizationName = "";
+            if (orgState is OrganizationDetailSuccess) {
+              organizationName = orgState.organization.name!;
+            } else if (userState is UserOrganizationsSuccess &&
+                organizations.isNotEmpty) {
+              // Fallback to the first organization from UserOrganizationsCubit if available
+              organizationName = organizations.first.name!;
+            }
+
+            return OrganizationAppBar(
+              organizationName: organizationName,
+              organizations: organizations,
+            );
+          },
+        );
+      },
+    );
+  }
+
+  @override
+  Size get preferredSize =>
+      Size.fromHeight(124.r); // Adjust the height as needed
 }

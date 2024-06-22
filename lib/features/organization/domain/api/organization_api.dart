@@ -72,6 +72,7 @@ class OrganizationHttpClient {
 
   static Future<http.Response> getOrganizationMembers(int orgId) async {
     final accessToken = await _getAccessToken();
+
     final res = await http.get(
       Uri.parse('$organizationBaseUrl/members/$orgId'),
       headers: {
@@ -80,8 +81,11 @@ class OrganizationHttpClient {
       },
     );
 
-    print("OrganizationHttpClient.getOrganizationMembers: ${res.body}");
+    if (res.statusCode == 401) {
+      // call  the refresh token to get the new access token
+    }
 
+    print("Status code: ${res.statusCode}");
     return res;
   }
 
