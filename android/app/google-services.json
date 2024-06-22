@@ -1,0 +1,105 @@
+{
+  "project_info": {
+    "project_number": "670051743143",
+    "project_id": "estegatha-notification",
+    "storage_bucket": "estegatha-notification.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:670051743143:android:2e3c33e065ac455af2f282",
+        "android_client_info": {
+          "package_name": "com.estegatha.firebasepushnotification"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAi2XluzSbTa9_F-9IzAOv3QoIO9mL4vc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:670051743143:android:9af543de034616bff2f282",
+        "android_client_info": {
+          "package_name": "com.estegatha.firebasepushnotificationapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAi2XluzSbTa9_F-9IzAOv3QoIO9mL4vc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:670051743143:android:04f87ed1fd48d985f2f282",
+        "android_client_info": {
+          "package_name": "com.example.estegatha"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAi2XluzSbTa9_F-9IzAOv3QoIO9mL4vc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:670051743143:android:ea2c72173c1aad34f2f282",
+        "android_client_info": {
+          "package_name": "com.example.graduatedummy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAi2XluzSbTa9_F-9IzAOv3QoIO9mL4vc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:670051743143:android:a290436ffa3daa55f2f282",
+        "android_client_info": {
+          "package_name": "com.example.push_notification"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAi2XluzSbTa9_F-9IzAOv3QoIO9mL4vc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

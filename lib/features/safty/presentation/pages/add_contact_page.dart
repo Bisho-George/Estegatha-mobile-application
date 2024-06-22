@@ -9,59 +9,61 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../responsive/size_config.dart';
 import '../../../../utils/constant/sizes.dart';
+
 class AddContactPage extends StatelessWidget {
   AddContactPage({super.key});
+
   static const String routeName = '/add-contact';
   TextEditingController controller = TextEditingController();
   TextEditingController phoneController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     SizeConfig sizeConfig = SizeConfig();
     sizeConfig.init(context);
     FocusNode node = FocusNode();
     return Scaffold(
-      appBar: CustomAppBar.buildAppBar(
-        title: 'Add Contact',
-        actions: [
+        appBar: CustomAppBar.buildAppBar(title: 'Add Contact', actions: [
           IconButton(
             icon: const Icon(Icons.check),
             color: ConstantColors.primary,
-            onPressed: (){
-              BlocProvider.of<ContactCubit>(context).addContact(ContactModel(name: controller.text, phoneNumber: phoneController.text));
+            onPressed: () {
+              BlocProvider.of<ContactCubit>(context).addContact(ContactModel(
+                  name: controller.text, phoneNumber: phoneController.text));
               Navigator.pop(context);
             },
           ),
-        ]
-      ),
-      body: Column(
-        children: [
-          const CategoryHeaderWidget(name: 'Name'),
-          Container(
-            alignment: Alignment.center,
-            padding: EdgeInsets.only(
-              left: responsiveWidth(ConstantSizes.lg),
-              right: responsiveWidth(ConstantSizes.lg),
-              bottom: responsiveHeight(ConstantSizes.md),
+        ]),
+        body: Column(
+          children: [
+            const CategoryHeaderWidget(name: 'Name'),
+            Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.only(
+                left: responsiveWidth(ConstantSizes.lg),
+                right: responsiveWidth(ConstantSizes.lg),
+                bottom: responsiveHeight(ConstantSizes.md),
+              ),
+              child: TextField(
+                style: Styles.getDefaultPrimary(
+                    weight: ConstantSizes.fontWeightBold),
+                controller: controller,
+                textAlignVertical: TextAlignVertical.center,
+              ),
             ),
-            child: TextField(
-              style: Styles.getDefaultPrimary(weight: ConstantSizes.fontWeightBold),
-              controller: controller,
-              textAlignVertical: TextAlignVertical.center,
+            const CategoryHeaderWidget(name: 'Phone Number'),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: responsiveWidth(ConstantSizes.lg),
+                vertical: responsiveHeight(ConstantSizes.md),
+              ),
+              child: IntlPhoneField(
+                showCursor: false,
+                controller: phoneController,
+                initialCountryCode: 'EG',
+              ),
             ),
-          ),
-          const CategoryHeaderWidget(name: 'Phone Number'),
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: responsiveWidth(ConstantSizes.lg),
-              vertical: responsiveHeight(ConstantSizes.md),
-            ),
-            child: IntlPhoneField(
-              showCursor: false,
-              controller: phoneController,
-            ),
-          ),
-        ],
-      )
-    );
+          ],
+        ));
   }
 }

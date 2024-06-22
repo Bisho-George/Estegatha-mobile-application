@@ -5,7 +5,7 @@ class DioAuth {
     Dio dio = Dio();
     dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) {
-        String token = 'eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiI4YmUzYzI3ZC04NjQzLTQ5M2MtOTg0Mi1mYWE0MzcwMzc2NzQiLCJzdWIiOiJtaWRvbW9zdGFmYTUxNEBnbWFpbC5jb20iLCJpYXQiOjE3MTg4ODczNzksImlzcyI6ImFwcC1TZXJ2aWNlIiwiZXhwIjoxNzE4ODg5MTc5LCJjcmVhdGVkIjoxNzE4ODg3Mzc5NTI5fQ.NYDYOsdKb-pGIaaiwtynA20lReCRE6Lrd3yViQo0PuEL_McVttUPMARFxVFIS7CKnU633-WOnMbPYq_p0ISUYQ';
+        String token = 'eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiIyNDViNTE0My0wZTcyLTRiYzUtYjE1Yy0zMjQxMmJiZDkwNzMiLCJzdWIiOiJtaWRvbW9zdGFmYTUxNEBnbWFpbC5jb20iLCJpYXQiOjE3MTkwNzExMjYsImlzcyI6ImFwcC1TZXJ2aWNlIiwiZXhwIjoxNzE5MDcyOTI2LCJjcmVhdGVkIjoxNzE5MDcxMTI2NjIxfQ.wbr-w4t51hk2IsRavanUJZlsJFrY_tupekAKodeUibVcMGbCYvR-oB6f8Hr4HMJBquhSCWcQS9Ns36qAHlfEeA';
         options.headers['Authorization'] = 'Bearer $token';
         return handler.next(options); //continue
       },
