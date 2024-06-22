@@ -1,8 +1,7 @@
-import 'package:estegatha/features/organization/domain/models/member.dart';
 import 'package:estegatha/features/organization/domain/models/organization.dart';
-import 'package:estegatha/features/organization/presentation/view/main/organization_detail_page.dart';
+import 'package:estegatha/features/organization/domain/models/organizationMember.dart';
 import 'package:estegatha/features/organization/presentation/view_model/organization_cubit.dart';
-import 'package:estegatha/features/sign-in/presentation/veiw_models/user_cubit.dart';
+import 'package:estegatha/main_menu.dart';
 import 'package:estegatha/utils/common/widgets/custom_elevated_button.dart';
 import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
@@ -11,14 +10,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FinalJoinOrganizationPage extends StatelessWidget {
-  const FinalJoinOrganizationPage({super.key, required this.code});
+  const FinalJoinOrganizationPage({super.key, required this.orgId});
 
-  final String code;
+  final int orgId;
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Organization?>(
-        future: context.read<OrganizationCubit>().getOrganizationByCode(code),
+        future: context.read<OrganizationCubit>().getOrganizationById(orgId),
         builder: (BuildContext context, AsyncSnapshot<Organization?> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const CircularProgressIndicator(); // Show loading spinner while waiting for future to complete
@@ -38,7 +37,7 @@ class FinalJoinOrganizationPage extends StatelessWidget {
               ),
               body: Padding(
                 padding: const EdgeInsets.symmetric(
-                    vertical: ConstantSizes.spaceBtwSections * 2,
+                    vertical: ConstantSizes.spaceBtwSections,
                     horizontal: ConstantSizes.defaultSpace),
                 child: Column(
                   children: [
@@ -51,9 +50,6 @@ class FinalJoinOrganizationPage extends StatelessWidget {
                         fontWeight: ConstantSizes.fontWeightBold,
                       ),
                     ),
-                    const SizedBox(
-                      height: ConstantSizes.spaceBtwSections,
-                    ),
                     const Text(
                       "Here's how is waiting for you:",
                       style: TextStyle(
@@ -61,89 +57,86 @@ class FinalJoinOrganizationPage extends StatelessWidget {
                         fontSize: ConstantSizes.fontSizeLg,
                       ),
                     ),
-
                     const SizedBox(
-                      height: ConstantSizes.spaceBtwSections * 3,
+                      height: ConstantSizes.spaceBtwSections * 4,
                     ),
-
-                    // create a circle
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: org!.memberIds!.map((id) {
-                        return FutureBuilder<Member?>(
-                          future: context.read<UserCubit>().getUserById(id),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<Member?> snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const CircularProgressIndicator(); // Show loading spinner while waiting for future to complete
-                            } else if (snapshot.hasError) {
-                              return Text(
-                                  'Error: ${snapshot.error}'); // Show error message if future completed with an error
-                            } else {
-                              final user = snapshot.data;
-                              return Container(
-                                height: 100,
-                                width: 100,
-                                decoration: const BoxDecoration(
-                                  color: ConstantColors.primary,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    // Only show the first character of the name
-                                    (user?.name ?? '')[0].toUpperCase(),
-                                    style: const TextStyle(
-                                      color: ConstantColors.white,
-                                      fontSize: ConstantSizes.headingLg,
+                    FutureBuilder<List<OrganizationMember>>(
+                      future: context
+                          .read<OrganizationCubit>()
+                          .getOrganizationMembers(orgId),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else {
+                          final members = snapshot.data ?? [];
+                          return Expanded(
+                            child: GridView.builder(
+                              shrinkWrap: true,
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                childAspectRatio: 2,
+                                crossAxisSpacing: 0,
+                                mainAxisSpacing: 5,
+                              ),
+                              itemCount: members.length,
+                              itemBuilder: (context, index) {
+                                final member = members[index];
+                                return GridTile(
+                                  child: Container(
+                                    height: 50,
+                                    width: 50,
+                                    decoration: const BoxDecoration(
+                                      color: ConstantColors.primary,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        member.username![0].toUpperCase(),
+                                        style: const TextStyle(
+                                          color: ConstantColors.white,
+                                          fontSize: 20,
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              );
-                            }
-                          },
-                        );
-                      }).toList(),
+                                );
+                              },
+                            ),
+                          );
+                        }
+                      },
                     ),
-
                     const SizedBox(
                       height: ConstantSizes.spaceBtwSections * 2,
                     ),
-
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         CustomElevatedButton(
                             onPressed: () {
-                              final userCubit = context.read<UserCubit>();
-                              final user =
-                                  (userCubit.state as UserSuccess).user;
-                              final updatedOrganizationIds =
-                                  List<int>.from(user.organizationIds ?? []);
-
-                              final updatedUser = Member(
-                                id: user.id,
-                                name: user.name,
-                                email: user.email,
-                                password: user.password,
-                                organizationIds: updatedOrganizationIds,
-                              );
-
-                              userCubit.setUser(updatedUser);
-                              // pop all pages before navigating to the organization detail page
                               Navigator.pop(context);
+                              // Navigator.pushReplacement(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //     builder: (context) => OrganizationDetailPage(
+                              //       organizationId: org.id,
+                              //     ),
+                              //   ),
+                              // );
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => OrganizationDetailPage(
-                                    organizationId: org.id,
-                                  ),
+                                  builder: (context) => const MainNavMenu(),
                                 ),
                               );
                             },
                             labelText: "Join"),
                         const SizedBox(
-                          height: ConstantSizes.spaceBtwSections,
+                          height: ConstantSizes.md,
                         ),
                         CustomElevatedButton(
                           onPressed: () {
@@ -160,7 +153,5 @@ class FinalJoinOrganizationPage extends StatelessWidget {
             );
           }
         });
-
-    // todo: get organization object by the code entered
   }
 }

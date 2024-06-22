@@ -7,10 +7,12 @@ import 'package:estegatha/features/organization/presentation/view_model/organiza
 import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/image_strings.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
+import 'package:estegatha/utils/helpers/responsive.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class OrganizationDetailPage extends StatelessWidget {
@@ -20,9 +22,9 @@ class OrganizationDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // SizeConfig().init(context);
+    SizeConfig().init(context);
     final organizationCubit = BlocProvider.of<OrganizationCubit>(context);
-    organizationCubit.getOrganizationData(organizationId);
+    // organizationCubit.getOrganizationData(organizationId);
 
     return DefaultTabController(
       length: 3,
@@ -187,14 +189,14 @@ class OrganizationDetailPage extends StatelessWidget {
                             child: ListTile(
                               leading: CircleAvatar(
                                 child: Text(
-                                  member.name[0],
+                                  member.username[0],
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ),
                               title: Text(
-                                member.name,
+                                member.username,
                                 style: const TextStyle(
                                   color: ConstantColors.primary,
                                   fontSize: ConstantSizes.fontSizeLg,
@@ -274,14 +276,14 @@ class OrganizationDetailPage extends StatelessWidget {
                             child: ListTile(
                               leading: CircleAvatar(
                                 child: Text(
-                                  member.name[0],
+                                  member.username[0],
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ),
                               title: Text(
-                                member.name,
+                                member.username,
                                 style: const TextStyle(
                                   color: ConstantColors.primary,
                                   fontSize: ConstantSizes.fontSizeLg,

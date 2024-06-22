@@ -8,8 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class OTPForm extends StatefulWidget {
-  const OTPForm({Key? key}) : super(key: key);
+  const OTPForm({super.key});
 
   @override
   _OTPFormState createState() => _OTPFormState();
@@ -22,8 +24,8 @@ class _OTPFormState extends State<OTPForm> {
 
   Widget buildOTPField(int index) {
     return SizedBox(
-      height: 50,
-      width: 45,
+      height: 50.h,
+      width: 50.w,
       child: TextFormField(
         focusNode: focusNodes[index],
         onChanged: (value) {
@@ -69,7 +71,7 @@ class _OTPFormState extends State<OTPForm> {
       child: Column(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: List.generate(7, (index) {
               if (index == 3) {
                 return const Text('-',
@@ -87,8 +89,8 @@ class _OTPFormState extends State<OTPForm> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => FinalJoinOrganizationPage(
-                      code: otp.join().toString(),
+                    builder: (context) => const FinalJoinOrganizationPage(
+                      orgId: 16,
                     ),
                   ),
                 );
@@ -116,7 +118,8 @@ class _OTPFormState extends State<OTPForm> {
                   onPressed: () {
                     final organizationCubit = context.read<OrganizationCubit>();
                     print("Code: ${otp.join()}");
-                    organizationCubit.joinOrganization(context, otp.join());
+                    organizationCubit.joinOrganizationByCode(
+                        context, otp.join());
                   },
                   labelText: 'Submit',
                 ),
@@ -128,6 +131,3 @@ class _OTPFormState extends State<OTPForm> {
     );
   }
 }
-
-
-// FMEEUY

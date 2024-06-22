@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
+import 'package:estegatha/utils/constant/variables.dart';
+
 import 'package:http/http.dart' as http;
 
-const uri = kIsWeb ? 'http://127.0.0.1:8080' : 'http://10.0.2.2:8080';
+class SignInHttpClient {
+  static String authBaseUrl = '${ConstantVariables.uri}/api/v1/auth';
 
-class LoginHttpClient {
-  static String authBaseUrl = '$uri/auth';
   static Future<http.Response> login(
       String url, String email, String password) async {
     return await http.post(

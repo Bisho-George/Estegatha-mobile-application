@@ -2,18 +2,13 @@ import 'package:estegatha/features/forget-password/presentation/pages/forget_pas
 import 'package:estegatha/features/sign-in/presentation/veiw_models/login_cubit/login_cubit.dart';
 import 'package:estegatha/utils/common/widgets/custom_elevated_button.dart';
 import 'package:estegatha/utils/common/widgets/custom_text_field.dart';
-import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
-import 'package:estegatha/utils/helpers/validation.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SignInForm extends StatefulWidget {
-  SignInForm({super.key, required this.signInWithPhone});
+  const SignInForm({super.key, required this.signInWithPhone});
 
   final bool signInWithPhone;
 
@@ -38,8 +33,7 @@ class _SignInFormState extends State<SignInForm> {
     return Form(
       key: formKey,
       child: Padding(
-        padding:
-            const EdgeInsets.symmetric(vertical: ConstantSizes.defaultSpace),
+        padding: EdgeInsets.symmetric(vertical: ConstantSizes.defaultSpace.h),
         child: Column(
           children: [
             if (widget.signInWithPhone)
@@ -49,7 +43,6 @@ class _SignInFormState extends State<SignInForm> {
                 onChanged: (value) {
                   phone = value;
                 },
-                validator: (value) => Validation.validatePhone(value),
                 prefixIcon: const Icon(Icons.phone),
               )
             else
@@ -58,8 +51,16 @@ class _SignInFormState extends State<SignInForm> {
                 onChanged: (value) {
                   email = value;
                 },
-                validator: (value) => Validation.validateEmail(value),
                 prefixIcon: const Icon(Icons.email),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter your email';
+                  }
+                  if (!value.contains('@')) {
+                    return 'Please enter a valid email';
+                  }
+                  return null;
+                },
               ),
             const SizedBox(
               height: ConstantSizes.spaceBtwInputFields,
@@ -69,7 +70,6 @@ class _SignInFormState extends State<SignInForm> {
               onChanged: (value) {
                 password = value;
               },
-              validator: (value) => Validation.validatePassword(value),
               obscureText: _obscureText,
               prefixIcon: const Icon(Icons.password),
               suffixIcon: IconButton(
@@ -78,30 +78,38 @@ class _SignInFormState extends State<SignInForm> {
                 ),
                 onPressed: _togglePasswordVisibility,
               ),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Please enter your password';
+                }
+                if (value.length < 6) {
+                  return 'Password must be at least 6 characters';
+                }
+                return null;
+              },
             ),
             const SizedBox(
               height: ConstantSizes.spaceBtwInputFields,
             ),
-            SizedBox(
-              width: double.infinity,
-              child: CustomElevatedButton(
-                labelText: "Login",
-                onPressed: () {
-                  if (formKey.currentState!.validate()) {
-                    if (widget.signInWithPhone == true) {
-                      BlocProvider.of<LoginCubit>(context).loginWithPhone(
-                        phone: phone!,
-                        password: password!,
-                      );
-                    } else {
-                      BlocProvider.of<LoginCubit>(context).loginWithEmail(
-                        email: email!,
-                        password: password!,
-                      );
-                    }
+            CustomElevatedButton(
+              onPressed: () {
+                print("login Pressed");
+                if (formKey.currentState!.validate()) {
+                  if (widget.signInWithPhone == true) {
+                    BlocProvider.of<LoginCubit>(context).loginWithPhone(
+                      phone: phone!,
+                      password: password!,
+                    );
+                  } else {
+                    BlocProvider.of<LoginCubit>(context).loginWithEmail(
+                      context: context,
+                      email: email!,
+                      password: password!,
+                    );
                   }
-                },
-              ),
+                }
+              },
+              labelText: "Login",
             ),
             Row(
               children: [

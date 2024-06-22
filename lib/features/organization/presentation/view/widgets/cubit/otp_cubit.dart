@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:estegatha/features/organization/domain/api/organization_api.dart';
-
 import 'package:meta/meta.dart';
 
 part 'otp_state.dart';
@@ -15,7 +14,7 @@ class OtpCubit extends Cubit<OtpState> {
 
     // Check the database for an organization with the entered OTP
     // final dbHelper = DatabaseHelper.instance;
-    final organization = OrganizationHttpClient.getOrganizationByCode(otp);
+    final organization = OrganizationHttpClient.getOrganizationById(1);
 
     print("===========================================");
     print(organization);
