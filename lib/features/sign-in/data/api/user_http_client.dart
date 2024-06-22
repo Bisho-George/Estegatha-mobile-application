@@ -9,7 +9,6 @@ class UserHttpClient {
   // get user organizations
   static Future<http.Response> getUserOrganizations(int userId) async {
     final accessToken = await HelperFunctions.getAccessToken();
-    print("Enter getUserOrganizations");
     final res = await http.get(
       Uri.parse('$userBaseUrl/organizations'),
       headers: {
@@ -17,8 +16,6 @@ class UserHttpClient {
         "Authorization": "Bearer $accessToken"
       },
     );
-
-    print("Response from getUserOrganizations: ${res.body}");
 
     return res;
   }

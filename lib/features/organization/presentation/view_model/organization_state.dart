@@ -29,12 +29,15 @@ class OrganizationCreationSuccess extends OrganizationState {
 
 class OrganizationDetailSuccess extends OrganizationState {
   final Organization organization;
+  final List<OrganizationMember>? members;
+  final List<Post>? posts;
 
-  const OrganizationDetailSuccess(this.organization) : super(organization);
+  const OrganizationDetailSuccess(this.organization, {this.members, this.posts})
+      : super(organization);
 }
 
 class OrganizationSuccess extends OrganizationState {
-  final List<Member> members;
+  final List<OrganizationMember> members;
   final List<Post> posts;
 
   const OrganizationSuccess(
@@ -48,6 +51,10 @@ class OrganizationLoading extends OrganizationState {
 
 class JoinOrganizationLoading extends OrganizationState {
   const JoinOrganizationLoading() : super(null);
+}
+
+class UserOrganizationsLoading extends OrganizationState {
+  const UserOrganizationsLoading() : super(null);
 }
 
 class OrganizationMembersLoading extends OrganizationState {
@@ -70,12 +77,6 @@ class OrganizationJoinSuccess extends OrganizationState {
   const OrganizationJoinSuccess() : super(null);
 }
 
-class PostSuccess extends OrganizationState {
-  final Post post;
-
-  const PostSuccess(this.post) : super(null);
-}
-
 class OrganizationPostsLoading extends OrganizationState {
   const OrganizationPostsLoading() : super(null);
 }
@@ -90,4 +91,10 @@ class OrganizationPostsSuccess extends OrganizationState {
   final List<Post> posts;
 
   const OrganizationPostsSuccess(this.posts) : super(null);
+}
+
+class UserOrganizationsSuccess extends OrganizationState {
+  final List<Organization> organizations;
+
+  const UserOrganizationsSuccess(this.organizations) : super(null);
 }

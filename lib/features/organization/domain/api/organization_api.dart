@@ -84,4 +84,19 @@ class OrganizationHttpClient {
 
     return res;
   }
+
+  static Future<http.Response> getOrganizationPosts(int orgId) async {
+    final accessToken = await _getAccessToken();
+    final res = await http.get(
+      Uri.parse('$organizationBaseUrl/posts/$orgId'),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $accessToken",
+      },
+    );
+
+    print("OrganizationHttpClient.getOrganizationPosts: ${res.body}");
+
+    return res;
+  }
 }

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:estegatha/features/forget-password/presentation/veiw_models/forget-password/forget_password_cubit.dart';
 import 'package:estegatha/features/organization/domain/models/member.dart';
 import 'package:estegatha/features/organization/presentation/view_model/organization_cubit.dart';
+import 'package:estegatha/features/organization/presentation/view_model/user_organizations_cubit.dart';
 import 'package:estegatha/features/sign-in/presentation/pages/sign_in_page.dart';
 import 'package:estegatha/features/sign-in/presentation/veiw_models/login_cubit/login_cubit.dart';
 import 'package:estegatha/features/sign-in/presentation/veiw_models/user_cubit.dart';
@@ -28,6 +29,9 @@ void main() {
         ),
         BlocProvider<OrganizationCubit>(
           create: (context) => OrganizationCubit(),
+        ),
+        BlocProvider<UserOrganizationsCubit>(
+          create: (context) => UserOrganizationsCubit(),
         ),
       ],
       child: const MyApp(),
