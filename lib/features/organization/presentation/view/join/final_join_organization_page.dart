@@ -8,6 +8,7 @@ import 'package:estegatha/utils/constant/sizes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 class FinalJoinOrganizationPage extends StatelessWidget {
   const FinalJoinOrganizationPage({super.key, required this.orgId});
@@ -20,10 +21,9 @@ class FinalJoinOrganizationPage extends StatelessWidget {
         future: context.read<OrganizationCubit>().getOrganizationById(orgId),
         builder: (BuildContext context, AsyncSnapshot<Organization?> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator(); // Show loading spinner while waiting for future to complete
+            return const CircularProgressIndicator();
           } else if (snapshot.hasError) {
-            return Text(
-                'Error: ${snapshot.error}'); // Show error message if future completed with an error
+            return Text('Error: ${snapshot.error}');
           } else {
             final org = snapshot.data;
             return Scaffold(
@@ -127,6 +127,15 @@ class FinalJoinOrganizationPage extends StatelessWidget {
                               //     ),
                               //   ),
                               // );
+                              PersistentNavBarNavigator.pushNewScreen(
+                                context,
+                                screen: const MainNavMenu(),
+                                withNavBar: false,
+                              );
+                              // MaterialPageRoute(
+                              //   builder: (context) => MainNavMenu(),
+                              // ),
+
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(

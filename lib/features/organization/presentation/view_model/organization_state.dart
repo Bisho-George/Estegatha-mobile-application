@@ -1,6 +1,5 @@
 // part of 'organization_cubit.dart';
 
-import 'package:estegatha/features/organization/domain/models/member.dart';
 import 'package:estegatha/features/organization/domain/models/organization.dart';
 import 'package:estegatha/features/organization/domain/models/organizationMember.dart';
 import 'package:estegatha/features/organization/domain/models/post.dart';
@@ -74,7 +73,10 @@ class OrganizationMembersSuccess extends OrganizationState {
 }
 
 class OrganizationJoinSuccess extends OrganizationState {
-  const OrganizationJoinSuccess() : super(null);
+  final Organization organization;
+  const OrganizationJoinSuccess(
+    this.organization,
+  ) : super(organization);
 }
 
 class OrganizationPostsLoading extends OrganizationState {
@@ -103,4 +105,12 @@ class CurrentOrganizationId extends OrganizationState {
   final int organizationId;
 
   const CurrentOrganizationId(this.organizationId) : super(null);
+}
+
+class LeaveOrganizationLoading extends OrganizationState {
+  const LeaveOrganizationLoading() : super(null);
+}
+
+class LeaveOrganizationSuccess extends OrganizationState {
+  const LeaveOrganizationSuccess() : super(null);
 }

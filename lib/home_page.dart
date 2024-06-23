@@ -4,7 +4,6 @@ import 'package:estegatha/features/organization/presentation/view/join/join_orga
 import 'package:estegatha/features/organization/presentation/view/main/organization_detail_page.dart';
 import 'package:estegatha/features/organization/presentation/view_model/current_organization_cubit.dart';
 import 'package:estegatha/features/organization/presentation/view_model/user_organizations_cubit.dart';
-import 'package:estegatha/features/sign-in/presentation/pages/sign_in_page.dart';
 import 'package:estegatha/features/sign-in/presentation/veiw_models/user_cubit.dart';
 import 'package:estegatha/utils/common/widgets/custom_elevated_button.dart';
 import 'package:flutter/cupertino.dart';
@@ -49,14 +48,10 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Future<void> deleteUserFromPreferences() async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.remove('user');
-  }
-
   Future<void> _loadCurrentOrganization() async {
     final prefs = await SharedPreferences.getInstance();
     final organizationId = prefs.getInt('currentOrganizationId');
+    print("Organization ID: $organizationId");
     if (organizationId != null && userId != null) {
       final organizationsCubit = context.read<UserOrganizationsCubit>();
       if (organizationsCubit.state is UserOrganizationsSuccess) {
@@ -210,13 +205,7 @@ class _HomePageState extends State<HomePage> {
               child: CustomElevatedButton(
                 labelText: 'Logout',
                 onPressed: () async {
-                  await deleteUserFromPreferences();
-                  BlocProvider.of<UserCubit>(context).logout();
-                  PersistentNavBarNavigator.pushNewScreen(
-                    context,
-                    screen: SignInPage(),
-                    withNavBar: false,
-                  );
+                  BlocProvider.of<UserCubit>(context).logout(context);
                 },
               ),
             ),

@@ -17,6 +17,7 @@ class ConstantSizes {
   static const double iconLg = 32.0;
 
   // Font sizes
+  static const double fontSizeXs = 12.0;
   static const double fontSizeSm = 14.0;
   static const double fontSizeMd = 16.0;
   static const double fontSizeLg = 18.0;
@@ -41,6 +42,7 @@ class ConstantSizes {
 
   // AppBar height
   static const double appBarHeight = 56.0;
+  static const double bottomNavBarHeight = 50.0;
 
   // Image sizes
   static const double imageThumbSize = 80.0;
@@ -60,5 +62,5 @@ class ConstantSizes {
 
   // Input field
   static const double inputFieldRadius = 12.0;
-  static const double spaceBtwInputFields = 16.0;
+  static const double spaceBtwInputFields = 20.0;
 }

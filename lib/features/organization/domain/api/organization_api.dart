@@ -40,12 +40,11 @@ class OrganizationHttpClient {
   }
 
   static Future<http.Response> joinOrganizationByCode(
-      String organizationCode, int orgId) async {
+      String organizationCode) async {
     final accessToken = await _getAccessToken();
 
     final res = await http.post(
-      Uri.parse(
-          '$organizationBaseUrl/$orgId/join/code?org-code=$organizationCode'),
+      Uri.parse('$organizationBaseUrl/join/code/$organizationCode'),
       headers: {
         'Content-Type': 'application/json',
         "Authorization": "Bearer $accessToken",
@@ -100,6 +99,22 @@ class OrganizationHttpClient {
     );
 
     print("OrganizationHttpClient.getOrganizationPosts: ${res.body}");
+
+    return res;
+  }
+
+  static Future<http.Response> removeMemberFromOrganization(
+      int orgId, int userId) async {
+    final accessToken = await _getAccessToken();
+    final res = await http.delete(
+      Uri.parse('$organizationBaseUrl/$orgId/remove-member/$userId'),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $accessToken",
+      },
+    );
+
+    print("OrganizationHttpClient.removeUserFromOrganization: ${res.body}");
 
     return res;
   }

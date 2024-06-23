@@ -3,6 +3,7 @@ import 'package:estegatha/features/organization/domain/api/organization_api.dart
 import 'package:estegatha/features/organization/domain/models/organization.dart';
 import 'package:estegatha/features/organization/domain/models/organizationMember.dart';
 import 'package:estegatha/features/organization/domain/models/post.dart';
+import 'package:estegatha/features/organization/presentation/view_model/current_organization_cubit.dart';
 import 'package:estegatha/features/organization/presentation/view_model/user_organizations_cubit.dart'
     as userOrgCubit;
 import 'package:estegatha/features/sign-in/data/api/user_http_client.dart';
@@ -62,11 +63,15 @@ class OrganizationCubit extends Cubit<OrganizationState> {
       emit(const JoinOrganizationLoading());
 
       try {
-        final response = await OrganizationHttpClient.joinOrganizationByCode(
-            code, 16); //TODO: orgId => static value for now
+        final response =
+            await OrganizationHttpClient.joinOrganizationByCode(code);
 
         if (response.statusCode == 200) {
-          emit(const OrganizationJoinSuccess());
+          final Organization organization =
+              Organization.fromJson(jsonDecode(response.body));
+
+          print("Organization: ${organization.id}");
+          emit(OrganizationJoinSuccess(organization));
         } else {
           emit(const OrganizationFailure(
               errMessage: "Something went wrong, try again!"));
@@ -197,5 +202,53 @@ class OrganizationCubit extends Cubit<OrganizationState> {
       }
     }
     return [];
+  }
+
+  Future<void> leaveOrganization(BuildContext context, int orgId) async {
+    final userCubit = context.read<UserCubit>();
+    final userId = userCubit.getCurrentUser()?.id;
+    if (userCubit.state is UserLoaded) {
+      emit(const LeaveOrganizationLoading());
+
+      try {
+        final response =
+            await OrganizationHttpClient.removeMemberFromOrganization(
+                orgId, userId!);
+
+        if (response.statusCode == 200) {
+          updateOrganizationsList(context);
+
+          // get user organization
+          final userOrganizationResponse =
+              await UserHttpClient.getUserOrganizations(userId);
+          if (userOrganizationResponse.statusCode == 200) {
+            List<dynamic> userOrganizations =
+                jsonDecode(userOrganizationResponse.body);
+            if (userOrganizations.isNotEmpty) {
+              // Assuming each organization object has an 'id' field
+              int firstOrganizationId = userOrganizations[0]['id'];
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.setInt('currentOrganizationId', firstOrganizationId);
+              // set the current organization in the current organization cubit
+              context
+                  .read<CurrentOrganizationCubit>()
+                  .loadCurrentOrganization();
+            }
+          } else {
+            // Handle the case where fetching organizations failed
+            print("Failed to fetch user organizations");
+          }
+
+          emit(const LeaveOrganizationSuccess());
+        } else {
+          emit(const OrganizationFailure(
+              errMessage: "Something went wrong, try again!"));
+        }
+      } catch (e) {
+        print(e);
+        emit(const OrganizationFailure(
+            errMessage: "Failed to leave organization!"));
+      }
+    }
   }
 }

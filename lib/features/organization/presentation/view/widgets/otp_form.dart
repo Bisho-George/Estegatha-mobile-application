@@ -89,8 +89,8 @@ class _OTPFormState extends State<OTPForm> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const FinalJoinOrganizationPage(
-                      orgId: 16,
+                    builder: (context) => FinalJoinOrganizationPage(
+                      orgId: state.organization.id!,
                     ),
                   ),
                 );

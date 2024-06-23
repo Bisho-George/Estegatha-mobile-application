@@ -11,6 +11,10 @@ class CurrentOrganizationState extends Equatable {
   List<Object?> get props => [organizationId];
 }
 
+class CurrentOrganizationInitial extends CurrentOrganizationState {
+  const CurrentOrganizationInitial() : super();
+}
+
 class CurrentOrganizationCubit extends Cubit<CurrentOrganizationState> {
   CurrentOrganizationCubit() : super(const CurrentOrganizationState());
 
@@ -24,5 +28,9 @@ class CurrentOrganizationCubit extends Cubit<CurrentOrganizationState> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt('currentOrganizationId', organizationId);
     emit(CurrentOrganizationState(organizationId: organizationId));
+  }
+
+  void resetCurrentOrganizationState() {
+    emit(const CurrentOrganizationInitial());
   }
 }

@@ -1,4 +1,5 @@
 import 'package:estegatha/features/organization/presentation/view_model/current_organization_cubit.dart';
+import 'package:estegatha/features/settings/presentation/view/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'home_page.dart';
@@ -34,9 +35,7 @@ class _MainNavMenuState extends State<MainNavMenu> {
       const Center(
         child: Text("Catalog screen"),
       ),
-      const Center(
-        child: Text("Setting screen"),
-      ),
+      const SettingsScreen()
     ];
   }
 
