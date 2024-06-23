@@ -1,11 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:estegatha/utils/constant/colors.dart';
 
 import 'package:estegatha/utils/constant/sizes.dart';
 import 'package:estegatha/utils/helpers/responsive.dart';
 import 'package:flutter/material.dart';
 
 class SettingCardCarousel extends StatefulWidget {
-  const SettingCardCarousel({super.key});
+  final bool isOwner;
+  const SettingCardCarousel({super.key, required this.isOwner});
 
   @override
   _CardCarouselState createState() => _CardCarouselState();
@@ -28,6 +30,28 @@ class _CardCarouselState extends State<SettingCardCarousel> {
     // Add more help notes as needed
   ];
 
+  final List<Map<String, dynamic>> ownerHelpNotes = [
+    {
+      'image': 'assets/org_settings_reg_3.png',
+      'title': 'Admin permissions',
+      'text':
+          'Only admins can edit, delete organization, and change members role.',
+    },
+    {
+      'image': 'assets/org_settings_reg_1.png',
+      'title': 'Organization management',
+      'text':
+          'Changes you make here apply only to the current selected organization.',
+    },
+    {
+      'image': 'assets/org_settings_reg_2.png',
+      'title': 'Admin permissions',
+      'text':
+          'Only admins can edit, delete organization, and change members role.',
+    },
+    // Add more help notes as needed
+  ];
+
   int _currentImageIndex = 0;
   final CarouselController _carouselController = CarouselController();
 
@@ -36,7 +60,7 @@ class _CardCarouselState extends State<SettingCardCarousel> {
     return Column(
       children: [
         CarouselSlider.builder(
-          itemCount: helpNotes.length,
+          itemCount: widget.isOwner ? ownerHelpNotes.length : helpNotes.length,
           options: CarouselOptions(
             height: getProportionateScreenHeight(130),
             enableInfiniteScroll: false,
@@ -69,7 +93,9 @@ class _CardCarouselState extends State<SettingCardCarousel> {
                           bottomLeft: Radius.circular(10),
                         ),
                         child: Image.asset(
-                          helpNotes[index]['image'],
+                          widget.isOwner
+                              ? ownerHelpNotes[index]['image']
+                              : helpNotes[index]['image'],
                           fit: BoxFit.fitHeight,
                         ),
                       ),
@@ -87,14 +113,18 @@ class _CardCarouselState extends State<SettingCardCarousel> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              helpNotes[index]['title'],
+                              widget.isOwner
+                                  ? ownerHelpNotes[index]['title']
+                                  : helpNotes[index]['title'],
                               style: TextStyle(
                                 fontSize: SizeConfig.font16,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             Text(
-                              helpNotes[index]['text'],
+                              widget.isOwner
+                                  ? ownerHelpNotes[index]['text']
+                                  : helpNotes[index]['text'],
                               style: TextStyle(
                                 fontSize: SizeConfig.font16,
                               ),
@@ -109,11 +139,11 @@ class _CardCarouselState extends State<SettingCardCarousel> {
             );
           },
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(
-            helpNotes.length,
+            widget.isOwner ? ownerHelpNotes.length : helpNotes.length,
             (index) => buildDotIndicator(index),
           ),
         ),
@@ -123,12 +153,13 @@ class _CardCarouselState extends State<SettingCardCarousel> {
 
   Widget buildDotIndicator(int index) {
     return AnimatedContainer(
-      duration: Duration(milliseconds: 200),
-      margin: EdgeInsets.symmetric(horizontal: 4.0),
+      duration: const Duration(milliseconds: 200),
+      margin: const EdgeInsets.symmetric(horizontal: 4.0),
       height: 8.0,
       width: _currentImageIndex == index ? 24.0 : 8.0,
       decoration: BoxDecoration(
-        color: _currentImageIndex == index ? Colors.blue : Colors.grey,
+        color:
+            _currentImageIndex == index ? ConstantColors.primary : Colors.grey,
         borderRadius: BorderRadius.circular(4),
       ),
     );

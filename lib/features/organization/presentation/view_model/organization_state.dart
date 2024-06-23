@@ -114,3 +114,22 @@ class LeaveOrganizationLoading extends OrganizationState {
 class LeaveOrganizationSuccess extends OrganizationState {
   const LeaveOrganizationSuccess() : super(null);
 }
+
+class ChangeMemberRoleLoading extends OrganizationState {
+  const ChangeMemberRoleLoading() : super(null);
+}
+
+class ChangeMemberRoleSuccess extends OrganizationState {
+  const ChangeMemberRoleSuccess() : super(null);
+}
+
+class RemoveMemberLoading extends OrganizationState {
+  const RemoveMemberLoading() : super(null);
+}
+
+class RemoveMemberSuccess extends OrganizationState {
+  final List<OrganizationMember> members;
+  const RemoveMemberSuccess(
+    this.members,
+  ) : super(null);
+}

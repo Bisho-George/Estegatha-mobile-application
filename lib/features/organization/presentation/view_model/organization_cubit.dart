@@ -8,6 +8,7 @@ import 'package:estegatha/features/organization/presentation/view_model/user_org
     as userOrgCubit;
 import 'package:estegatha/features/sign-in/data/api/user_http_client.dart';
 import 'package:estegatha/features/sign-in/presentation/veiw_models/user_cubit.dart';
+import 'package:estegatha/utils/helpers/helper_functions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -250,5 +251,85 @@ class OrganizationCubit extends Cubit<OrganizationState> {
             errMessage: "Failed to leave organization!"));
       }
     }
+  }
+
+  Future<void> removeMemberFromOrganization(
+      BuildContext context, int orgId, int userId) async {
+    final userCubit = context.read<UserCubit>();
+    if (userCubit.state is UserLoaded) {
+      emit(const RemoveMemberLoading());
+
+      try {
+        final response =
+            await OrganizationHttpClient.removeMemberFromOrganization(
+                orgId, userId);
+
+        if (response.statusCode == 200) {
+          final List<OrganizationMember> newMembers =
+              await getOrganizationMembers(orgId);
+
+          print("New Members length: ${newMembers.length}");
+
+          emit(RemoveMemberSuccess(newMembers));
+
+          // await getOrganizationById(orgId);
+        } else {
+          emit(const OrganizationFailure(
+              errMessage: "Something went wrong, try again!"));
+        }
+      } catch (e) {
+        print(e);
+        emit(const OrganizationFailure(
+            errMessage: "Failed to remove member from organization!"));
+      }
+    }
+  }
+
+  Future<bool> changeMemberRole(
+      BuildContext context, int orgId, int userId, String newRole) async {
+    final userCubit = context.read<UserCubit>();
+    if (userCubit.state is UserLoaded) {
+      emit(const ChangeMemberRoleLoading());
+
+      try {
+        // Fetch current organization members
+        final members = await getOrganizationMembers(orgId);
+
+        // Check if there's at least one member with a role of 'owner' or 'admin'
+        bool hasRequiredRole = members.any((member) =>
+            (member.role == 'OWNER' || member.role == 'ADMIN') &&
+            member.userId != userId);
+
+        print("hasRequiredRole: $hasRequiredRole");
+
+        // If trying to change the role of an 'owner' or 'admin', ensure another exists
+        if (!hasRequiredRole && (newRole != 'OWNER' && newRole != 'ADMIN')) {
+          HelperFunctions.showSnackBar(
+              context, "Must have at least one 'owner' or 'admin'");
+          await getOrganizationById(orgId);
+          return false;
+        }
+
+        // Proceed with role change if condition is met
+        final response = await OrganizationHttpClient.changeMemberRole(
+            orgId, userId, newRole);
+
+        if (response.statusCode == 200) {
+          emit(const ChangeMemberRoleSuccess());
+          await getOrganizationById(orgId);
+          return true;
+        } else {
+          emit(const OrganizationFailure(
+              errMessage: "Something went wrong, try again!"));
+        }
+      } catch (e) {
+        print(e);
+        emit(
+          const OrganizationFailure(
+              errMessage: "Failed to change member role!"),
+        );
+      }
+    }
+    return false;
   }
 }

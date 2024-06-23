@@ -84,7 +84,6 @@ class OrganizationHttpClient {
       // call  the refresh token to get the new access token
     }
 
-    print("Status code: ${res.statusCode}");
     return res;
   }
 
@@ -97,8 +96,6 @@ class OrganizationHttpClient {
         "Authorization": "Bearer $accessToken",
       },
     );
-
-    print("OrganizationHttpClient.getOrganizationPosts: ${res.body}");
 
     return res;
   }
@@ -115,6 +112,24 @@ class OrganizationHttpClient {
     );
 
     print("OrganizationHttpClient.removeUserFromOrganization: ${res.body}");
+    print("Status code: ${res.statusCode}");
+
+    return res;
+  }
+
+  static Future<http.Response> changeMemberRole(
+      int orgId, int userId, String newRole) async {
+    final accessToken = await _getAccessToken();
+    final res = await http.put(
+      Uri.parse(
+          '$organizationBaseUrl/$orgId/update-role/$userId?role=$newRole'),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $accessToken",
+      },
+    );
+
+    print("OrganizationHttpClient.changeMemberRole: ${res.body}");
 
     return res;
   }

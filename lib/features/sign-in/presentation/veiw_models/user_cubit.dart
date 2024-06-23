@@ -50,7 +50,6 @@ class UserCubit extends Cubit<UserState> {
         emit(UserSuccess(member));
         return member;
       } else {
-        print('Status code: ${response.statusCode}');
         print('Response body: ${response.body}');
         emit(const UserFailure(errMessage: "Failed to get user details!"));
         return null;
