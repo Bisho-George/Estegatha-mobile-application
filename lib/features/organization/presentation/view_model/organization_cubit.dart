@@ -10,6 +10,7 @@ import 'package:estegatha/features/sign-in/data/api/user_http_client.dart';
 import 'package:estegatha/features/sign-in/presentation/veiw_models/user_cubit.dart';
 import 'package:estegatha/utils/helpers/helper_functions.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,6 +19,7 @@ import 'organization_state.dart';
 class OrganizationCubit extends Cubit<OrganizationState> {
   OrganizationCubit() : super(const OrganizationInitial());
 
+  // ============= Create Organization =============
   Future<void> createOrganization(BuildContext context,
       {required String name, String? type}) async {
     final userCubit = context.read<UserCubit>();
@@ -49,6 +51,7 @@ class OrganizationCubit extends Cubit<OrganizationState> {
     }
   }
 
+  // ============= update Organizations List =============
   Future<void> updateOrganizationsList(BuildContext context) async {
     final userId = BlocProvider.of<UserCubit>(context).getCurrentUser()?.id;
     if (userId != null) {
@@ -58,6 +61,7 @@ class OrganizationCubit extends Cubit<OrganizationState> {
     }
   }
 
+  // ============= Join Organization =============
   Future<void> joinOrganizationByCode(BuildContext context, String code) async {
     final userCubit = context.read<UserCubit>();
     if (userCubit.state is UserLoaded) {
@@ -88,6 +92,7 @@ class OrganizationCubit extends Cubit<OrganizationState> {
     }
   }
 
+  // ============= Get Organization By Id =============
   Future<Organization?> getOrganizationById(int orgId) async {
     emit(const OrganizationLoading());
 
@@ -116,6 +121,7 @@ class OrganizationCubit extends Cubit<OrganizationState> {
     return null;
   }
 
+  // ============= Get Organization Members =============
   Future<List<OrganizationMember>> getOrganizationMembers(int orgId) async {
     emit(const OrganizationMembersLoading());
 
@@ -144,6 +150,7 @@ class OrganizationCubit extends Cubit<OrganizationState> {
     return [];
   }
 
+  // ============= Get Organization Posts =============
   Future<List<Post>> getOrganizationPosts(int orgId) async {
     emit(const OrganizationPostsLoading());
 
@@ -170,6 +177,7 @@ class OrganizationCubit extends Cubit<OrganizationState> {
     return [];
   }
 
+  // ============= Get user organizations =============
   Future<List<Organization>>? getUserOrganizations(
       BuildContext context, int userId) async {
     final userCubit = context.read<UserCubit>();
@@ -205,52 +213,58 @@ class OrganizationCubit extends Cubit<OrganizationState> {
     return [];
   }
 
-  Future<void> leaveOrganization(BuildContext context, int orgId) async {
+  // ============= Leave Organization =============
+  Future<bool> leaveOrganization(BuildContext context, int orgId) async {
     final userCubit = context.read<UserCubit>();
     final userId = userCubit.getCurrentUser()?.id;
     if (userCubit.state is UserLoaded) {
-      emit(const LeaveOrganizationLoading());
-
       try {
         final response =
-            await OrganizationHttpClient.removeMemberFromOrganization(
-                orgId, userId!);
+            await OrganizationHttpClient.leaveOrganization(orgId, userId!);
+        print(
+            "Leave organization response status code: ${response.statusCode}");
+        print("Leave organization response: ${response.body}");
 
         if (response.statusCode == 200) {
           updateOrganizationsList(context);
 
-          // get user organization
           final userOrganizationResponse =
               await UserHttpClient.getUserOrganizations(userId);
+
           if (userOrganizationResponse.statusCode == 200) {
             List<dynamic> userOrganizations =
                 jsonDecode(userOrganizationResponse.body);
             if (userOrganizations.isNotEmpty) {
-              // Assuming each organization object has an 'id' field
               int firstOrganizationId = userOrganizations[0]['id'];
-              final prefs = await SharedPreferences.getInstance();
-              await prefs.setInt('currentOrganizationId', firstOrganizationId);
-              // set the current organization in the current organization cubit
+              print("New current organization id: $firstOrganizationId");
               context
                   .read<CurrentOrganizationCubit>()
-                  .loadCurrentOrganization();
+                  .setCurrentOrganization(firstOrganizationId);
             }
+            return true;
           } else {
-            // Handle the case where fetching organizations failed
             print("Failed to fetch user organizations");
           }
 
           emit(const LeaveOrganizationSuccess());
+        } else if (jsonDecode(response.body)['success'] == false) {
+          final responseData = jsonDecode(response.body);
+          emit(LeaveOrganizationFailure(errMessage: responseData['message']));
+          await getOrganizationById(orgId);
+          return false;
         } else {
-          emit(const OrganizationFailure(
+          emit(const LeaveOrganizationFailure(
               errMessage: "Something went wrong, try again!"));
         }
+        await getOrganizationById(orgId);
+        return false;
       } catch (e) {
         print(e);
-        emit(const OrganizationFailure(
+        emit(const LeaveOrganizationFailure(
             errMessage: "Failed to leave organization!"));
       }
     }
+    return false;
   }
 
   Future<void> removeMemberFromOrganization(
@@ -260,22 +274,55 @@ class OrganizationCubit extends Cubit<OrganizationState> {
       emit(const RemoveMemberLoading());
 
       try {
-        final response =
-            await OrganizationHttpClient.removeMemberFromOrganization(
-                orgId, userId);
+        // Fetch current members to check the count
+        final List<OrganizationMember> currentMembers =
+            await getOrganizationMembers(orgId);
 
-        if (response.statusCode == 200) {
-          final List<OrganizationMember> newMembers =
-              await getOrganizationMembers(orgId);
+        if (currentMembers.length > 1) {
+          // Proceed with member removal if more than one member exists
+          final response =
+              await OrganizationHttpClient.removeMemberFromOrganization(
+                  orgId, userId);
 
-          print("New Members length: ${newMembers.length}");
-
-          emit(RemoveMemberSuccess(newMembers));
-
-          // await getOrganizationById(orgId);
+          if (response.statusCode == 200) {
+            final List<OrganizationMember> newMembers =
+                await getOrganizationMembers(orgId);
+            print("New Members length: ${newMembers.length}");
+            emit(RemoveMemberSuccess(newMembers));
+            await getOrganizationById(orgId);
+          } else {
+            emit(const OrganizationFailure(
+                errMessage: "Something went wrong, try again!"));
+          }
         } else {
-          emit(const OrganizationFailure(
-              errMessage: "Something went wrong, try again!"));
+          // Show dialog if only one member is left
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text("Delete Organization"),
+                content: const Text(
+                    "Deleting this member will delete the entire organization. Are you sure you want to proceed?"),
+                actions: <Widget>[
+                  TextButton(
+                    child: const Text("Cancel"),
+                    onPressed: () {
+                      Navigator.of(context).pop(); // Close the dialog
+                    },
+                  ),
+                  TextButton(
+                    child: const Text("Delete"),
+                    onPressed: () {
+                      OrganizationHttpClient.deleteOrganization(orgId);
+                      HelperFunctions.showSnackBar(
+                          context, "Organization deleted successfully!");
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              );
+            },
+          );
         }
       } catch (e) {
         print(e);
@@ -331,5 +378,40 @@ class OrganizationCubit extends Cubit<OrganizationState> {
       }
     }
     return false;
+  }
+
+  Future<Organization> updateOrganization(BuildContext context, int orgId,
+      Organization organization, String? name, String? type) async {
+    final userCubit = context.read<UserCubit>();
+    if (userCubit.state is UserLoaded) {
+      emit(const UpdateOrganizationLoading());
+
+      final updatedName = name ?? organization.name;
+      final updatedType = type ?? organization.type;
+
+      try {
+        final response = await OrganizationHttpClient.updateOrganization(
+            orgId, updatedName!, updatedType!);
+
+        if (response.statusCode == 200) {
+          final responseBody = jsonDecode(response.body);
+          final updatedOrganization = Organization.fromJson(responseBody);
+
+          emit(UpdateOrganizationSuccess(updatedOrganization));
+
+          await updateOrganizationsList(context);
+          await getOrganizationById(orgId);
+          return updatedOrganization;
+        } else {
+          emit(const OrganizationFailure(
+              errMessage: "Something went wrong, try again!"));
+        }
+      } catch (e) {
+        print(e);
+        emit(const OrganizationFailure(
+            errMessage: "Failed to update organization!"));
+      }
+    }
+    return Organization();
   }
 }

@@ -115,6 +115,12 @@ class LeaveOrganizationSuccess extends OrganizationState {
   const LeaveOrganizationSuccess() : super(null);
 }
 
+class LeaveOrganizationFailure extends OrganizationState {
+  final String errMessage;
+
+  const LeaveOrganizationFailure({required this.errMessage}) : super(null);
+}
+
 class ChangeMemberRoleLoading extends OrganizationState {
   const ChangeMemberRoleLoading() : super(null);
 }
@@ -132,4 +138,15 @@ class RemoveMemberSuccess extends OrganizationState {
   const RemoveMemberSuccess(
     this.members,
   ) : super(null);
+}
+
+class UpdateOrganizationLoading extends OrganizationState {
+  const UpdateOrganizationLoading() : super(null);
+}
+
+class UpdateOrganizationSuccess extends OrganizationState {
+  final Organization organization;
+  const UpdateOrganizationSuccess(
+    this.organization,
+  ) : super(organization);
 }

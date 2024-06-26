@@ -1,6 +1,7 @@
 import 'package:estegatha/features/organization/presentation/view/setting/organization_settings_screen.dart';
 import 'package:estegatha/features/organization/presentation/view/widgets/section_heading.dart';
 import 'package:estegatha/features/organization/presentation/view_model/current_organization_cubit.dart';
+import 'package:estegatha/features/organization/presentation/view_model/current_organization_state.dart';
 import 'package:estegatha/features/settings/presentation/view/widgets/setting_item.dart';
 import 'package:estegatha/features/sign-in/presentation/veiw_models/user_cubit.dart';
 import 'package:estegatha/utils/common/custom_app_bar.dart';
@@ -59,6 +60,7 @@ class SettingsScreen extends StatelessWidget {
               const SectionHeading(title: "Organization settings"),
               BlocBuilder<CurrentOrganizationCubit, CurrentOrganizationState>(
                 builder: (context, state) {
+                  print("Current organization ID: ${state.organizationId}");
                   return SettingItem(
                     label: "Organization Management",
                     icon: Icons.groups,

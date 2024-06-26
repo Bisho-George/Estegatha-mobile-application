@@ -3,6 +3,7 @@ import 'package:estegatha/features/organization/presentation/view/boarding_page.
 import 'package:estegatha/features/organization/presentation/view/join/join_organization_page.dart';
 import 'package:estegatha/features/organization/presentation/view/main/organization_detail_page.dart';
 import 'package:estegatha/features/organization/presentation/view_model/current_organization_cubit.dart';
+import 'package:estegatha/features/organization/presentation/view_model/current_organization_state.dart';
 import 'package:estegatha/features/organization/presentation/view_model/user_organizations_cubit.dart';
 import 'package:estegatha/features/sign-in/presentation/veiw_models/user_cubit.dart';
 import 'package:estegatha/utils/common/widgets/custom_elevated_button.dart';
@@ -28,6 +29,11 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _loadUserData();
+    _loadUserOrganizations();
+  }
+
+  Future<void> _loadUserOrganizations() async {
+    await context.read<UserOrganizationsCubit>().getUserOrganizations(userId!);
   }
 
   Future<void> _loadUserData() async {
@@ -51,7 +57,6 @@ class _HomePageState extends State<HomePage> {
   Future<void> _loadCurrentOrganization() async {
     final prefs = await SharedPreferences.getInstance();
     final organizationId = prefs.getInt('currentOrganizationId');
-    print("Organization ID: $organizationId");
     if (organizationId != null && userId != null) {
       final organizationsCubit = context.read<UserOrganizationsCubit>();
       if (organizationsCubit.state is UserOrganizationsSuccess) {
@@ -71,6 +76,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    _loadUserOrganizations();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home Page'),
@@ -82,11 +88,9 @@ class _HomePageState extends State<HomePage> {
                 return BlocBuilder<CurrentOrganizationCubit,
                     CurrentOrganizationState>(
                   builder: (context, currentOrgState) {
-                    // Find the current organization based on the ID in CurrentOrganizationState
                     final currentOrganization = organizations.firstWhere(
                       (org) => org.id == currentOrgState.organizationId,
-                      orElse: () => organizations
-                          .first, // Fallback to the first organization if not found
+                      orElse: () => organizations.first,
                     );
                     return DropdownButton<Organization>(
                       value: currentOrganization,
@@ -127,8 +131,8 @@ class _HomePageState extends State<HomePage> {
                   onTap: () {
                     PersistentNavBarNavigator.pushNewScreen(
                       context,
-                      screen: const OrganizationBoardingPage(
-                        name: 'Dummy',
+                      screen: OrganizationBoardingPage(
+                        name: username!,
                       ),
                       withNavBar: false,
                     );

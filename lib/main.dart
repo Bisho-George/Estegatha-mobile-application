@@ -34,7 +34,7 @@ void main() {
         BlocProvider<UserOrganizationsCubit>(
           create: (context) => UserOrganizationsCubit(),
         ),
-        BlocProvider(
+        BlocProvider<CurrentOrganizationCubit>(
           create: (_) => CurrentOrganizationCubit()..loadCurrentOrganization(),
         ),
       ],

@@ -41,6 +41,21 @@ class HelperFunctions {
     return accessToken;
   }
 
+  static Future<String> getRefreshToken() async {
+    print("getRefreshTokenis called");
+    final prefs = await SharedPreferences.getInstance();
+    final user = prefs.getString('user');
+    if (user == null) {
+      throw Exception('User not found in SharedPreferences');
+    }
+    final userJson = jsonDecode(user);
+    final refreshToken = userJson['tokens']['refreshToken'];
+    if (refreshToken == null) {
+      throw Exception('Refresh token is null');
+    }
+    return refreshToken;
+  }
+
   // static to get user object from shared preferences
   static Future<Member> getUser() async {
     final prefs = await SharedPreferences.getInstance();

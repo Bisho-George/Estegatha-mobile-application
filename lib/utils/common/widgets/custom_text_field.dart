@@ -16,24 +16,23 @@ class CustomTextField extends StatefulWidget {
   final TextInputType? keyboardType;
   final TextAlign? textAlign;
   final List<TextInputFormatter>? inputFormatters;
+  final String? initialValue;
 
-
-  const CustomTextField({
-    super.key,
-    this.controller,
-    this.labelText,
-    this.hintText,
-    this.validator,
-    this.obscureText = false,
-    this.onChanged,
-    this.prefixIcon,
-    this.suffixIcon,
-    this.keyboardType,
-    this.onPressed,
-    this.textAlign,
-    this.inputFormatters
-
-  });
+  const CustomTextField(
+      {super.key,
+      this.controller,
+      this.labelText,
+      this.hintText,
+      this.validator,
+      this.obscureText = false,
+      this.onChanged,
+      this.prefixIcon,
+      this.suffixIcon,
+      this.keyboardType,
+      this.onPressed,
+      this.textAlign,
+      this.inputFormatters,
+      this.initialValue});
 
   @override
   _MyWidgetState createState() => _MyWidgetState();
@@ -43,6 +42,7 @@ class _MyWidgetState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      initialValue: widget.initialValue,
       keyboardType: widget.keyboardType,
       obscureText: widget.obscureText!,
       controller: widget.controller,

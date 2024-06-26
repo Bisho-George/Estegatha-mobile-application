@@ -45,6 +45,7 @@ class UserCubit extends Cubit<UserState> {
           image: responseBody['image'].toString(),
           sosPin: responseBody['sosPin'].toString(),
           accessToken: responseBody['tokens']["accessToken"].toString(),
+          refreshToken: responseBody['tokens']["refreshToken"].toString(),
         );
 
         emit(UserSuccess(member));
