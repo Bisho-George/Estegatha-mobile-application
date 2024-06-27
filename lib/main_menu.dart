@@ -1,5 +1,6 @@
 import 'package:estegatha/features/organization/presentation/view_model/current_organization_cubit.dart';
 import 'package:estegatha/features/organization/presentation/view_model/current_organization_state.dart';
+import 'package:estegatha/features/safety/presentation/view/safetys_creen.dart';
 import 'package:estegatha/features/settings/presentation/view/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,9 +23,7 @@ class _MainNavMenuState extends State<MainNavMenu> {
   List<Widget> buildScreens(int? organizationId) {
     return [
       HomePage(),
-      const Center(
-        child: Text("Safety screen"),
-      ),
+      const SafetyScreen(),
       if (organizationId != null)
         OrganizationDetailPage(
           organizationId: organizationId,

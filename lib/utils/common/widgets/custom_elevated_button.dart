@@ -13,7 +13,7 @@ class CustomElevatedButton extends StatelessWidget {
   });
 
   final GlobalKey<FormState>? formKey;
-  final void Function() onPressed;
+  final void Function()? onPressed;
   final String labelText;
   FocusNode? focusNode;
   final bool isPrimary;
@@ -28,8 +28,8 @@ class CustomElevatedButton extends StatelessWidget {
           foregroundColor: ConstantColors.light,
           backgroundColor: ConstantColors.primary,
           disabledForegroundColor: ConstantColors.darkGrey,
-          disabledBackgroundColor: ConstantColors.buttonDisabled,
-          side: const BorderSide(color: ConstantColors.primary),
+          disabledBackgroundColor: ConstantColors.grey,
+          // side: const BorderSide(color: ConstantColors.primary),
           padding:
               const EdgeInsets.symmetric(vertical: ConstantSizes.buttonHeight),
           textStyle: const TextStyle(

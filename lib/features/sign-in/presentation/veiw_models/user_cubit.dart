@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:estegatha/features/organization/domain/models/member.dart';
 import 'package:estegatha/features/organization/domain/models/organization.dart';
 import 'package:estegatha/features/organization/presentation/view_model/current_organization_cubit.dart';
+import 'package:estegatha/features/safety/domain/models/user_health_info.dart';
 import 'package:estegatha/features/sign-in/data/api/signin_http_client.dart';
 import 'package:estegatha/features/sign-in/data/api/user_http_client.dart';
 import 'package:estegatha/features/sign-in/presentation/pages/sign_in_page.dart';
@@ -61,10 +62,6 @@ class UserCubit extends Cubit<UserState> {
       return null;
     }
   }
-
-  // void logout() {
-  //   emit(UserInitial());
-  // }
 
   Future<void> deleteUserFromPreferences() async {
     final prefs = await SharedPreferences.getInstance();

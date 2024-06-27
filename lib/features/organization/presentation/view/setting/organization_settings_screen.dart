@@ -17,6 +17,7 @@ import 'package:estegatha/main_menu.dart';
 import 'package:estegatha/utils/common/custom_app_bar.dart';
 import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
+import 'package:estegatha/utils/constant/variables.dart';
 import 'package:estegatha/utils/helpers/helper_functions.dart';
 import 'package:estegatha/utils/helpers/responsive.dart';
 import 'package:flutter/material.dart';
@@ -46,67 +47,6 @@ class _OrganizationSettingsScreenState
         .getOrganizationById(widget.organizationId);
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     appBar: PreferredSize(
-  //       preferredSize: Size.fromHeight(
-  //         getProportionateScreenHeight(ConstantSizes.appBarHeight),
-  //       ),
-  //       child: BlocBuilder<OrganizationCubit, OrganizationState>(
-  //         builder: (context, state) {
-  //           String appBarTitle = "";
-  //           if (state is OrganizationDetailSuccess) {
-  //             appBarTitle = state.organization.name!;
-  //           }
-  //           return CustomAppBar(
-  //             leadingIcon: Icons.arrow_back,
-  //             leadingOnPressed: () {
-  //               Navigator.pop(context, true);
-  //             },
-  //             title: Text(
-  //               appBarTitle,
-  //               style: TextStyle(
-  //                 fontSize: SizeConfig.font20,
-  //                 color: ConstantColors.primary,
-  //               ),
-  //             ),
-  //             showBackArrow: false,
-  //           );
-  //         },
-  //       ),
-  //     ),
-  //     body: BlocBuilder<OrganizationCubit, OrganizationState>(
-  //       builder: (context, state) {
-  //         if (state is OrganizationLoading) {
-  //           return const Center(child: CircularProgressIndicator());
-  //         } else if (state is OrganizationDetailSuccess) {
-  //           SizeConfig().init(context);
-  //           isOwner = state.members!.any((member) =>
-  //               member.userId ==
-  //                   context.read<UserCubit>().getCurrentUser()?.id &&
-  //               (member.role == 'OWNER' || member.role == 'ADMIN'));
-  //           if (!isOwner) {
-  //             return MemberSettingScreen(
-  //               organization: state.organization,
-  //               members: state.members!,
-  //             );
-  //           } else {
-  //             return OwnerSettingScreen(
-  //               organization: state.organization,
-  //               members: state.members!,
-  //             );
-  //           }
-  //         } else if (state is OrganizationFailure) {
-  //           return const Center(
-  //               child: Text('Failed to load organization data'));
-  //         } else {
-  //           return const Loader();
-  //         }
-  //       },
-  //     ),
-  //   );
-  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -199,11 +139,7 @@ class MemberSettingScreen extends StatelessWidget {
           ),
           child: Column(
             children: <Widget>[
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    vertical: getProportionateScreenHeight(ConstantSizes.sm)),
-                child: const SettingCardCarousel(isOwner: false),
-              ),
+              SettingCardCarousel(helpNotes: ConstantVariables.memberHelpNotes),
               const SectionHeading(title: "Organization settings"),
               Column(
                 children: [
@@ -315,8 +251,8 @@ class OwnerSettingScreen extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(
                     vertical: getProportionateScreenHeight(ConstantSizes.sm)),
-                child: const SettingCardCarousel(
-                  isOwner: true,
+                child: SettingCardCarousel(
+                  helpNotes: ConstantVariables.ownerHelpNotes,
                 ),
               ),
               const SectionHeading(title: "Organization Details"),

@@ -51,7 +51,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               )
             : leadingIcon != null
                 ? IconButton(
-                    icon: Icon(leadingIcon),
+                    icon: Icon(
+                      leadingIcon,
+                      color: ConstantColors.textPrimary,
+                    ),
                     onPressed: leadingOnPressed,
                   )
                 : null,

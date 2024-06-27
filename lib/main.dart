@@ -5,6 +5,7 @@ import 'package:estegatha/features/organization/domain/models/member.dart';
 import 'package:estegatha/features/organization/presentation/view_model/current_organization_cubit.dart';
 import 'package:estegatha/features/organization/presentation/view_model/organization_cubit.dart';
 import 'package:estegatha/features/organization/presentation/view_model/user_organizations_cubit.dart';
+import 'package:estegatha/features/safety/presentation/view_model/user_health_cubit.dart';
 import 'package:estegatha/features/sign-in/presentation/pages/sign_in_page.dart';
 import 'package:estegatha/features/sign-in/presentation/veiw_models/login_cubit/login_cubit.dart';
 import 'package:estegatha/features/sign-in/presentation/veiw_models/user_cubit.dart';
@@ -37,6 +38,9 @@ void main() {
         BlocProvider<CurrentOrganizationCubit>(
           create: (_) => CurrentOrganizationCubit()..loadCurrentOrganization(),
         ),
+        BlocProvider<UserHealthCubit>(
+          create: (context) => UserHealthCubit(),
+        ),
       ],
       child: const MyApp(),
     ),
@@ -62,6 +66,7 @@ class _MyAppState extends State<MyApp> {
   Future<void> checkUserLoggedIn() async {
     final prefs = await SharedPreferences.getInstance();
     final userJson = prefs.getString('user');
+    print("User object from shared preferences => $userJson");
     final userCurrentOrganizationJson = prefs.getInt('currentOrganizationId');
 
     print("User current organization => $userCurrentOrganizationJson");
