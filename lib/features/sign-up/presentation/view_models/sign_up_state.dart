@@ -34,3 +34,9 @@ class SignUpAddressState extends SignUpState {
 
   SignUpAddressState(this.address);
 }
+
+class SignUpSubmitState extends SignUpState {
+  final UserModel userModel;
+
+  SignUpSubmitState(this.userModel);
+}
