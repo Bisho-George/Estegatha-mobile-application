@@ -1,3 +1,4 @@
+import 'package:estegatha/features/edit_account/presentation/pages/edit_account_menu.dart';
 import 'package:estegatha/features/organization/presentation/view/main/organization_detail_page.dart';
 import 'package:estegatha/home_page.dart';
 import 'package:estegatha/utils/constant/colors.dart';
@@ -8,7 +9,7 @@ import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 class MainNavMenu extends StatelessWidget {
   const MainNavMenu({super.key});
-
+  static String routeName = "/main_nav_menu";
   @override
   Widget build(BuildContext context) {
     List<Widget> buildScreens() {

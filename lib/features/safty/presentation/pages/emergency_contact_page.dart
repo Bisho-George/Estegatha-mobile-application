@@ -28,7 +28,7 @@ class EmergencyContactPage extends StatelessWidget {
     context.read<ContactCubit>().fetchContact();
     return Scaffold(
       appBar: CustomAppBar.buildAppBar(title: 'Emergency Contact'),
-      body: BlocBuilder<ContactCubit, ContactState>(
+      body: BlocConsumer<ContactCubit, ContactState>(
         builder: (context, state) {
           return LoadingWidget(
             loading: context.read<ContactCubit>().isLoading,
@@ -45,9 +45,11 @@ class EmergencyContactPage extends StatelessWidget {
                     itemCount: context.read<ContactCubit>().contacts.length,
                     itemBuilder: (context, index) {
                       return ContactWidget(
-                          contact: ContactModel(
-                              name: context.read<ContactCubit>().contacts[index].name,
-                              phoneNumber: context.read<ContactCubit>().contacts[index].phoneNumber));
+                        contact: ContactModel(
+                          name: context.read<ContactCubit>().contacts[index].name,
+                          phoneNumber: context.read<ContactCubit>().contacts[index].phoneNumber,
+                        ),
+                      );
                     },
                   ),
                 ),
@@ -55,6 +57,15 @@ class EmergencyContactPage extends StatelessWidget {
             ),
           );
         },
+        listener: (context, state) {
+          if (state is ContactFailureState) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+              ),
+            );
+          }
+        }
       ),
     );
   }

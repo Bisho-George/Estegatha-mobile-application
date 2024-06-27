@@ -18,7 +18,11 @@ class SignUpViewModel {
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController otpController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
+  final TextEditingController otpController1 = TextEditingController();
+  final TextEditingController otpController2 = TextEditingController();
+  final TextEditingController otpController3 = TextEditingController();
+  final TextEditingController otpController4 = TextEditingController();
   DatePickerViewModel datePickerViewModel = DatePickerViewModel();
   final GlobalKey<FormState> formKey = GlobalKey();
 

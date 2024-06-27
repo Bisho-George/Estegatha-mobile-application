@@ -48,6 +48,10 @@ class HelperFunctions {
     if (user == null) {
       throw Exception('User not found in SharedPreferences');
     }
-    return jsonDecode(user);
+    return Member.fromJson(jsonDecode(user));
+  }
+  static void setUser(Member user) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('user', jsonEncode(user));
   }
 }

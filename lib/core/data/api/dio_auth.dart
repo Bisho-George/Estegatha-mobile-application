@@ -1,16 +1,25 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
+import 'package:estegatha/features/organization/domain/models/member.dart';
+import 'package:estegatha/constants.dart';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DioAuth {
-  static Dio getDio() {
+  static Future<Dio> getDio() async{
+    final prefs = await SharedPreferences.getInstance();
+    String userString = prefs.getString(userKey) ?? '';
+    final userJson = jsonDecode(userString);
+    Member user = Member.fromJson(userJson);
     Dio dio = Dio();
     dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) {
-        String token = 'eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiIyNDViNTE0My0wZTcyLTRiYzUtYjE1Yy0zMjQxMmJiZDkwNzMiLCJzdWIiOiJtaWRvbW9zdGFmYTUxNEBnbWFpbC5jb20iLCJpYXQiOjE3MTkwNzExMjYsImlzcyI6ImFwcC1TZXJ2aWNlIiwiZXhwIjoxNzE5MDcyOTI2LCJjcmVhdGVkIjoxNzE5MDcxMTI2NjIxfQ.wbr-w4t51hk2IsRavanUJZlsJFrY_tupekAKodeUibVcMGbCYvR-oB6f8Hr4HMJBquhSCWcQS9Ns36qAHlfEeA';
-        options.headers['Authorization'] = 'Bearer $token';
+        options.headers['Authorization'] = 'Bearer ${user.accessToken}';
         return handler.next(options); //continue
       },
       onError: (error, handler) async{
-/*        if (error.response?.statusCode == 401) {
+        if (error.response?.statusCode == 401) {
           // If a 401 response is received, refresh the access token
           String newAccessToken = await refreshToken();
 
@@ -19,10 +28,32 @@ class DioAuth {
 
           // Repeat the request with the updated header
           return handler.resolve(await dio.fetch(error.requestOptions));
-        }*/
+        }
         return handler.next(error);//continue
       },
     ));
     return dio;
+  }
+
+  static Future<String> refreshToken() async{
+    final prefs = await SharedPreferences.getInstance();
+    String userString = prefs.getString(userKey) ?? '';
+    final userJson = jsonDecode(userString);
+    Member user = Member.fromJson(userJson);
+    Dio dio = Dio();
+    dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (options, handler) {
+        options.headers['Authorization'] = 'Bearer ${user.refreshToken}';
+        return handler.next(options); //continue
+      },
+      onError: (error, handler) async{
+        return handler.next(error);//continue
+      },
+    ));
+    Response response = await dio.post(baseUrl + refreshTokenEndPoint);
+    String newAccessToken = response.data[accessTokenKey];
+    userJson[tokensKey][accessTokenKey] = newAccessToken;
+    prefs.setString(userKey, jsonEncode(userJson));
+    return newAccessToken;
   }
 }

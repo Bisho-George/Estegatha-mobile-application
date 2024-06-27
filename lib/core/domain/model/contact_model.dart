@@ -1,4 +1,4 @@
-import 'package:estegatha/utils/constant/strings.dart';
+import 'package:estegatha/constants.dart';
 
 class ContactModel{
   final String name;

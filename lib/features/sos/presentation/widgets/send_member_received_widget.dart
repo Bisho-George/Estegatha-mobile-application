@@ -4,6 +4,7 @@ import '../../../../responsive/size_config.dart';
 import '../../../../utils/common/styles/text_styles.dart';
 import '../../../../utils/constant/sizes.dart';
 import '../../../organization/domain/models/member.dart';
+import '../../../organization/domain/models/organizationMember.dart';
 import 'member_bubble_widget.dart';
 class SosReceivedMembersWidget extends StatelessWidget {
   const SosReceivedMembersWidget({
@@ -11,7 +12,7 @@ class SosReceivedMembersWidget extends StatelessWidget {
     required this.members,
   });
 
-  final List<Member> members;
+  final List<OrganizationMember> members;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class SosReceivedMembersWidget extends StatelessWidget {
             itemCount: members.length,
             itemBuilder: (context, index) {
               return MemberBubbleWidget(
-                name: members[index].name,
+                name: members[index].username,
               );
             },
             scrollDirection: Axis.horizontal,

@@ -1,7 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:estegatha/core/data/api/dio_auth.dart';
+import 'package:estegatha/features/organization/domain/models/organizationMember.dart';
 import 'package:estegatha/features/sos/domain/repositories/organizations_repo.dart';
-import 'package:estegatha/utils/constant/strings.dart';
+import 'package:estegatha/constants.dart';
 
 import '../../../organization/domain/models/member.dart';
 import '../../../organization/domain/models/organization.dart';
@@ -9,7 +10,7 @@ import '../../../organization/domain/models/organization.dart';
 class OrganizationsApi extends OrganizationsRepo{
   @override
   Future<List<Organization>> fetchOrganizations() async {
-    Dio dio = DioAuth.getDio();
+    Dio dio = await DioAuth.getDio();
     List<Organization> organizations = [];
     Response response = await dio.get('$baseUrl$getOrganizationsEndPoint');
     if(response.statusCode == 200) {
@@ -21,12 +22,12 @@ class OrganizationsApi extends OrganizationsRepo{
     return organizations;
   }
   @override
-  Future<List<Member>> fetchOrganizationMembers(int organizationId) async{
-    List<Member> members = [];
-    Dio dio = DioAuth.getDio();
+  Future<List<OrganizationMember>> fetchOrganizationMembers(int organizationId) async{
+    List<OrganizationMember> members = [];
+    Dio dio = await DioAuth.getDio();
     Response response = await dio.get('$baseUrl$getOrganizationMembersEndPoint/$organizationId');
     for(var element in response.data){
-      members.add(Member.fromJson(element));
+      members.add(OrganizationMember.fromJson(element));
     }
     return members;
   }

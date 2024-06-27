@@ -6,19 +6,27 @@ import 'package:estegatha/features/sos/domain/repositories/organizations_repo.da
 import 'package:estegatha/features/sos/domain/repositories/sos_repo.dart';
 import 'package:estegatha/features/sos/presentation/pages/send_sos.dart';
 import 'package:estegatha/features/sos/presentation/view_models/cubit/send_sos_status.dart';
+import 'package:estegatha/utils/helpers/helper_functions.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../../constants.dart';
+import '../../../../organization/domain/models/organizationMember.dart';
 class SendSosCubit extends Cubit<SendSosStatus>{
   SendSosCubit():super(SendSosInitial());
   Future<void> getMembers() async {
     emit(SendSosLoading());
-    List<Member> members = [];
+    List<OrganizationMember> members = [];
     OrganizationsRepo repo = OrganizationsApi();
     try{
-      List<Organization> organizations = await repo.fetchOrganizations();
+      Member ?user = await HelperFunctions.getUser();
+      List<Organization> organizations = await repo.fetchOrganizations().timeout(Duration(seconds: durationTimeout));
       for (var organization in organizations) {
-        List<Member> organizationMembers =
-            await repo.fetchOrganizationMembers(organization.id);
-        members.addAll(organizationMembers);
+        if(organization.organizationSize != null && organization.organizationSize! > 0){
+          List<OrganizationMember> organizationMembers =
+          await repo.fetchOrganizationMembers(organization.id!).timeout(Duration(seconds: durationTimeout));
+          organizationMembers.removeWhere((element) => element.userId == user!.id);
+          members.addAll(organizationMembers);
+        }
       }
       emit(MembersReceivedStatus(members: members));
     }catch(e){
@@ -29,9 +37,12 @@ class SendSosCubit extends Cubit<SendSosStatus>{
     emit(SendSosLoading());
     SosRepo repo = SosApi();
     try{
-      int statusCode = await repo.sendSos();
-      if(statusCode == 200 || statusCode == 201){
+      int numOfSuccess = await repo.sendSos().timeout(Duration(seconds: durationTimeout));
+      if(numOfSuccess != 0){
         emit(SendSosSuccess());
+      }
+      else{
+        emit(SendSosFailure(message: 'Failed to send sos request'));
       }
     }catch(e){
       emit(SendSosFailure(message: 'Failed to send sos request'));

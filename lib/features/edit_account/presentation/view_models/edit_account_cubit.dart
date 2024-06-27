@@ -6,21 +6,12 @@ class EditAccountCubit extends Cubit<EditAccountState>{
   bool loading = false;
   String phone = '';
   EditAccountCubit():super(EditAccountInitialState());
-  void editPhone() async{
-    EditAccountRepo editAccountRepo = EditAccountApi();
+  void logout() async{
     loading = true;
     try{
-      int response = await editAccountRepo.editPhone(phone);
-      if(response == 0){
-        emit(EditAccountFailureState(error: 'Failed to update phone number'));
-      }
-      else {
-        emit(EditAccountSuccessState(message: 'Phone number updated successfully'));
-      }
     }catch(e){
-      emit(EditAccountFailureState(error: 'Failed to update phone number'));
+      emit(EditAccountFailureState(error: 'Failed to logout'));
     }
     loading = false;
-    phone = '';
   }
 }

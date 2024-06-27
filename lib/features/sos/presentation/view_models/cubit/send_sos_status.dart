@@ -1,4 +1,5 @@
 import '../../../../organization/domain/models/member.dart';
+import '../../../../organization/domain/models/organizationMember.dart';
 
 class SendSosStatus{}
 class SendSosInitial extends SendSosStatus{}
@@ -13,6 +14,6 @@ class MemberReceivedFailure extends SendSosStatus{
   MemberReceivedFailure({this.message});
 }
 class MembersReceivedStatus extends SendSosStatus{
-  final List<Member> members;
+  final List<OrganizationMember> members;
   MembersReceivedStatus({required this.members});
 }

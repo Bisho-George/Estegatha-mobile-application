@@ -9,59 +9,44 @@ import 'package:estegatha/utils/common/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'change_email.dart';
-import 'change_password.dart';
-class EditAccountMenu extends StatelessWidget {
-  const EditAccountMenu({super.key});
+import 'change_password_page.dart';
+
+class EditAccountMenu extends StatefulWidget {
+  EditAccountMenu({super.key});
+
   static const String routeName = 'EditAccountMenu';
+
+  @override
+  State<EditAccountMenu> createState() => _EditAccountMenuState();
+}
+
+class _EditAccountMenuState extends State<EditAccountMenu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar.buildAppBar(title: 'Account'),
-      body: BlocConsumer<EditAccountCubit, EditAccountState>(
-        builder: (context, state) {
-          return LoadingWidget(
-            loading: BlocProvider.of<EditAccountCubit>(context).loading,
-            child: Column(
-              children: [
-                ProfileWidget(userName: "Ahmed"),
-                CategoryWidget(
-                  name: 'Account details',
-                  preferences: [
-                    AccountPreferences(propertyName: 'Edit Phone Number', propertyAction: (){
-                      Navigator.pushNamed(context, ChangePhoneNumber.routeName);
+      body: LoadingWidget(
+        loading: false,
+        child: Column(
+          children: [
+            ProfileWidget(userName: "Ahmed"),
+            CategoryWidget(
+              name: 'Account details',
+              preferences: [
+                AccountPreferences(
+                    propertyName: 'Edit Phone Number',
+                    propertyAction: () {
+                      Navigator.pushNamed(context, ChangePhonePage.routeName);
                     }),
-                    AccountPreferences(propertyName: 'Change Password', propertyAction: (){
+                AccountPreferences(
+                    propertyName: 'Change Password',
+                    propertyAction: () {
                       Navigator.pushNamed(context, ChangePassword.routeName);
                     })
-                  ],
-                ),
-                CategoryWidget(
-                  name: 'Account management',
-                  preferences: [
-                    AccountPreferences(propertyName: 'Delete Account', propertyAction: (){
-
-                    }),
-                  ],
-                ),
               ],
             ),
-          );
-        },
-        listener: (context, state) {
-          if(state is EditAccountSuccessState) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message!),
-              ),
-            );
-          } else if(state is EditAccountFailureState) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.error),
-              ),
-            );
-          }
-        }
+          ],
+        ),
       ),
     );
   }

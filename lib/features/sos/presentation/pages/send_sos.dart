@@ -7,10 +7,12 @@ import 'package:estegatha/responsive/size_config.dart';
 import 'package:estegatha/utils/common/widgets/custom_app_bar.dart';
 import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
+import 'package:estegatha/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../utils/common/styles/text_styles.dart';
 import '../../../organization/domain/models/member.dart';
+import '../../../organization/domain/models/organizationMember.dart';
 import '../widgets/member_bubble_widget.dart';
 import '../widgets/send_member_received_widget.dart';
 import '../widgets/sos_button_widget.dart';
@@ -45,7 +47,7 @@ class SendSos extends StatelessWidget {
                   return const CircularProgressIndicator();
                 }
                 else if(state is MembersReceivedStatus){
-                  List<Member> members = state.members;
+                  List<OrganizationMember> members = state.members;
                   return SosReceivedMembersWidget(members: members);
                 }
                 return IconButton(
@@ -70,6 +72,7 @@ class SendSos extends StatelessWidget {
               },
               listener: (context, state) {
                 if(state is SendSosSuccess){
+                  HelperFunctions.showSnackBar(context, 'SOS sent successfully');
                   Navigator.of(context).pushNamed(CancelSos.routeName);
                 }
                 else if(state is MemberReceivedFailure){

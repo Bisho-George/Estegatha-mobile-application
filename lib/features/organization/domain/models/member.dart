@@ -2,12 +2,12 @@ class Member {
   final int id;
   final String username;
   final String email;
-  final String? phone;
+  String? phone;
   final String? address;
   final String? image;
   final String? sosPin;
   final String accessToken;
-
+  final String refreshToken;
   // // can have list of organization IDs
   // final List<int>? organizationIds;
 
@@ -16,6 +16,7 @@ class Member {
     required this.username,
     required this.email,
     required this.accessToken,
+    required this.refreshToken,
     this.phone,
     this.address,
     this.image,
@@ -24,7 +25,7 @@ class Member {
 
   factory Member.fromJson(Map<String, dynamic> json) {
     return Member(
-      id: json['id'],
+      id: json['id'] ?? '',
       username: json['username'] ?? '',
       email: json['email'] ?? '',
       phone: json['phone'] ?? '',
@@ -32,6 +33,7 @@ class Member {
       image: json['image'] ?? '',
       sosPin: json['sosPin'] ?? '',
       accessToken: json['tokens']["accessToken"] ?? '',
+      refreshToken: json['tokens']["refreshToken"] ?? '',
     );
   }
 
@@ -47,6 +49,7 @@ class Member {
       'sosPin': sosPin,
       'tokens': {
         'accessToken': accessToken,
+        'refreshToken': refreshToken,
       },
     };
   }

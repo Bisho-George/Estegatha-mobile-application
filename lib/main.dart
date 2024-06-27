@@ -1,62 +1,41 @@
 import 'dart:convert';
 
-import 'package:estegatha/features/forget-password/presentation/veiw_models/forget-password/forget_password_cubit.dart';
+import 'package:estegatha/core/firebase/SosScreen.dart';
+import 'package:estegatha/core/firebase/fcm_setup.dart';
 import 'package:estegatha/features/organization/domain/models/member.dart';
-import 'package:estegatha/features/organization/presentation/view_model/organization_cubit.dart';
 import 'package:estegatha/features/sign-in/presentation/pages/sign_in_page.dart';
-import 'package:estegatha/features/sign-in/presentation/veiw_models/login_cubit/login_cubit.dart';
 import 'package:estegatha/features/sign-in/presentation/veiw_models/user_cubit.dart';
+import 'package:estegatha/features/sos/presentation/pages/send_sos.dart';
 import 'package:estegatha/main_menu.dart';
+import 'package:estegatha/providers.dart';
+import 'package:estegatha/utils/helpers/helper_functions.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:estegatha/features/landing/presentation/pages/landing_intro.dart';
-import 'package:estegatha/features/edit_account/presentation/view_models/edit_account_cubit.dart';
-import 'package:estegatha/features/landing/presentation/view_model/permissions_cubit.dart';
-import 'package:estegatha/features/safty/presentation/view_models/cotact_cubit.dart';
-import 'package:estegatha/features/sos/presentation/view_models/cubit/create_pin_cubit.dart';
-import 'package:estegatha/features/sos/presentation/view_models/cubit/send_sos_cubit.dart';
 import 'package:estegatha/routes.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'core/firebase/notification.dart';
 import 'firebase_options.dart';
-void main() {
+void main() async{
   await GetStorage.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  WidgetsFlutterBinding.ensureInitialized();
+  NotificationService notificationService = NotificationService();
+  await notificationService.initialize();
+  FCMSetup.setupFCM((String fcmToken) {
+    print('FCM Token: $fcmToken');
+  });
   runApp(
     MultiBlocProvider(
-      providers: [
-        BlocProvider<UserCubit>(
-          create: (context) => UserCubit(),
-        ),
-        BlocProvider<LoginCubit>(
-          create: (context) => LoginCubit(),
-        ),
-        BlocProvider<ForgetPasswordCubit>(
-          create: (context) => ForgetPasswordCubit(),
-        ),
-        BlocProvider<OrganizationCubit>(
-          create: (context) => OrganizationCubit(),
-        ),
-        BlocProvider<PermissionCubit>(
-          create: (context) => PermissionCubit(),
-        ),
-        BlocProvider<CreatePinCubit>(
-          create: (context) => CreatePinCubit(),
-        ),
-        BlocProvider<SendSosCubit>(
-          create: (context) => SendSosCubit(),
-        ),
-        BlocProvider<ContactCubit>(
-          create: (context) => ContactCubit(),
-        ),
-        BlocProvider<EditAccountCubit>(
-          create: (context) => EditAccountCubit(),
-        ),
-      ],
+      providers: providers,
       child: const MyApp(),
     ),
   );
@@ -70,12 +49,31 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final ValueNotifier<bool> isUserLoggedIn = ValueNotifier<bool>(false);
-  String initialRoute = SignInPage.routeName;
+  final ValueNotifier<Widget> home = ValueNotifier<Widget>(SignInPage());
+  final String initialRoute = SignInPage.routeName;
   @override
   void initState() {
     super.initState();
     checkUserLoggedIn();
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async{
+      print('Got a message whilst in the foreground!');
+      print('Message data: ${message.data}');
+      var user = await HelperFunctions.getUser();
+      if (message.notification != null && message.data['userId'] != user.id.toString()) {
+        NotificationService notificationService = NotificationService();
+        notificationService.showNotification(message.notification!.title!, message.notification!.body!);
+      }
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => SosScreen(message: message)));
+    });
+    FirebaseMessaging.onBackgroundMessage((message) async {
+      var user = await HelperFunctions.getUser();
+      if(message.data['userId'] != user.id.toString()){
+        NotificationService notificationService = NotificationService();
+        notificationService.showNotification(message.notification!.title!, message.notification!.body!);
+      }
+    });
   }
 
   Future<void> checkUserLoggedIn() async {
@@ -86,24 +84,25 @@ class _MyAppState extends State<MyApp> {
       print("User object from shared preferences => $userJson");
       final user = Member.fromJson(jsonDecode(userJson));
       BlocProvider.of<UserCubit>(context).setUser(user);
-      isUserLoggedIn.value = true;
-      initialRoute = MainNavMenu.routeName;
-    }else{
+      home.value = const MainNavMenu();
+    }
+    else{
       checkFirstTime();
     }
   }
+
   void checkFirstTime() {
     final box = GetStorage();
     if (box.read('isFirstTime') ?? true == true) {
-      initialRoute = LandingIntro.routeName;
+      home.value = const LandingIntro();
       box.write('isFirstTime', false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<bool>(
-      valueListenable: isUserLoggedIn,
+    return ValueListenableBuilder<Widget>(
+      valueListenable: home,
       builder: (context, isLoggedIn, child) {
         return ScreenUtilInit(
           designSize: const Size(360, 690),
@@ -111,9 +110,9 @@ class _MyAppState extends State<MyApp> {
           splitScreenMode: true,
           builder: (_, child) => MaterialApp(
             debugShowCheckedModeBanner: false,
-            title: 'Flutter Demo',
+            title: 'Estegatha',
+            home: SendSos(),
             routes: routes,
-            initialRoute: initialRoute,
           ),
         );
       },

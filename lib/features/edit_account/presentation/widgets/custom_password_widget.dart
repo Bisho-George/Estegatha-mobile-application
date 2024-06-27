@@ -19,7 +19,7 @@ class CustomPasswordWidget extends StatefulWidget {
 }
 
 class _CustomPasswordWidgetState extends State<CustomPasswordWidget> {
-  bool isPasswordHidden = false;
+  bool isPasswordHidden = true;
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +46,10 @@ class _CustomPasswordWidgetState extends State<CustomPasswordWidget> {
           Flexible(
             child: TextField(
               style: Styles.getDefaultPrimary(
-                  weight: ConstantSizes.fontWeightBold),
-              showCursor: false,
+                weight: ConstantSizes.fontWeightBold,
+                fontSize: ConstantSizes.fontSizeLg,
+              ),
+              showCursor: true,
               controller: widget.controller,
               cursorColor: ConstantColors.primary,
               autofillHints: const ['password'],
@@ -55,7 +57,9 @@ class _CustomPasswordWidgetState extends State<CustomPasswordWidget> {
               obscureText: isPasswordHidden,
               decoration: InputDecoration(
                 hintText: widget.hint,
-                hintStyle: Styles.getDefaultSecondary(),
+                hintStyle: Styles.getDefaultSecondary(
+                  fontSize: ConstantSizes.fontSizeLg,
+                ),
                 border: InputBorder.none,
               ),
             ),

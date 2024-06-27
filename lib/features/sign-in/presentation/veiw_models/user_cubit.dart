@@ -32,16 +32,7 @@ class UserCubit extends Cubit<UserState> {
 
       if (response.statusCode == 200) {
         final responseBody = jsonDecode(response.body);
-        final member = Member(
-          id: responseBody['id'],
-          username: responseBody['username'].toString(),
-          email: responseBody['email'].toString(),
-          address: responseBody['address'].toString(),
-          phone: responseBody['phone'].toString(),
-          image: responseBody['image'].toString(),
-          sosPin: responseBody['sosPin'].toString(),
-          accessToken: responseBody['tokens']["accessToken"].toString(),
-        );
+        final member = Member.fromJson(responseBody);
 
         emit(UserSuccess(member));
         return member;
