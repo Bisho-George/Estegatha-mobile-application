@@ -1,6 +1,6 @@
 import 'package:estegatha/utils/constant/image_strings.dart';
 
-import '../../features/sos_alert/presentation/views/widgets/sos_instruction.dart';
+import '../../features/sos/presentation/widgets/sos_instruction.dart';
 
 class SosAlertContent {
   final String sosImage;
@@ -36,9 +36,9 @@ List<SosAlertContent> contents = [
     sosDescription: "Release the button to silently notify your organization and emergency contacts",
   ),
   SosAlertContent(
-    sosImage: ConstantImages.sosAlert4,
-    sosDescription: "If you’re OK, enter your PIN code and we’ll cancel your SOS",
-    buttonText: "Setup pin "
+      sosImage: ConstantImages.sosAlert4,
+      sosDescription: "If you’re OK, enter your PIN code and we’ll cancel your SOS",
+      buttonText: "Setup pin "
   ),
 
 

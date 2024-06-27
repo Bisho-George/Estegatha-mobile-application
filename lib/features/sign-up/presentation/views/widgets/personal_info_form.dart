@@ -172,7 +172,11 @@ class PersonalInfoForm extends StatelessWidget {
                       fontSize: ConstantSizes.fontSizeMd),
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                      return SignInPage();
+                    }));
+                  },
                   child: const Text("Sign in",
                       style: TextStyle(
                           color: ConstantColors.textPrimary,

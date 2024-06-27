@@ -3,21 +3,26 @@ import 'package:estegatha/utils/constant/sizes.dart';
 import 'package:flutter/material.dart';
 
 class CustomElevatedButton extends StatelessWidget {
-  const CustomElevatedButton({
+  CustomElevatedButton({
     super.key,
     required this.onPressed,
     required this.labelText,
     this.formKey,
+    this.focusNode,
+    this.isPrimary = true,
   });
 
   final GlobalKey<FormState>? formKey;
   final void Function() onPressed;
   final String labelText;
+  FocusNode? focusNode;
+  final bool isPrimary;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: double.infinity,
+      width: ConstantSizes.buttonWidth,
+      height: ConstantSizes.buttonHeight,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           elevation: 0,
@@ -27,9 +32,9 @@ class CustomElevatedButton extends StatelessWidget {
           disabledBackgroundColor: ConstantColors.buttonDisabled,
           side: const BorderSide(color: ConstantColors.primary),
           padding:
-              const EdgeInsets.symmetric(vertical: ConstantSizes.buttonHeight),
+          const EdgeInsets.symmetric(vertical: ConstantSizes.buttonVerticalPadding, horizontal: ConstantSizes.buttonVerticalPadding),
           textStyle: const TextStyle(
-              fontSize: ConstantSizes.fontSizeMd,
+              fontSize: ConstantSizes.buttonFontSize,
               color: ConstantColors.textWhite,
               fontWeight: FontWeight.w600),
           shape: RoundedRectangleBorder(

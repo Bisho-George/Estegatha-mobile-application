@@ -9,12 +9,13 @@ library;
 
 class ConstantImages {
   // -- App Logo
-  static const String AppLogo = "assets/logo.png";
+  static const String AppLogo2 = "assets/logo.png";
+  static const String AppLogo = "assets/logo2.png";
 
   // -- OnBoarding Images
-  static const String onBoardingImage1 = "";
-  static const String onBoardingImage2 = "";
-  static const String onBoardingImage3 = "";
+  static const String onBoardingImage1 = "assets/landing_1.png";
+  static const String onBoardingImage2 = "assets/landing_2.png";
+  static const String onBoardingImage3 = "assets/check.png";
 
   //Profile
   static const String user = "";
@@ -60,5 +61,13 @@ class ConstantImages {
   // dangerous dialogs
   static const String dialogIcon = "assets/dialog_icon.svg";
 
-
+  static const String organizationBoarding = "assets/organization_boarding.png";
+  static const String organizationTrackIcon = "assets/org_track_icon.png";
+  static const String organizationHealthIcon = "assets/org_health_icon.png";
+  static const String organizationPostIcon = "assets/org_post_icon.png";
+  // Sos Alert
+  static const String sosAlert1 = "assets/sos1.png";
+  static const String sosAlert2 = "assets/sos2.png";
+  static const String sosAlert3 = "assets/sos3.png";
+  static const String sosAlert4 = "assets/sos4.png";
 }
