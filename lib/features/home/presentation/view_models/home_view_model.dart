@@ -55,6 +55,12 @@ class HomeCubit extends Cubit<HomeState> {
   void updateZoom(double zoom) {
     emit(state.copyWith(zoom: zoom));
   }
+  void showOrganizations() {
+    emit(state.copyWith(organizationsVisible: true));
+  }
+  void hideOrganizations() {
+    emit(state.copyWith(organizationsVisible: false));
+  }
 
   void animateCamera() {
     googleMapController?.animateCamera(

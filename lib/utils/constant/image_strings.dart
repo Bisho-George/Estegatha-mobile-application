@@ -43,6 +43,7 @@ class ConstantImages {
   static const String settingsAppbarIcon = "assets/settings_appbar.svg";
   static const String organizationArrowIcon = "assets/arrow_organization.svg";
   static const String messagesIcon = "assets/messages_icon.svg";
+  static const String addPersonIcon = "assets/add_person_icon.svg";
 
 
   // bottom navigation bar

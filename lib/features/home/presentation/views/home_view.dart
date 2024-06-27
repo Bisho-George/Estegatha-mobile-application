@@ -1,3 +1,5 @@
+import 'package:estegatha/features/home/presentation/views/widgets/animated_organization_header.dart';
+import 'package:estegatha/features/home/presentation/views/widgets/animated_organizations_widget.dart';
 import 'package:estegatha/features/home/presentation/views/widgets/dangerous_dialog.dart';
 import 'package:estegatha/features/home/presentation/views/widgets/draggable_scroll_sheet.dart';
 import 'package:estegatha/features/home/presentation/views/widgets/google_map.dart';
@@ -35,7 +37,7 @@ class _HomeViewState extends State<HomeView>
     );
     _slideAnimation = Tween<Offset>(
       begin: Offset.zero,
-      end: Offset(0, 1),
+      end: const Offset(0, 1),
     ).animate(CurvedAnimation(
       parent: _animationController,
       curve: Curves.easeInOut,
@@ -64,71 +66,56 @@ class _HomeViewState extends State<HomeView>
 
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery.of(context).size.height;
     return BlocProvider(
       create: (context) => HomeCubit(),
-      child: SafeArea(
-        child: Scaffold(
-          body: BlocConsumer<HomeCubit, HomeState>(
-            listener: (context, state) async {
-              if (state.position != null) {
-                BlocProvider.of<HomeCubit>(context).animateCamera();
-              }
-            },
-            builder: (context, state) {
-              return Stack(
+      child: Scaffold(
+        body: BlocConsumer<HomeCubit, HomeState>(
+          listener: (context, state) async {
+            if (state.position != null) {
+              BlocProvider.of<HomeCubit>(context).animateCamera();
+            }
+          },
+          builder: (context, state) {
+            return SafeArea(
+              child: Stack(
                 children: [
                   GoogleMapView(),
-                  Positioned(
-                      top: 40,
-                      left: 20,
-                      right: 20,
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                color: ConstantColors.white,
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                              child: IconButton(
-                                icon: SvgPicture.asset(
-                                    ConstantImages.settingsAppbarIcon),
-                                onPressed: () {},
-                              ),
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: ConstantColors.white,
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                              // padding: EdgeInsets.symmetric(horizontal: ConstantSizes.defaultSpace),
-                              child: IconButton(
-                                icon: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: ConstantSizes.defaultSpace),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                     Text("graduation project", style: TextStyle(
-                                        color: ConstantColors.primary,
-                                        fontSize: ConstantSizes.fontSizeMd,
-                                        fontWeight: ConstantSizes.fontWeightSemiBold,
-                                      ),),
-                                        SizedBox(width: ConstantSizes.spaceBtwItems,),
-                                        SvgPicture.asset(ConstantImages.organizationArrowIcon),
-
-                                    ],
-                                  ),
-                                ),
-                                onPressed: () {},
-                              ),
-                            ),
-                            Container(
+                  if (state.organizationsVisible)
+                    const AnimatedOrganizationsWidget(),
+                  if (!state.organizationsVisible)
+                    Positioned(
+                        top: 40,
+                        left: 20,
+                        right: 20,
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
                                 decoration: BoxDecoration(
                                   color: ConstantColors.white,
                                   borderRadius: BorderRadius.circular(50),
                                 ),
-                                child: IconButton(onPressed: () {}, icon: SvgPicture.asset(ConstantImages.messagesIcon)))
-                          ])),
+                                child: IconButton(
+                                  icon: SvgPicture.asset(
+                                      ConstantImages.settingsAppbarIcon),
+                                  onPressed: () {},
+                                ),
+                              ),
+                              AnimatedOrganizationHeader(
+                                isExpanded: false,
+                              ),
+                              Container(
+                                  decoration: BoxDecoration(
+                                    color: ConstantColors.white,
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  child: IconButton(
+                                      onPressed: () {},
+                                      icon: SvgPicture.asset(
+                                          ConstantImages.messagesIcon)))
+                            ])),
                   if (state.position != null && state.customMarker != null)
                     AnimatedPositioned(
                       duration: Duration(milliseconds: 300),
@@ -147,8 +134,8 @@ class _HomeViewState extends State<HomeView>
                       ),
                     ),
                   Positioned(
-                    bottom: 350,
-                    left: 10,
+                    bottom: height * .4,
+                    left: width * .03,
                     child: SlideTransition(
                       position: _slideAnimation,
                       child: AnimatedOpacity(
@@ -193,8 +180,8 @@ class _HomeViewState extends State<HomeView>
                     ),
                   ),
                   Positioned(
-                    bottom: 350,
-                    right: 10,
+                    bottom: height * .4,
+                    right: width * .03,
                     child: Column(
                       children: [
                         SlideTransition(
@@ -274,9 +261,9 @@ class _HomeViewState extends State<HomeView>
                     child: BottomNavBarFAB(),
                   ),
                 ],
-              );
-            },
-          ),
+              ),
+            );
+          },
         ),
       ),
     );

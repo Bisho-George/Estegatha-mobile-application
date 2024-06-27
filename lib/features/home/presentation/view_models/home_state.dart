@@ -10,6 +10,7 @@ class HomeState {
   final bool isAppBarVisible;
   final double zoom;
   final bool isButtonVisible;
+  final bool organizationsVisible;
 
   HomeState({
     this.position,
@@ -19,6 +20,7 @@ class HomeState {
     this.isAppBarVisible = false,
     this.zoom = 15,  // Default zoom level
     this.isButtonVisible = true,
+    this.organizationsVisible = false,
   });
 
   HomeState copyWith({
@@ -29,6 +31,7 @@ class HomeState {
     bool? isAppBarVisible,
     double? zoom,
     bool? isButtonVisible,
+    bool? organizationsVisible,
   }) {
     return HomeState(
       position: position ?? this.position,
@@ -38,6 +41,7 @@ class HomeState {
       isAppBarVisible: isAppBarVisible ?? this.isAppBarVisible,
       zoom: zoom ?? this.zoom,
       isButtonVisible: isButtonVisible ?? this.isButtonVisible,
+      organizationsVisible: organizationsVisible ?? this.organizationsVisible,
     );
   }
 }

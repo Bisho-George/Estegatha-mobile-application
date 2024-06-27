@@ -1,8 +1,6 @@
 import 'package:estegatha/features/home/presentation/views/widgets/draggable_scroll_sheet_button.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../../utils/constant/colors.dart';
 import '../../../../../utils/constant/image_strings.dart';
@@ -10,6 +8,7 @@ import '../../../../../utils/constant/sizes.dart';
 import '../../view_models/draggable_scroll_sheet/draggable_scroll_sheet_cubit.dart';
 import '../../view_models/draggable_scroll_sheet/draggable_scroll_sheet_state.dart';
 import 'draggable_scroll_sheet_list_item.dart';
+import 'organization_option.dart';
 
 class DraggableScrollSheet extends StatelessWidget {
   const DraggableScrollSheet({super.key});
@@ -25,42 +24,35 @@ class DraggableScrollSheet extends StatelessWidget {
 
 class DraggableScrollSheetView extends StatefulWidget {
   @override
-  State<DraggableScrollSheetView> createState() => _DraggableScrollSheetViewState();
+  State<DraggableScrollSheetView> createState() =>
+      _DraggableScrollSheetViewState();
 }
 
 class _DraggableScrollSheetViewState extends State<DraggableScrollSheetView> {
+  final sheet = GlobalKey();
+  final controller = DraggableScrollableController();
+  final ScrollController _scrollController = ScrollController();
+  final GlobalKey _keySection1 = GlobalKey();
+  final GlobalKey _keySection2 = GlobalKey();
+  final GlobalKey _keySection3 = GlobalKey();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     controller.addListener(onChanged);
-
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
     controller.removeListener(onChanged);
+    _scrollController.dispose();
     controller.dispose();
   }
 
-  void onChanged () {
-    final currentSize = controller.size;
-    if (currentSize <= .05) collapse();
-  }
 
-  void collapse () => animatedSheet(getSheet.snapSizes!.first);
-  void anchor () => animatedSheet(getSheet.snapSizes!.last);
-  void expand () => animatedSheet(getSheet.maxChildSize);
-  void hide () => animatedSheet(getSheet.minChildSize);
-      void animatedSheet (double size) {
-        controller.animateTo(size, duration: const Duration(microseconds: 50), curve: Curves.easeInOut);
-      }
-      DraggableScrollableSheet get getSheet => (sheet.currentWidget as DraggableScrollableSheet);
-
-  final sheet = GlobalKey();
-  final controller = DraggableScrollableController();
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
@@ -104,54 +96,69 @@ class _DraggableScrollSheetViewState extends State<DraggableScrollSheetView> {
                         DraggableScrollSheetState>(
                       builder: (context, state) {
                         return DraggableScrollSheetButton(
-                          opacity: state.opacity1,
-                          isSelected: state.isSelected1,
-                          iconPath: ConstantImages.peopleIcon,
-                          onPressed: () => context
-                              .read<DraggableScrollSheetCubit>()
-                              .toggleSelection(1),
-                        );
+                            opacity: state.opacity1,
+                            isSelected: state.isSelected1,
+                            iconPath: ConstantImages.peopleIcon,
+                            onPressed: () {
+                              context
+                                  .read<DraggableScrollSheetCubit>()
+                                  .toggleSelection(1);
+                              _scrollToSection(_keySection1);
+                            });
                       },
                     ),
                     BlocBuilder<DraggableScrollSheetCubit,
                         DraggableScrollSheetState>(
                       builder: (context, state) {
                         return DraggableScrollSheetButton(
-                          opacity: state.opacity2,
-                          isSelected: state.isSelected2,
-                          iconPath: ConstantImages.wayIcon,
-                          onPressed: () => context
-                              .read<DraggableScrollSheetCubit>()
-                              .toggleSelection(2),
-                        );
+                            opacity: state.opacity2,
+                            isSelected: state.isSelected2,
+                            iconPath: ConstantImages.wayIcon,
+                            onPressed: () {
+                              context
+                                  .read<DraggableScrollSheetCubit>()
+                                  .toggleSelection(2);
+                              _scrollToSection(_keySection2);
+                            });
                       },
                     ),
                     BlocBuilder<DraggableScrollSheetCubit,
                         DraggableScrollSheetState>(
                       builder: (context, state) {
                         return DraggableScrollSheetButton(
-                          opacity: state.opacity3,
-                          isSelected: state.isSelected3,
-                          iconPath: ConstantImages.buildingIcon,
-                          onPressed: () => context
-                              .read<DraggableScrollSheetCubit>()
-                              .toggleSelection(3),
-                        );
+                            opacity: state.opacity3,
+                            isSelected: state.isSelected3,
+                            iconPath: ConstantImages.buildingIcon,
+                            onPressed: () {
+                              context
+                                  .read<DraggableScrollSheetCubit>()
+                                  .toggleSelection(3);
+                              _scrollToSection(_keySection3);
+                            });
                       },
                     ),
                   ],
                 ),
-                SizedBox(height: ConstantSizes.defaultSpace),
-                Text("People",
-                    style: TextStyle(
-                      color: ConstantColors.black,
-                      fontSize: ConstantSizes.fontSizeLg,
-                      fontWeight: ConstantSizes.fontWeightBold,
-                    )),
                 Expanded(
                   child: CustomScrollView(
                     controller: scrollController,
                     slivers: [
+                      SliverToBoxAdapter(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: ConstantSizes.defaultSpace),
+                            Text(
+                                key: _keySection1,
+                                "People",
+                                style: TextStyle(
+                                  color: ConstantColors.black,
+                                  fontSize: ConstantSizes.fontSizeLg,
+                                  fontWeight: ConstantSizes.fontWeightBold,
+                                )),
+                          ],
+                        ),
+                      ),
                       BlocBuilder<DraggableScrollSheetCubit,
                           DraggableScrollSheetState>(
                         builder: (context, state) {
@@ -183,29 +190,41 @@ class _DraggableScrollSheetViewState extends State<DraggableScrollSheetView> {
                         ),
                       ),
                       SliverToBoxAdapter(
-                        child: Row(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                color: ConstantColors.primary.withOpacity(.1),
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                              child: IconButton(
-                                  onPressed: () {},
-                                  icon:
-                                      SvgPicture.asset(ConstantImages.peopleIcon,
-                                      color: ConstantColors.primary,)),
-                            ),
-                            SizedBox(width: ConstantSizes.spaceBtwItems),
-                            Text('Add a member',
+                            OrganizationOption(
+                                optionName: 'Add a member',
+                                iconPath: ConstantImages.peopleIcon),
+                            SizedBox(height: ConstantSizes.spaceBtwItems),
+                            Text(
+                                key: _keySection2,
+                                "Track",
                                 style: TextStyle(
-                                  color: ConstantColors.primary,
+                                  color: ConstantColors.black,
                                   fontSize: ConstantSizes.fontSizeMd,
                                   fontWeight: ConstantSizes.fontWeightBold,
-                                ))
+                                )),
+                            SizedBox(height: ConstantSizes.spaceBtwItems),
+                            OrganizationOption(
+                                optionName: 'Track member',
+                                iconPath: ConstantImages.wayIcon),
+                            SizedBox(height: ConstantSizes.spaceBtwItems),
+                            Text(
+                                key: _keySection3,
+                                "Places",
+                                style: TextStyle(
+                                  color: ConstantColors.black,
+                                  fontSize: ConstantSizes.fontSizeMd,
+                                  fontWeight: ConstantSizes.fontWeightBold,
+                                )),
+                            SizedBox(height: ConstantSizes.spaceBtwItems),
+                            OrganizationOption(
+                                optionName: 'Manage places',
+                                iconPath: ConstantImages.buildingIcon),
                           ],
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -215,5 +234,35 @@ class _DraggableScrollSheetViewState extends State<DraggableScrollSheetView> {
         );
       },
     );
+  }
+
+
+  void onChanged() {
+    final currentSize = controller.size;
+    if (currentSize <= .05) collapse();
+  }
+
+  void collapse() => animatedSheet(getSheet.snapSizes!.first);
+
+  void anchor() => animatedSheet(getSheet.snapSizes!.last);
+
+  void expand() => animatedSheet(getSheet.maxChildSize);
+
+  void hide() => animatedSheet(getSheet.minChildSize);
+
+  void animatedSheet(double size) {
+    controller.animateTo(size,
+        duration: const Duration(microseconds: 50), curve: Curves.easeInOut);
+  }
+
+  DraggableScrollableSheet get getSheet =>
+      (sheet.currentWidget as DraggableScrollableSheet);
+
+  void _scrollToSection(GlobalKey key) {
+    final context = key.currentContext;
+    if (context != null) {
+      Scrollable.ensureVisible(context,
+          duration: Duration(seconds: 1), curve: Curves.easeInOut);
+    }
   }
 }
