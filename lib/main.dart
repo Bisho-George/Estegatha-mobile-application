@@ -1,11 +1,20 @@
 import 'package:estegatha/features/forget-password/presentation/veiw_models/forget-password/forget_password_cubit.dart';
 import 'package:estegatha/features/sign-in/presentation/veiw_models/login_cubit/login_cubit.dart';
-import 'package:estegatha/features/sign-up/presentation/views/test_view.dart';
 import 'package:estegatha/routes.dart';
+import 'package:estegatha/utils/constant/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:estegatha/routes.dart';
 import 'package:get_storage/get_storage.dart';
+
+import 'features/landing/presentation/pages/landing_intro.dart';
+import 'features/landing/presentation/view_model/permissions_cubit.dart';
+import 'features/organization/presentation/view_model/organization_cubit.dart';
+import 'features/safty/presentation/view_models/cotact_cubit.dart';
+import 'features/sign-in/presentation/pages/sign_in_page.dart';
+import 'features/sign-up/presentation/view_models/sign_up_cubit.dart';
+import 'features/sign-up/presentation/views/personal_info_view.dart';
+import 'features/sos/presentation/view_models/cubit/create_pin_cubit.dart';
+import 'features/sos/presentation/view_models/cubit/send_sos_cubit.dart';
 
 void main() async {
   await GetStorage.init();
