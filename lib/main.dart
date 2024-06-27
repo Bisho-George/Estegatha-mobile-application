@@ -21,6 +21,7 @@ import 'package:estegatha/features/landing/presentation/pages/landing_intro.dart
 import 'package:estegatha/routes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'core/firebase/notification.dart';
+import 'features/home/presentation/views/home_view.dart';
 import 'firebase_options.dart';
 void main() async{
   await GetStorage.init();
@@ -84,7 +85,7 @@ class _MyAppState extends State<MyApp> {
       print("User object from shared preferences => $userJson");
       final user = Member.fromJson(jsonDecode(userJson));
       BlocProvider.of<UserCubit>(context).setUser(user);
-      home.value = const MainNavMenu();
+      home.value = HomeView();
     }
     else{
       checkFirstTime();
@@ -111,7 +112,7 @@ class _MyAppState extends State<MyApp> {
           builder: (_, child) => MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'Estegatha',
-            home: SendSos(),
+            home: home.value,
             routes: routes,
           ),
         );
