@@ -78,6 +78,13 @@ class _AnimatedOrganizationHeaderState extends State<AnimatedOrganizationHeader>
           decoration: BoxDecoration(
             color: ConstantColors.white,
             borderRadius: BorderRadius.circular(50),
+            boxShadow: [
+              BoxShadow(
+                color: ConstantColors.grey,
+                offset: Offset(0, 2),
+                blurRadius: 4,
+              ),
+            ],
           ),
           child: IconButton(
             icon: Padding(
