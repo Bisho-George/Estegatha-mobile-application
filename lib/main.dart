@@ -91,6 +91,7 @@ class _MyAppState extends State<MyApp> {
       final user = Member.fromJson(jsonDecode(userJson));
       BlocProvider.of<UserCubit>(context).setUser(user);
       home.value = MainNavMenu();
+      // home.value = SendSos();
     } else {
       checkFirstTime();
     }
