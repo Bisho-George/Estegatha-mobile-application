@@ -1,5 +1,7 @@
 import 'package:estegatha/features/home/presentation/views/widgets/organization_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -28,7 +30,6 @@ class _AnimatedOrganizationsWidgetState
 
   TickerFuture  _reverseAnimation () => _animationController.reverse();
   void _startAnimation()  {
-    // await Future.delayed(Duration(seconds: 3));
     _animationController.forward();
   }
 
@@ -54,10 +55,7 @@ class _AnimatedOrganizationsWidgetState
     super.dispose();
     _animationController.dispose();
   }
-  Future<bool> _onWillPop() async {
-    await _animationController.reverse();
-    return true;
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -66,27 +64,42 @@ class _AnimatedOrganizationsWidgetState
         return SlideTransition(
           position: _animation,
           child: Container(
+              height: MediaQuery.of(context).size.height / 3.2,
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.sizeOf(context).height / 4,
-              decoration: BoxDecoration(color: Colors.white),
-              child: Stack(children: [
-                Positioned(
-                    top: 40,
-                    left: MediaQuery.sizeOf(context).width / 4,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
+              decoration: const BoxDecoration(color: Colors.white,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(ConstantSizes.defaultSpace),
+                bottomRight: Radius.circular(ConstantSizes.defaultSpace),
+              ),),
+              padding: const EdgeInsets.only(top: ConstantSizes.defaultSpace),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: ConstantSizes.defaultSpace),
+
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Row(
-                          children: [
-                            AnimatedOrganizationHeader(isExpanded: state.organizationsVisible),
-                            const SizedBox(width: ConstantSizes.defaultSpace),
-                            SvgPicture.asset(ConstantImages.addPersonIcon),
-                          ],
-                        ),
-                        const OrganizationWidget(),
+                        AnimatedOrganizationHeader(isExpanded: state.organizationsVisible),
+                        const SizedBox(width: ConstantSizes.defaultSpace + 10),
+                        IconButton(
+                          icon: SvgPicture.asset(ConstantImages.addPersonIcon),
+                          onPressed: () {},
+                          ),
                       ],
-                    ))
-              ])),
+                    ),
+                  ),
+                  const SizedBox(height: ConstantSizes.spaceBtwItems,),
+                  Expanded(
+                    child: ListView.builder(
+                      itemBuilder: (context, index) => const OrganizationWidget(),
+                      itemCount: 3,
+                    
+                    ),
+                  )
+                ],
+              )),
         );
       },
     );

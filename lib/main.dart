@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_storage/get_storage.dart';
 
+import 'features/home/presentation/views/home_view.dart';
 import 'features/landing/presentation/pages/landing_intro.dart';
 import 'features/landing/presentation/view_model/permissions_cubit.dart';
 import 'features/organization/presentation/view_model/organization_cubit.dart';
@@ -65,7 +66,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         home: SignInPage(),
-        initialRoute: PersonalInfoView.routeName,
+        initialRoute: HomeView.routeName,
         routes: routes,
         theme: ThemeData(
           primaryColor: ConstantColors.primary,

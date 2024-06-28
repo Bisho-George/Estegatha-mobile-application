@@ -15,8 +15,8 @@ class DangerousDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       child: Container(
-        width: 300,
-        height: 400,
+        // width: 300,
+
         decoration: ShapeDecoration(
           color: Color(0xFFF6F6F8),
           shape: RoundedRectangleBorder(
@@ -36,6 +36,7 @@ class DangerousDialog extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: ConstantSizes.defaultSpace),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text("Dangerous Area", style: TextStyle(
                 color: ConstantColors.primary,
@@ -74,7 +75,10 @@ class DangerousDialog extends StatelessWidget {
                     CustomElevatedButton(
                         onPressed: () {}, labelText: "See More Details"),
                     SizedBox(height: ConstantSizes.spaceBtwItems),
-                    CustomElevatedButton(onPressed: () {}, labelText: "Notify Your Organization"),
+                    CustomElevatedButton(
+
+                        onPressed: () {},
+                        labelText: "Notify Your Organization"),
                   ],
                 ),
               ),

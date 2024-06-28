@@ -22,6 +22,7 @@ import 'package:estegatha/features/sos/presentation/pages/create_pin.dart';
 import 'package:estegatha/features/sos/presentation/pages/send_sos.dart';
 import 'package:flutter/material.dart';
 
+import 'features/home/presentation/views/home_view.dart';
 import 'features/sign-up/presentation/views/personal_info_view.dart';
 import 'features/sos/presentation/pages/sos_alert_intro.dart';
 
@@ -47,4 +48,5 @@ final Map<String, WidgetBuilder> routes = {
   CreateOrganizationPage.id: (context) => const CreateOrganizationPage(),
   SendSos.routeName: (context) => const SendSos(),
   CancelSos.routeName: (context) => const CancelSos(),
+  HomeView.routeName: (context) => HomeView()
 };
