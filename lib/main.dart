@@ -23,7 +23,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'core/firebase/notification.dart';
 import 'features/home/presentation/views/home_view.dart';
 import 'firebase_options.dart';
-void main() async{
+
+void main() async {
   await GetStorage.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -56,23 +57,27 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     checkUserLoggedIn();
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) async{
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       print('Got a message whilst in the foreground!');
       print('Message data: ${message.data}');
       var user = await HelperFunctions.getUser();
-      if (message.notification != null && message.data['userId'] != user.id.toString()) {
+      if (message.notification != null &&
+          message.data['userId'] != user.id.toString()) {
         NotificationService notificationService = NotificationService();
-        notificationService.showNotification(message.notification!.title!, message.notification!.body!);
+        notificationService.showNotification(
+            message.notification!.title!, message.notification!.body!);
       }
     });
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => SosScreen(message: message)));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => SosScreen(message: message)));
     });
     FirebaseMessaging.onBackgroundMessage((message) async {
       var user = await HelperFunctions.getUser();
-      if(message.data['userId'] != user.id.toString()){
+      if (message.data['userId'] != user.id.toString()) {
         NotificationService notificationService = NotificationService();
-        notificationService.showNotification(message.notification!.title!, message.notification!.body!);
+        notificationService.showNotification(
+            message.notification!.title!, message.notification!.body!);
       }
     });
   }
@@ -85,9 +90,8 @@ class _MyAppState extends State<MyApp> {
       print("User object from shared preferences => $userJson");
       final user = Member.fromJson(jsonDecode(userJson));
       BlocProvider.of<UserCubit>(context).setUser(user);
-      home.value = HomeView();
-    }
-    else{
+      home.value = MainNavMenu();
+    } else {
       checkFirstTime();
     }
   }

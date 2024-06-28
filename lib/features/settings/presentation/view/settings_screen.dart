@@ -1,3 +1,4 @@
+import 'package:estegatha/features/edit_account/presentation/pages/edit_account_menu.dart';
 import 'package:estegatha/features/organization/presentation/view/setting/organization_settings_screen.dart';
 import 'package:estegatha/features/organization/presentation/view/widgets/section_heading.dart';
 import 'package:estegatha/features/organization/presentation/view_model/current_organization_cubit.dart';
@@ -82,7 +83,16 @@ class SettingsScreen extends StatelessWidget {
               SettingItem(
                 label: "Account",
                 icon: Icons.account_box_rounded,
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EditAccountMenu(
+                        parentContext: context,
+                      ),
+                    ),
+                  );
+                },
               ),
               SettingItem(
                 label: "Privacy & Security",

@@ -21,8 +21,7 @@ class CustomElevatedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: ConstantSizes.buttonWidth,
-      height: ConstantSizes.buttonHeight,
+      width: double.infinity,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           elevation: 0,
@@ -32,9 +31,9 @@ class CustomElevatedButton extends StatelessWidget {
           disabledBackgroundColor: ConstantColors.grey,
           // side: const BorderSide(color: ConstantColors.primary),
           padding:
-          const EdgeInsets.symmetric(vertical: ConstantSizes.buttonVerticalPadding, horizontal: ConstantSizes.buttonVerticalPadding),
+              const EdgeInsets.symmetric(vertical: ConstantSizes.buttonHeight),
           textStyle: const TextStyle(
-              fontSize: ConstantSizes.buttonFontSize,
+              fontSize: ConstantSizes.fontSizeMd,
               color: ConstantColors.textWhite,
               fontWeight: FontWeight.w600),
           shape: RoundedRectangleBorder(

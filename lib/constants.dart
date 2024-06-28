@@ -1,4 +1,5 @@
-String baseUrl = 'http://192.168.1.13:8080/';
+// String baseUrl = 'http://192.168.1.13:8080/';
+String baseUrl = 'http://192.168.1.11:8080/';
 String createSosEndPoint = 'api/v1/users/sos';
 String getOrganizationsEndPoint = 'api/v1/users/organizations';
 String getOrganizationMembersEndPoint = 'api/v1/organizations/members';

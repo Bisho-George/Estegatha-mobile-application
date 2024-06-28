@@ -4,6 +4,7 @@ import 'package:estegatha/features/organization/presentation/view/setting/widget
 import 'package:estegatha/features/organization/presentation/view/widgets/section_heading.dart';
 import 'package:estegatha/features/safety/presentation/view/add_health_record_screen.dart';
 import 'package:estegatha/features/safety/presentation/view_model/user_health_cubit.dart';
+import 'package:estegatha/features/safty/presentation/pages/emergency_contact_page.dart';
 import 'package:estegatha/features/sign-in/presentation/veiw_models/user_cubit.dart';
 import 'package:estegatha/utils/common/custom_app_bar.dart';
 import 'package:estegatha/utils/constant/colors.dart';
@@ -40,11 +41,19 @@ class SafetyScreen extends StatelessWidget {
           child: Column(
             children: <Widget>[
               OrganizationSettingItem(
-                  label: "Health Records",
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const UserHealthRecordScreen()));
-                  })
+                label: "Health Records",
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const UserHealthRecordScreen()));
+                },
+              ),
+              OrganizationSettingItem(
+                label: "Emergency Contact",
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => EmergencyContactPage()));
+                },
+              )
             ],
           ),
         ),

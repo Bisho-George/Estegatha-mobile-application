@@ -12,12 +12,14 @@ import 'package:estegatha/utils/helpers/validation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../utils/helpers/helper_functions.dart';
 import '../../../organization/domain/models/member.dart';
 import '../../../sign-in/presentation/veiw_models/user_cubit.dart';
+
 class ChangePhonePage extends StatefulWidget {
   static const String routeName = '/change_phone';
 
@@ -37,67 +39,68 @@ class _ChangePhonePageState extends State<ChangePhonePage> {
     SizeConfig sizeConfig = SizeConfig();
     sizeConfig.init(context);
     return BlocConsumer<EditPhoneCubit, EditPhoneState>(
-      builder: (context, state) {
-        return LoadingWidget(
-          loading: BlocProvider.of<EditPhoneCubit>(context).loading,
-          child: Scaffold(
-            appBar: CustomAppBar.buildAppBar(
-              title: 'Edit Phone Number',
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.check),
-                  color: ConstantColors.primary,
-                  onPressed: () {
-                    if(isValid) {
-                      FocusScope.of(context).unfocus();
-                      BlocProvider.of<EditPhoneCubit>(context).editPhone();
-                    }
-                  },
-                  padding: EdgeInsets.only(right: responsiveWidth(20)),
-                ),
-              ],
-            ),
-            body: LoadingWidget(
-              loading: false,
-              child: Container(
-                height: double.infinity,
-                padding: EdgeInsets.symmetric(vertical: responsiveHeight(ConstantSizes.md), horizontal: responsiveWidth(ConstantSizes.md)),
-                child: IntlPhoneField(
-                  decoration: const InputDecoration(
-                    labelText: 'Phone Number',
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(),
-                    ),
+        builder: (context, state) {
+      return LoadingWidget(
+        loading: BlocProvider.of<EditPhoneCubit>(context).loading,
+        child: Scaffold(
+          appBar: CustomAppBar.buildAppBar(
+            title: 'Edit Phone Number',
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.check),
+                color: ConstantColors.primary,
+                onPressed: () {
+                  if (isValid) {
+                    FocusScope.of(context).unfocus();
+                    BlocProvider.of<EditPhoneCubit>(context).editPhone();
+                  }
+                },
+                padding: EdgeInsets.only(right: responsiveWidth(20)),
+              ),
+            ],
+          ),
+          body: LoadingWidget(
+            loading: false,
+            child: Container(
+              height: double.infinity,
+              padding: EdgeInsets.symmetric(
+                  vertical: responsiveHeight(ConstantSizes.md),
+                  horizontal: responsiveWidth(ConstantSizes.md)),
+              child: IntlPhoneField(
+                decoration: const InputDecoration(
+                  labelText: 'Phone Number',
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(),
                   ),
-                  initialCountryCode: 'EG',
-                  onChanged: (phone) {
-                    BlocProvider.of<EditPhoneCubit>(context).phone = phone.completeNumber;
-                    isValid = phone.isValidNumber();
-                  },
                 ),
+                initialCountryCode: 'EG',
+                onChanged: (phone) {
+                  BlocProvider.of<EditPhoneCubit>(context).phone =
+                      phone.completeNumber;
+                  isValid = phone.isValidNumber();
+                },
               ),
             ),
           ),
+        ),
+      );
+    }, listener: (context, state) {
+      if (state is EditPhoneSuccess) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(state.message),
+          ),
         );
-      },
-      listener: (context, state) {
-        if(state is EditPhoneSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.message),
-            ),
-          );
-          BlocProvider.of<UserCubit>(context).setUser(state.newMember);
-          BlocProvider.of<EditPhoneCubit>(context).phone = '';
-          Navigator.pop(context);
-        } else if(state is EditPhoneFailure) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.message),
-            ),
-          );
-        }
+        BlocProvider.of<UserCubit>(context).setUser(state.newMember);
+        BlocProvider.of<EditPhoneCubit>(context).phone = '';
+        Navigator.pop(context);
+      } else if (state is EditPhoneFailure) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(state.message),
+          ),
+        );
       }
-    );
+    });
   }
 }

@@ -249,17 +249,17 @@ class _HomeViewState extends State<HomeView>
                             height: MediaQuery.of(context).size.height * .88,
                             child: DraggableScrollSheet(),
                           ),
-                          BottomNavBar(),
+                          // BottomNavBar(),
                         ],
                       ),
                     ),
                   ),
-                  Positioned(
-                    bottom: 30,
-                    // Adjusted to not overlap with BottomNavBar and DraggableScrollSheet
-                    left: MediaQuery.of(context).size.width / 2 - 30,
-                    child: BottomNavBarFAB(),
-                  ),
+                  // Positioned(
+                  //   bottom: 30,
+                  //   // Adjusted to not overlap with BottomNavBar and DraggableScrollSheet
+                  //   left: MediaQuery.of(context).size.width / 2 - 30,
+                  //   child: BottomNavBarFAB(),
+                  // ),
                 ],
               ),
             );

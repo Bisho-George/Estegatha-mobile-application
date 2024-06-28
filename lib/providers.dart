@@ -1,3 +1,6 @@
+import 'package:estegatha/features/organization/presentation/view_model/current_organization_cubit.dart';
+import 'package:estegatha/features/organization/presentation/view_model/user_organizations_cubit.dart';
+import 'package:estegatha/features/safety/presentation/view_model/user_health_cubit.dart';
 import 'package:flutter_bloc/src/bloc_provider.dart';
 import 'package:provider/single_child_widget.dart';
 
@@ -12,6 +15,7 @@ import 'features/sign-in/presentation/veiw_models/login_cubit/login_cubit.dart';
 import 'features/sign-in/presentation/veiw_models/user_cubit.dart';
 import 'features/sos/presentation/view_models/cubit/create_pin_cubit.dart';
 import 'features/sos/presentation/view_models/cubit/send_sos_cubit.dart';
+
 List<SingleChildWidget> providers = [
   BlocProvider<UserCubit>(
     create: (context) => UserCubit(),
@@ -45,5 +49,14 @@ List<SingleChildWidget> providers = [
   ),
   BlocProvider<EditPasswordCubit>(
     create: (context) => EditPasswordCubit(),
+  ),
+  BlocProvider<UserOrganizationsCubit>(
+    create: (context) => UserOrganizationsCubit(),
+  ),
+  BlocProvider<CurrentOrganizationCubit>(
+    create: (_) => CurrentOrganizationCubit()..loadCurrentOrganization(),
+  ),
+  BlocProvider<UserHealthCubit>(
+    create: (context) => UserHealthCubit(),
   ),
 ];

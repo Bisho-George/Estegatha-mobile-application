@@ -12,7 +12,8 @@ import 'change_email.dart';
 import 'change_password_page.dart';
 
 class EditAccountMenu extends StatefulWidget {
-  EditAccountMenu({super.key});
+  BuildContext? parentContext;
+  EditAccountMenu({super.key, this.parentContext});
 
   static const String routeName = 'EditAccountMenu';
 
@@ -36,12 +37,18 @@ class _EditAccountMenuState extends State<EditAccountMenu> {
                 AccountPreferences(
                     propertyName: 'Edit Phone Number',
                     propertyAction: () {
-                      Navigator.pushNamed(context, ChangePhonePage.routeName);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ChangePhonePage()));
                     }),
                 AccountPreferences(
                     propertyName: 'Change Password',
                     propertyAction: () {
-                      Navigator.pushNamed(context, ChangePassword.routeName);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ChangePassword()));
                     })
               ],
             ),

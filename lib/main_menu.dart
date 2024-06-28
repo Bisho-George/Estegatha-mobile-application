@@ -1,3 +1,4 @@
+import 'package:estegatha/features/home/presentation/views/home_view.dart';
 import 'package:estegatha/features/organization/presentation/view_model/current_organization_cubit.dart';
 import 'package:estegatha/features/organization/presentation/view_model/current_organization_state.dart';
 import 'package:estegatha/features/safety/presentation/view/safetys_creen.dart';
@@ -23,7 +24,7 @@ class _MainNavMenuState extends State<MainNavMenu> {
 
   List<Widget> buildScreens(int? organizationId) {
     return [
-      HomePage(),
+      HomeView(),
       const SafetyScreen(),
       if (organizationId != null)
         OrganizationDetailPage(
