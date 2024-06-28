@@ -8,6 +8,7 @@ class Member {
   final String? sosPin;
   final String accessToken;
   final String refreshToken;
+
   // // can have list of organization IDs
   // final List<int>? organizationIds;
 

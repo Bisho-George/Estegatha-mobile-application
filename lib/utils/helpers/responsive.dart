@@ -15,8 +15,13 @@ class SizeConfig {
     orientation = _mediaQueryData.orientation;
   }
 
+  static double font12 = screenHeight / 68.0;
+  static double font14 = screenHeight / 58.0;
   static double font16 = screenHeight / 52.5;
+  static double font18 = screenHeight / 46.6;
   static double font20 = screenHeight / 42.2;
+  static double font22 = screenHeight / 37.0;
+  static double font24 = screenHeight / 35.17;
   static double font26 = screenHeight / 32.3;
 
   // dynamic radius

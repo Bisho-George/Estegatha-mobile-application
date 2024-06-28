@@ -37,12 +37,3 @@ class UserSuccess extends UserState {
   @override
   List<Object> get props => [user];
 }
-
-class UserOrganizationsSuccess extends UserState {
-  final List<Organization> organizations;
-
-  const UserOrganizationsSuccess(this.organizations);
-
-  @override
-  List<Object> get props => [organizations];
-}

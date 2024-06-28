@@ -1,6 +1,5 @@
 // part of 'organization_cubit.dart';
 
-import 'package:estegatha/features/organization/domain/models/member.dart';
 import 'package:estegatha/features/organization/domain/models/organization.dart';
 import 'package:estegatha/features/organization/domain/models/organizationMember.dart';
 import 'package:estegatha/features/organization/domain/models/post.dart';
@@ -29,12 +28,15 @@ class OrganizationCreationSuccess extends OrganizationState {
 
 class OrganizationDetailSuccess extends OrganizationState {
   final Organization organization;
+  final List<OrganizationMember>? members;
+  final List<Post>? posts;
 
-  const OrganizationDetailSuccess(this.organization) : super(organization);
+  const OrganizationDetailSuccess(this.organization, {this.members, this.posts})
+      : super(organization);
 }
 
 class OrganizationSuccess extends OrganizationState {
-  final List<Member> members;
+  final List<OrganizationMember> members;
   final List<Post> posts;
 
   const OrganizationSuccess(
@@ -48,6 +50,10 @@ class OrganizationLoading extends OrganizationState {
 
 class JoinOrganizationLoading extends OrganizationState {
   const JoinOrganizationLoading() : super(null);
+}
+
+class UserOrganizationsLoading extends OrganizationState {
+  const UserOrganizationsLoading() : super(null);
 }
 
 class OrganizationMembersLoading extends OrganizationState {
@@ -67,13 +73,10 @@ class OrganizationMembersSuccess extends OrganizationState {
 }
 
 class OrganizationJoinSuccess extends OrganizationState {
-  const OrganizationJoinSuccess() : super(null);
-}
-
-class PostSuccess extends OrganizationState {
-  final Post post;
-
-  const PostSuccess(this.post) : super(null);
+  final Organization organization;
+  const OrganizationJoinSuccess(
+    this.organization,
+  ) : super(organization);
 }
 
 class OrganizationPostsLoading extends OrganizationState {
@@ -90,4 +93,60 @@ class OrganizationPostsSuccess extends OrganizationState {
   final List<Post> posts;
 
   const OrganizationPostsSuccess(this.posts) : super(null);
+}
+
+class UserOrganizationsSuccess extends OrganizationState {
+  final List<Organization> organizations;
+
+  const UserOrganizationsSuccess(this.organizations) : super(null);
+}
+
+class CurrentOrganizationId extends OrganizationState {
+  final int organizationId;
+
+  const CurrentOrganizationId(this.organizationId) : super(null);
+}
+
+class LeaveOrganizationLoading extends OrganizationState {
+  const LeaveOrganizationLoading() : super(null);
+}
+
+class LeaveOrganizationSuccess extends OrganizationState {
+  const LeaveOrganizationSuccess() : super(null);
+}
+
+class LeaveOrganizationFailure extends OrganizationState {
+  final String errMessage;
+
+  const LeaveOrganizationFailure({required this.errMessage}) : super(null);
+}
+
+class ChangeMemberRoleLoading extends OrganizationState {
+  const ChangeMemberRoleLoading() : super(null);
+}
+
+class ChangeMemberRoleSuccess extends OrganizationState {
+  const ChangeMemberRoleSuccess() : super(null);
+}
+
+class RemoveMemberLoading extends OrganizationState {
+  const RemoveMemberLoading() : super(null);
+}
+
+class RemoveMemberSuccess extends OrganizationState {
+  final List<OrganizationMember> members;
+  const RemoveMemberSuccess(
+    this.members,
+  ) : super(null);
+}
+
+class UpdateOrganizationLoading extends OrganizationState {
+  const UpdateOrganizationLoading() : super(null);
+}
+
+class UpdateOrganizationSuccess extends OrganizationState {
+  final Organization organization;
+  const UpdateOrganizationSuccess(
+    this.organization,
+  ) : super(organization);
 }

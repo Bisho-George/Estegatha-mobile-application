@@ -3,10 +3,15 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:estegatha/features/organization/domain/models/member.dart';
 import 'package:estegatha/features/organization/domain/models/organization.dart';
+import 'package:estegatha/features/organization/presentation/view_model/current_organization_cubit.dart';
+import 'package:estegatha/features/safety/domain/models/user_health_info.dart';
 import 'package:estegatha/features/sign-in/data/api/signin_http_client.dart';
 import 'package:estegatha/features/sign-in/data/api/user_http_client.dart';
+import 'package:estegatha/features/sign-in/presentation/pages/sign_in_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'user_state.dart';
 
@@ -85,7 +90,21 @@ class UserCubit extends Cubit<UserState> {
     return [];
   }
 
-  void logout() {
+  Future<void> deleteUserFromPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove('user');
+    prefs.remove('currentOrganizationId');
+  }
+
+  void logout(BuildContext context) async {
     emit(UserInitial());
+    await deleteUserFromPreferences();
+    context.read<CurrentOrganizationCubit>().resetCurrentOrganizationState();
+
+    PersistentNavBarNavigator.pushNewScreen(
+      context,
+      screen: SignInPage(),
+      withNavBar: false,
+    );
   }
 }
