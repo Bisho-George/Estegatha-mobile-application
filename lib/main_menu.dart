@@ -42,22 +42,22 @@ class _MainNavMenuState extends State<MainNavMenu> {
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.home),
         title: ("Home"),
-        activeColorPrimary: ConstantColors.secondary,
-        inactiveColorPrimary: Colors.grey,
+        activeColorPrimary: ConstantColors.primary,
+        inactiveColorPrimary: ConstantColors.secondary,
       ),
       // Safety
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.health_and_safety),
         title: ("Safety"),
-        activeColorPrimary: ConstantColors.secondary,
-        inactiveColorPrimary: Colors.grey,
+        activeColorPrimary: ConstantColors.primary,
+        inactiveColorPrimary: ConstantColors.secondary,
       ),
       // Organization
       PersistentBottomNavBarItem(
         iconSize: 28.r,
         icon: const Icon(
           Icons.people,
-          color: Colors.white,
+          color: ConstantColors.primary,
         ),
         inactiveIcon: const Icon(
           Icons.people_outline,
@@ -70,15 +70,15 @@ class _MainNavMenuState extends State<MainNavMenu> {
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.help_center_outlined),
         title: ("Catalog"),
-        activeColorPrimary: ConstantColors.secondary,
-        inactiveColorPrimary: ConstantColors.darkGrey,
+        activeColorPrimary: ConstantColors.primary,
+        inactiveColorPrimary: ConstantColors.secondary,
       ),
       // Settings
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.settings),
         title: ("Setting"),
-        activeColorPrimary: ConstantColors.secondary,
-        inactiveColorPrimary: ConstantColors.darkGrey,
+        activeColorPrimary: ConstantColors.primary,
+        inactiveColorPrimary: ConstantColors.secondary,
       ),
     ];
   }

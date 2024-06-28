@@ -73,8 +73,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
             height: fontSize * 2.5, // Adjust the size dynamically
             color: _selectedIndex == 1
                 ? ConstantColors.primary
-                : ConstantColors
-                    .secondaryBackground, // Change color based on selection
+                : ConstantColors.secondaryBackground,
           ),
           label: 'Safety',
         ),
