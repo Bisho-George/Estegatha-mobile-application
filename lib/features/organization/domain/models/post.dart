@@ -1,27 +1,36 @@
 class Post {
-  final int id;
-  final String title;
-  final String content;
-  final int organizationId;
+  int? id;
+  String? title;
+  String? content;
+  String? author;
+  String? publishedAt;
+  int? organizationId;
 
-  Post({
-    required this.id,
-    required this.title,
-    required this.content,
-    required this.organizationId,
-  }) : assert(id >= 0, 'Post id cannot be less than 0');
+  Post(
+      {this.id,
+      this.title,
+      this.content,
+      this.author,
+      this.publishedAt,
+      this.organizationId});
 
-  factory Post.fromJson(Map<String, dynamic> json) {
-    return Post(
-      id: json['id'] ?? 0,
-      title: json['title'] ?? '',
-      content: json['content'] ?? '',
-      organizationId: json['organizationId'] ?? 0,
-    );
+  Post.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    title = json['title'];
+    content = json['content'];
+    author = json['author'];
+    publishedAt = json['publishedAt'];
+    organizationId = json['organizationId'];
   }
 
-  @override
-  String toString() {
-    return 'Post{id: $id, title: $title, content: $content, organizationId: $organizationId}';
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['title'] = this.title;
+    data['content'] = this.content;
+    data['author'] = this.author;
+    data['publishedAt'] = this.publishedAt;
+    data['organizationId'] = this.organizationId;
+    return data;
   }
 }

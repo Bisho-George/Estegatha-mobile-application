@@ -414,4 +414,39 @@ class OrganizationCubit extends Cubit<OrganizationState> {
     }
     return Organization();
   }
+
+  Future<bool> isAdmin(BuildContext context, int orgId) async {
+    final userCubit = context.read<UserCubit>();
+    if (userCubit.state is UserLoaded) {
+      final userId = userCubit.getCurrentUser()?.id;
+      final members = await getOrganizationMembers(orgId);
+      final member = members.firstWhere((member) => member.userId == userId);
+      return member.role == 'ADMIN' || member.role == 'OWNER';
+    }
+    return false;
+  }
+
+  Future<void> createPost(
+      BuildContext context, String title, String content, int orgId) async {
+    final userCubit = context.read<UserCubit>();
+    if (userCubit.state is UserLoaded) {
+      emit(const CreatePostLoading());
+
+      try {
+        final response =
+            await OrganizationHttpClient.createPost(title, content, orgId);
+
+        if (response.statusCode == 201) {
+          emit(const CreatePostSuccess());
+          await getOrganizationById(orgId);
+        } else {
+          emit(const CreatePostFailure(
+              errMessage: "Something went wrong, try again!"));
+        }
+      } catch (e) {
+        print(e);
+        emit(const CreatePostFailure(errMessage: "Failed to create post!"));
+      }
+    }
+  }
 }

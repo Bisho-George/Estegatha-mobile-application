@@ -22,18 +22,13 @@ class MainNavMenu extends StatefulWidget {
 class _MainNavMenuState extends State<MainNavMenu> {
   PersistentTabController controller = PersistentTabController(initialIndex: 0);
 
-  List<Widget> buildScreens(int? organizationId) {
+  List<Widget> buildScreens() {
     return [
       HomeView(),
       const SafetyScreen(),
-      if (organizationId != null)
-        OrganizationDetailPage(
-          organizationId: organizationId,
-        )
-      else
-        const Center(
-          child: Text("No Organization Selected"),
-        ),
+      OrganizationDetailPage(
+        organizationId: 1, // TODO: change this to organizationId
+      ),
       const Center(
         child: Text("Catalog screen"),
       ),
@@ -95,7 +90,7 @@ class _MainNavMenuState extends State<MainNavMenu> {
         return PersistentTabView(
           navBarHeight: 60.0.h,
           context,
-          screens: buildScreens(state.organizationId),
+          screens: buildScreens(),
           items: navBarsItems(),
           controller: controller,
           confineInSafeArea: true,

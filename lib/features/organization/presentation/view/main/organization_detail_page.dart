@@ -1,4 +1,5 @@
 import 'package:estegatha/features/organization/presentation/view/widgets/posts_list.dart';
+import 'package:estegatha/utils/constant/colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:estegatha/features/organization/presentation/view/widgets/members_list.dart';
 import 'package:estegatha/features/organization/presentation/view/widgets/organization_app_bar.dart';
@@ -42,6 +43,9 @@ class OrganizationDetailPage extends StatelessWidget {
     context.read<OrganizationCubit>().getOrganizationById(organizationId);
     SizeConfig().init(context);
 
+    final isAdmin =
+        context.read<OrganizationCubit>().isAdmin(context, organizationId);
+
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -69,8 +73,13 @@ class OrganizationDetailPage extends StatelessWidget {
                 const TabStatus(
                   image: ConstantImages.organizationTrackIcon,
                   title: 'No Danger Status Detected',
-                  subtitle:
+                  subtitle: Text(
                       'Your organization may have not enabled location tracking.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: ConstantColors.darkGrey,
+                        fontSize: ConstantSizes.fontSizeSm,
+                      )),
                 ),
               ],
             ),
@@ -95,8 +104,13 @@ class OrganizationDetailPage extends StatelessWidget {
                 const TabStatus(
                   image: ConstantImages.organizationHealthIcon,
                   title: 'No Health Status Detected',
-                  subtitle:
+                  subtitle: Text(
                       'Your organization may have not enabled health tracking.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: ConstantColors.darkGrey,
+                        fontSize: ConstantSizes.fontSizeSm,
+                      )),
                 ),
               ],
             ),
@@ -110,7 +124,11 @@ class OrganizationDetailPage extends StatelessWidget {
                     } else if (state is OrganizationFailure) {
                       return Center(child: Text(state.errMessage));
                     } else if (state is OrganizationDetailSuccess) {
-                      return PostsList(posts: state.posts ?? []);
+                      return PostsList(
+                        posts: state.posts ?? [],
+                        isAdmin: true,
+                        organization: state.organization,
+                      );
                     } else {
                       return const Text("Error loading posts!");
                     }

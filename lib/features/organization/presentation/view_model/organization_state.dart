@@ -150,3 +150,17 @@ class UpdateOrganizationSuccess extends OrganizationState {
     this.organization,
   ) : super(organization);
 }
+
+class CreatePostLoading extends OrganizationState {
+  const CreatePostLoading() : super(null);
+}
+
+class CreatePostSuccess extends OrganizationState {
+  const CreatePostSuccess() : super(null);
+}
+
+class CreatePostFailure extends OrganizationState {
+  final String errMessage;
+
+  const CreatePostFailure({required this.errMessage}) : super(null);
+}

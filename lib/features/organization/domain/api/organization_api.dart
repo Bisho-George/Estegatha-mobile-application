@@ -67,6 +67,13 @@ class OrganizationHttpClient {
         body: {'name': name, 'type': type});
   }
 
+  static Future<http.Response> createPost(
+      String title, String content, int orgId) async {
+    return customHttpRequest(
+        'POST', Uri.parse('$organizationBaseUrl/posts/$orgId'),
+        body: {'title': title, 'content': content});
+  }
+
   static Future<http.Response> joinOrganizationByCode(
       String organizationCode) async {
     return customHttpRequest(
