@@ -51,6 +51,9 @@ class _AddHealthRecordScreenState extends State<AddHealthRecordScreen> {
   void submitMedicine() {
     if (medicineController.text.isNotEmpty) {
       context.read<UserHealthCubit>().addUserMedicine(medicineController.text);
+      HelperFunctions.showSnackBar(context, 'Medicine information saved');
+
+      Navigator.pop(context);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please enter medicine information')),

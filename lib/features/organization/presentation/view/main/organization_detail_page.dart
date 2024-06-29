@@ -43,9 +43,6 @@ class OrganizationDetailPage extends StatelessWidget {
     context.read<OrganizationCubit>().getOrganizationById(organizationId);
     SizeConfig().init(context);
 
-    final isAdmin =
-        context.read<OrganizationCubit>().isAdmin(context, organizationId);
-
     return DefaultTabController(
       length: 3,
       child: Scaffold(

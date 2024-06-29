@@ -54,3 +54,29 @@ class UserHealthInfoLoaded extends UserHealthState {
   @override
   List<Object> get props => [userHealthInfo];
 }
+
+class DeleteUserDiseaseLoading extends UserHealthState {}
+
+class DeleteUserDiseaseSuccess extends UserHealthState {}
+
+class DeleteUserDiseaseFailure extends UserHealthState {
+  final String errMessage;
+
+  const DeleteUserDiseaseFailure({required this.errMessage});
+
+  @override
+  List<Object> get props => [errMessage];
+}
+
+class DeleteUserMedicineLoading extends UserHealthState {}
+
+class DeleteUserMedicineSuccess extends UserHealthState {}
+
+class DeleteUserMedicineFailure extends UserHealthState {
+  final String errMessage;
+
+  const DeleteUserMedicineFailure({required this.errMessage});
+
+  @override
+  List<Object> get props => [errMessage];
+}
