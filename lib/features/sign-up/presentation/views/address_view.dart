@@ -1,4 +1,4 @@
-import 'package:estegatha/features/sign-up/data/repositories/predictions_maps_api.dart';
+import 'package:estegatha/features/sign-up/data/repos/predictions_maps_api.dart';
 import 'package:estegatha/features/sign-up/presentation/view_models/address_text_field_cubit.dart';
 import 'package:estegatha/features/sign-up/presentation/view_models/sign_up_view_model.dart';
 import 'package:estegatha/features/sign-up/presentation/views/widgets/address_text_field.dart';
