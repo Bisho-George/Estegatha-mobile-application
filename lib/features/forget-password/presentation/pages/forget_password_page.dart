@@ -32,7 +32,7 @@ class ForgetPasswordPage extends StatelessWidget {
         if (state is ForgetPasswordLoading) {
           isLoading = true;
         } else if (state is ForgetPasswordSuccess) {
-          HelperFunctions.showSnackBar(context, "Reset link sent");
+          // HelperFunctions.showSnackBar(context, "Reset link sent");
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -141,7 +141,7 @@ class ForgetPasswordPage extends StatelessWidget {
                             onPressed: () {
                               if (formKey.currentState!.validate()) {
                                 BlocProvider.of<ForgetPasswordCubit>(context)
-                                    .checkEmail(
+                                    .checkEmailToResetPassword(
                                   email: email!,
                                 );
                               }

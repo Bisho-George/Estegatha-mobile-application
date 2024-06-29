@@ -1,3 +1,4 @@
+import 'package:estegatha/features/forget-password/presentation/pages/change_password_screen.dart';
 import 'package:estegatha/features/forget-password/presentation/pages/forget_password_page.dart';
 import 'package:estegatha/features/sign-in/presentation/veiw_models/login_cubit/login_cubit.dart';
 import 'package:estegatha/utils/common/widgets/custom_elevated_button.dart';
@@ -118,6 +119,9 @@ class _SignInFormState extends State<SignInForm> {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return ForgetPasswordPage();
+                      // return ChangePasswordPage(
+                      //   token: "",
+                      // );
                     }));
                   },
                   child: const Text('Forget your password?'),

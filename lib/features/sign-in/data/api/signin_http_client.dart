@@ -58,4 +58,41 @@ class SignInHttpClient {
   static Future<http.Response> getUserById(int id) async {
     return customHttpRequest('GET', Uri.parse('$authBaseUrl/user/$id'));
   }
+
+  // static Future<http.Response> resetPasswordEmail(String email) async {
+  //   return customHttpRequest(
+  //       'POST', Uri.parse('$authBaseUrl/reset-password-link?email=$email'));
+  // }
+
+  static Future<http.Response> resetPasswordEmail(String email) async {
+    final res = await http.post(
+      Uri.parse('$authBaseUrl/reset-password-link?email=$email'),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    print("response: ${res.body}");
+    print("status code: ${res.statusCode}");
+
+    return res;
+  }
+
+  static Future<http.Response> changePassword(
+      String email, String newPassword, String token) async {
+    final res = await http.post(
+      Uri.parse('$authBaseUrl/reset'),
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": 'Bearer $token'
+      },
+      body: jsonEncode({
+        'email': email,
+        'newPassword': newPassword,
+      }),
+    );
+
+    print("response: ${res.body}");
+    print("status code: ${res.statusCode}");
+
+    return res;
+  }
 }
