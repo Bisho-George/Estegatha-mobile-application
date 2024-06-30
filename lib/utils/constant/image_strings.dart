@@ -60,10 +60,15 @@ class ConstantImages {
 
   // dangerous dialogs
   static const String dialogIcon = "assets/dialog_icon.svg";
+  static const String googleIcon = "assets/logo_google.svg";
 
   static const String organizationBoarding = "assets/organization_boarding.png";
   static const String organizationTrackIcon = "assets/org_track_icon.png";
   static const String organizationHealthIcon = "assets/org_health_icon.png";
   static const String organizationPostIcon = "assets/org_post_icon.png";
+  static const String healthRecordIcon = "assets/org_post_icon.png";
+  static const String healthTrackerImage1 = "assets/health_tracker_image1.jpg";
+  static const String healthTrackerImage2 = "assets/health_tracker_image2.jpg";
+  static const String healthTrackerImage3 = "assets/health_tracker_image3.jpg";
 
 }

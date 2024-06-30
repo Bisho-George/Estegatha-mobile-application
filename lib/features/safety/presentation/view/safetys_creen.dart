@@ -5,6 +5,8 @@ import 'package:estegatha/features/organization/presentation/view/widgets/sectio
 import 'package:estegatha/features/safety/presentation/view/add_health_record_screen.dart';
 import 'package:estegatha/features/safety/presentation/view_model/user_health_cubit.dart';
 import 'package:estegatha/features/safty/presentation/pages/emergency_contact_page.dart';
+import 'package:estegatha/features/safty/presentation/pages/health_tracker_welcome_page.dart';
+import 'package:estegatha/features/safty/presentation/pages/location_feedback_page.dart';
 import 'package:estegatha/features/sign-in/presentation/veiw_models/user_cubit.dart';
 import 'package:estegatha/utils/common/custom_app_bar.dart';
 import 'package:estegatha/utils/constant/colors.dart';
@@ -15,9 +17,12 @@ import 'package:estegatha/utils/helpers/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SafetyScreen extends StatelessWidget {
-  const SafetyScreen({super.key});
+import '../widgets/safty_item_widget.dart';
 
+class SafetyScreen extends StatelessWidget {
+  SafetyScreen({super.key, this.parentContext});
+  static String routeName = "/safety";
+  BuildContext ?parentContext;
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -40,20 +45,43 @@ class SafetyScreen extends StatelessWidget {
           ),
           child: Column(
             children: <Widget>[
-              OrganizationSettingItem(
+              SafetyItemWidget(
                 label: "Health Records",
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => const UserHealthRecordScreen()));
                 },
+                icon: Icons.event_note_sharp,
               ),
-              OrganizationSettingItem(
+              SafetyItemWidget(
                 label: "Emergency Contact",
                 onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
+                  Navigator.of(parentContext ?? context).push(MaterialPageRoute(
                       builder: (context) => EmergencyContactPage()));
                 },
-              )
+                icon: Icons.contact_phone,
+              ),
+              SafetyItemWidget(
+                label: "Health Track",
+                onTap: () {
+                  Navigator.of(parentContext ?? context).push(MaterialPageRoute(
+                      builder: (context) => HealthTrackerWelcomePage()));
+                },
+                icon: Icons.watch,
+              ),
+              SafetyItemWidget(
+                label: "Emergency Catalog",
+                onTap: () {},
+                icon: Icons.list_alt,
+              ),
+              SafetyItemWidget(
+                label: "Location Feedback",
+                onTap: () {
+                  Navigator.of(parentContext ?? context).push(MaterialPageRoute(
+                      builder: (context) => LocationFeedbackPage()));
+                },
+                icon: Icons.edit_location_alt_sharp,
+              ),
             ],
           ),
         ),

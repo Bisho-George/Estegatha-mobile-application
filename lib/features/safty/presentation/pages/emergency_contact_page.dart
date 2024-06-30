@@ -19,8 +19,8 @@ import '../widgets/add_contact_widget.dart';
 import '../widgets/add_widget.dart';
 
 class EmergencyContactPage extends StatelessWidget {
-  EmergencyContactPage({super.key});
-
+  EmergencyContactPage({super.key, this.parentContext});
+  BuildContext ?parentContext;
   static const String routeName = '/emergency-contact';
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,8 @@ class EmergencyContactPage extends StatelessWidget {
               children: [
                 AddContactWidget(
                   onTap: () {
-                    Navigator.pushNamed(context, AddContactPage.routeName);
+                    Navigator.of(parentContext ?? context).push(MaterialPageRoute(
+                        builder: (context) => AddContactPage()));
                   },
                 ),
                 const CategoryHeaderWidget(name: 'Saved Contacts'),

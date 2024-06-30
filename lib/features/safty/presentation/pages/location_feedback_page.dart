@@ -7,13 +7,18 @@ import 'package:estegatha/utils/constant/sizes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:geolocator/geolocator.dart';
 
+import '../widgets/location_quick_access_widget.dart';
 import '../widgets/location_search_widget.dart';
+
 class LocationFeedbackPage extends StatelessWidget {
   LocationFeedbackPage({super.key});
+
   static const String routeName = '/location-feedback';
   TextEditingController feedbackController = TextEditingController();
   TextEditingController locationController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -22,16 +27,11 @@ class LocationFeedbackPage extends StatelessWidget {
         title: 'Location Feedback',
         actions: [
           IconButton(
-            icon: Icon(Icons.attach_file),
-            onPressed: (){
-
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.send),
-            onPressed: (){
-
-            },
+            icon: Icon(
+              Icons.send,
+              color: ConstantColors.primary,
+            ),
+            onPressed: () {},
           )
         ],
       ),
@@ -51,10 +51,17 @@ class LocationFeedbackPage extends StatelessWidget {
           LocationQuickAccessWidget(
             title: 'Use my current location',
             iconPath: 'assets/current_location.png',
+            onTap: () {
+              Geolocator.getCurrentPosition().then((Position position) {
+              });
+            },
           ),
           LocationQuickAccessWidget(
             title: 'Locate on map',
             iconPath: 'assets/locate_icon.png',
+            onTap: () {
+
+            },
           ),
           SizedBox(
             height: responsiveHeight(ConstantSizes.md),
@@ -79,51 +86,3 @@ class LocationFeedbackPage extends StatelessWidget {
     );
   }
 }
-
-class LocationQuickAccessWidget extends StatelessWidget {
-  LocationQuickAccessWidget({
-    super.key,
-    required this.title,
-    required this.iconPath
-  });
-  String title;
-  String iconPath;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: responsiveWidth(ConstantSizes.xl),
-        vertical: responsiveHeight(ConstantSizes.lg),
-      ),
-      decoration: const BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: ConstantColors.buttonDisabled,
-            width: 1,
-          ),
-        )
-      ),
-      child: Row(
-        children: [
-          ImageIcon(
-            AssetImage(iconPath),
-            color: ConstantColors.primary,
-            size: 24,
-          ),
-          SizedBox(
-            width: responsiveWidth(ConstantSizes.sm),
-          ),
-          Text(
-            title,
-            style: Styles.getDefaultPrimary(
-              weight: ConstantSizes.fontWeightSemiBold,
-              fontSize: ConstantSizes.fontSizeLg,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-

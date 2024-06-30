@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:estegatha/features/organization/domain/api/organization_api.dart';
 import 'package:estegatha/features/organization/domain/models/organization.dart';
 import 'package:estegatha/features/organization/domain/models/organizationMember.dart';
@@ -9,11 +10,14 @@ import 'package:estegatha/features/organization/presentation/view_model/user_org
 import 'package:estegatha/features/sign-in/data/api/user_http_client.dart';
 import 'package:estegatha/features/sign-in/presentation/veiw_models/user_cubit.dart';
 import 'package:estegatha/utils/helpers/helper_functions.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../constants.dart';
+import '../../../../core/data/api/dio_auth.dart';
 import 'organization_state.dart';
 
 class OrganizationCubit extends Cubit<OrganizationState> {
@@ -70,7 +74,16 @@ class OrganizationCubit extends Cubit<OrganizationState> {
       try {
         final response =
             await OrganizationHttpClient.joinOrganizationByCode(code);
-
+        FirebaseMessaging.instance.getToken().then((value) async{
+          Dio dio = await DioAuth.getDio();
+          dio.post('${baseUrl}api/v1/notification/join',
+              queryParameters: {
+                // pass org id
+                'organizationId': Organization.fromJson(jsonDecode(response.body)).id,
+                'token': value,
+              }
+          );
+          // send notification to the organization members
         if (response.statusCode == 200) {
           final Organization organization =
               Organization.fromJson(jsonDecode(response.body));

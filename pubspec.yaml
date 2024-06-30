@@ -54,6 +54,7 @@ dependencies:
   font_awesome_flutter: ^10.7.0
   wakelock: ^0.6.2
   carousel_slider: ^4.2.1
+  google_places_flutter: ^2.0.8
 dev_dependencies:
   flutter_test:
     sdk: flutter

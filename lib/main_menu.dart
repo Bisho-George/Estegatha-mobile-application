@@ -24,8 +24,8 @@ class _MainNavMenuState extends State<MainNavMenu> {
 
   List<Widget> buildScreens(int? organizationId) {
     return [
-      HomeView(),
-      const SafetyScreen(),
+      HomeView(parentContext: context),
+      SafetyScreen(parentContext: context,),
       if (organizationId != null)
         OrganizationDetailPage(
           organizationId: organizationId,
