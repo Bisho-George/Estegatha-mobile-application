@@ -20,7 +20,7 @@ class OrganizationHttpClient {
     switch (method.toUpperCase()) {
       case 'POST':
         response =
-            await http.post(url, headers: headers, body: jsonEncode(body));
+        await http.post(url, headers: headers, body: jsonEncode(body));
         break;
       case 'GET':
         response = await http.get(url, headers: headers);
@@ -30,7 +30,7 @@ class OrganizationHttpClient {
         break;
       case 'PUT':
         response =
-            await http.put(url, headers: headers, body: jsonEncode(body));
+        await http.put(url, headers: headers, body: jsonEncode(body));
         break;
       default:
         throw Exception('HTTP method $method not supported');
@@ -43,7 +43,7 @@ class OrganizationHttpClient {
       switch (method.toUpperCase()) {
         case 'POST':
           response =
-              await http.post(url, headers: headers, body: jsonEncode(body));
+          await http.post(url, headers: headers, body: jsonEncode(body));
           break;
         case 'GET':
           response = await http.get(url, headers: headers);
@@ -53,7 +53,7 @@ class OrganizationHttpClient {
           break;
         case 'PUT':
           response =
-              await http.put(url, headers: headers, body: jsonEncode(body));
+          await http.put(url, headers: headers, body: jsonEncode(body));
           break;
       }
     }
@@ -65,6 +65,13 @@ class OrganizationHttpClient {
       String name, String? type) async {
     return customHttpRequest('POST', Uri.parse(organizationBaseUrl),
         body: {'name': name, 'type': type});
+  }
+
+  static Future<http.Response> createPost(
+      String title, String content, int orgId) async {
+    return customHttpRequest(
+        'POST', Uri.parse('$organizationBaseUrl/posts/$orgId'),
+        body: {'title': title, 'content': content});
   }
 
   static Future<http.Response> joinOrganizationByCode(

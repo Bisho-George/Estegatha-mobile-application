@@ -1,23 +1,19 @@
 import 'dart:convert';
-import 'package:dio/dio.dart';
 import 'package:estegatha/features/organization/domain/api/organization_api.dart';
 import 'package:estegatha/features/organization/domain/models/organization.dart';
 import 'package:estegatha/features/organization/domain/models/organizationMember.dart';
 import 'package:estegatha/features/organization/domain/models/post.dart';
 import 'package:estegatha/features/organization/presentation/view_model/current_organization_cubit.dart';
 import 'package:estegatha/features/organization/presentation/view_model/user_organizations_cubit.dart'
-    as userOrgCubit;
+as userOrgCubit;
 import 'package:estegatha/features/sign-in/data/api/user_http_client.dart';
 import 'package:estegatha/features/sign-in/presentation/veiw_models/user_cubit.dart';
 import 'package:estegatha/utils/helpers/helper_functions.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../../constants.dart';
-import '../../../../core/data/api/dio_auth.dart';
 import 'organization_state.dart';
 
 class OrganizationCubit extends Cubit<OrganizationState> {
@@ -73,20 +69,11 @@ class OrganizationCubit extends Cubit<OrganizationState> {
 
       try {
         final response =
-            await OrganizationHttpClient.joinOrganizationByCode(code);
-        FirebaseMessaging.instance.getToken().then((value) async{
-          Dio dio = await DioAuth.getDio();
-          dio.post('${baseUrl}api/v1/notification/join',
-              queryParameters: {
-                // pass org id
-                'organizationId': Organization.fromJson(jsonDecode(response.body)).id,
-                'token': value,
-              }
-          );
-          // send notification to the organization members
+        await OrganizationHttpClient.joinOrganizationByCode(code);
+
         if (response.statusCode == 200) {
           final Organization organization =
-              Organization.fromJson(jsonDecode(response.body));
+          Organization.fromJson(jsonDecode(response.body));
 
           print("Organization: ${organization.id}");
           emit(OrganizationJoinSuccess(organization));
@@ -173,7 +160,7 @@ class OrganizationCubit extends Cubit<OrganizationState> {
       if (res.statusCode == 200) {
         final responseBody = jsonDecode(res.body);
         final posts =
-            (responseBody as List).map((post) => Post.fromJson(post)).toList();
+        (responseBody as List).map((post) => Post.fromJson(post)).toList();
 
         emit(OrganizationPostsSuccess(posts));
         return posts;
@@ -233,7 +220,7 @@ class OrganizationCubit extends Cubit<OrganizationState> {
     if (userCubit.state is UserLoaded) {
       try {
         final response =
-            await OrganizationHttpClient.leaveOrganization(orgId, userId!);
+        await OrganizationHttpClient.leaveOrganization(orgId, userId!);
         print(
             "Leave organization response status code: ${response.statusCode}");
         print("Leave organization response: ${response.body}");
@@ -242,11 +229,11 @@ class OrganizationCubit extends Cubit<OrganizationState> {
           updateOrganizationsList(context);
 
           final userOrganizationResponse =
-              await UserHttpClient.getUserOrganizations(userId);
+          await UserHttpClient.getUserOrganizations(userId);
 
           if (userOrganizationResponse.statusCode == 200) {
             List<dynamic> userOrganizations =
-                jsonDecode(userOrganizationResponse.body);
+            jsonDecode(userOrganizationResponse.body);
             if (userOrganizations.isNotEmpty) {
               int firstOrganizationId = userOrganizations[0]['id'];
               print("New current organization id: $firstOrganizationId");
@@ -289,17 +276,17 @@ class OrganizationCubit extends Cubit<OrganizationState> {
       try {
         // Fetch current members to check the count
         final List<OrganizationMember> currentMembers =
-            await getOrganizationMembers(orgId);
+        await getOrganizationMembers(orgId);
 
         if (currentMembers.length > 1) {
           // Proceed with member removal if more than one member exists
           final response =
-              await OrganizationHttpClient.removeMemberFromOrganization(
-                  orgId, userId);
+          await OrganizationHttpClient.removeMemberFromOrganization(
+              orgId, userId);
 
           if (response.statusCode == 200) {
             final List<OrganizationMember> newMembers =
-                await getOrganizationMembers(orgId);
+            await getOrganizationMembers(orgId);
             print("New Members length: ${newMembers.length}");
             emit(RemoveMemberSuccess(newMembers));
             await getOrganizationById(orgId);
@@ -357,7 +344,7 @@ class OrganizationCubit extends Cubit<OrganizationState> {
 
         // Check if there's at least one member with a role of 'owner' or 'admin'
         bool hasRequiredRole = members.any((member) =>
-            (member.role == 'OWNER' || member.role == 'ADMIN') &&
+        (member.role == 'OWNER' || member.role == 'ADMIN') &&
             member.userId != userId);
 
         print("hasRequiredRole: $hasRequiredRole");
@@ -426,5 +413,40 @@ class OrganizationCubit extends Cubit<OrganizationState> {
       }
     }
     return Organization();
+  }
+
+  Future<bool> isAdmin(BuildContext context, int orgId) async {
+    final userCubit = context.read<UserCubit>();
+    if (userCubit.state is UserLoaded) {
+      final userId = userCubit.getCurrentUser()?.id;
+      final members = await getOrganizationMembers(orgId);
+      final member = members.firstWhere((member) => member.userId == userId);
+      return member.role == 'ADMIN' || member.role == 'OWNER';
+    }
+    return false;
+  }
+
+  Future<void> createPost(
+      BuildContext context, String title, String content, int orgId) async {
+    final userCubit = context.read<UserCubit>();
+    if (userCubit.state is UserLoaded) {
+      emit(const CreatePostLoading());
+
+      try {
+        final response =
+        await OrganizationHttpClient.createPost(title, content, orgId);
+
+        if (response.statusCode == 201) {
+          emit(const CreatePostSuccess());
+          await getOrganizationById(orgId);
+        } else {
+          emit(const CreatePostFailure(
+              errMessage: "Something went wrong, try again!"));
+        }
+      } catch (e) {
+        print(e);
+        emit(const CreatePostFailure(errMessage: "Failed to create post!"));
+      }
+    }
   }
 }

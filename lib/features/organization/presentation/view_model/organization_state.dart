@@ -75,8 +75,8 @@ class OrganizationMembersSuccess extends OrganizationState {
 class OrganizationJoinSuccess extends OrganizationState {
   final Organization organization;
   const OrganizationJoinSuccess(
-    this.organization,
-  ) : super(organization);
+      this.organization,
+      ) : super(organization);
 }
 
 class OrganizationPostsLoading extends OrganizationState {
@@ -136,8 +136,8 @@ class RemoveMemberLoading extends OrganizationState {
 class RemoveMemberSuccess extends OrganizationState {
   final List<OrganizationMember> members;
   const RemoveMemberSuccess(
-    this.members,
-  ) : super(null);
+      this.members,
+      ) : super(null);
 }
 
 class UpdateOrganizationLoading extends OrganizationState {
@@ -147,6 +147,20 @@ class UpdateOrganizationLoading extends OrganizationState {
 class UpdateOrganizationSuccess extends OrganizationState {
   final Organization organization;
   const UpdateOrganizationSuccess(
-    this.organization,
-  ) : super(organization);
+      this.organization,
+      ) : super(organization);
+}
+
+class CreatePostLoading extends OrganizationState {
+  const CreatePostLoading() : super(null);
+}
+
+class CreatePostSuccess extends OrganizationState {
+  const CreatePostSuccess() : super(null);
+}
+
+class CreatePostFailure extends OrganizationState {
+  final String errMessage;
+
+  const CreatePostFailure({required this.errMessage}) : super(null);
 }
