@@ -66,7 +66,7 @@ class InviteToOrganizationPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          '${organizationCode.substring(0, organizationCode.length ~/ 2).toUpperCase()}-${organizationCode.substring(organizationCode.length ~/ 2).toUpperCase()}',
+                          '${organizationCode.substring(0, organizationCode.length ~/ 2)}-${organizationCode.substring(organizationCode.length ~/ 2)}',
                           style: TextStyle(
                             letterSpacing: 2,
                             color: ConstantColors.primary,

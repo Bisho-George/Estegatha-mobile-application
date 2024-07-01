@@ -21,7 +21,10 @@ class FinalJoinOrganizationPage extends StatelessWidget {
         future: context.read<OrganizationCubit>().getOrganizationById(orgId),
         builder: (BuildContext context, AsyncSnapshot<Organization?> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
+            return SizedBox(
+                width: 200,
+                height: 500,
+                child: Center(child: const CircularProgressIndicator()));
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else {

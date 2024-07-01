@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:estegatha/core/firebase/cloud_messaging.dart';
 import 'package:estegatha/features/organization/domain/api/organization_api.dart';
 import 'package:estegatha/features/organization/domain/models/organization.dart';
@@ -13,8 +14,10 @@ import 'package:estegatha/utils/helpers/helper_functions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../constants.dart';
+import '../../../../core/data/api/dio_auth.dart';
+import '../../domain/models/member.dart';
 import 'organization_state.dart';
 
 class OrganizationCubit extends Cubit<OrganizationState> {
@@ -37,9 +40,9 @@ class OrganizationCubit extends Cubit<OrganizationState> {
           final organization = Organization.fromJson(responseBody);
 
           emit(OrganizationCreationSuccess(organization));
-
           // update the user organizations
           updateOrganizationsList(context);
+          await joinToOrganizationNotification(organization.id!);
         } else {
           emit(const OrganizationFailure(
               errMessage: "Something went wrong, try again!"));
@@ -73,13 +76,27 @@ class OrganizationCubit extends Cubit<OrganizationState> {
             await OrganizationHttpClient.joinOrganizationByCode(code);
 
         if (response.statusCode == 200) {
-          // subscribe to the notifications service
-
           final Organization organization =
               Organization.fromJson(jsonDecode(response.body));
 
           print("Organization: ${organization.id}");
+
           emit(OrganizationJoinSuccess(organization));
+          await joinToOrganizationNotification(organization.id!);
+          Dio dio = await DioAuth.getDio();
+          Member member = await HelperFunctions.getUser();
+          await dio.post(baseUrl + notifyMembersEndPoint, data: {
+            subjectKey: 'New Member',
+            contentKey:
+                'your friend ${member.username} has join ${organization.name}, welcome him/her',
+            "type": 'JOIN_ORG',
+            'data': {
+              'userId': member.id.toString(),
+              'organizationId': organization.id.toString(),
+            }
+          }, queryParameters: {
+            'organizationId': organization.id.toString(),
+          });
         } else {
           emit(const OrganizationFailure(
               errMessage: "Something went wrong, try again!"));

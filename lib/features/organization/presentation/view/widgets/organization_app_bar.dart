@@ -65,9 +65,12 @@ class OrganizationAppBar extends StatelessWidget
                   ),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<Organization>(
-                      value: organizations.firstWhere(
-                          (org) => org.name == organizationName,
-                          orElse: () => organizations.first),
+                      value: organizations.isNotEmpty
+                          ? organizations.firstWhere(
+                              (org) => org.name == organizationName,
+                              orElse: () => organizations.first,
+                            )
+                          : null,
                       dropdownColor: ConstantColors.grey,
                       items: organizations.map((Organization organization) {
                         return DropdownMenuItem<Organization>(

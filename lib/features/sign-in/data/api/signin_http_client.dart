@@ -48,11 +48,13 @@ class SignInHttpClient {
   }
 
   static Future<http.Response> login(String email, String password) async {
-    return await http.post(
-      Uri.parse('$authBaseUrl/login'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'email': email, 'password': password}),
-    );
+    return await http
+        .post(
+          Uri.parse('$authBaseUrl/login'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({'email': email, 'password': password}),
+        )
+        .timeout(const Duration(seconds: 5));
   }
 
   static Future<http.Response> getUserById(int id) async {

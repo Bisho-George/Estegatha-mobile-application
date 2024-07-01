@@ -79,6 +79,12 @@ class OrganizationJoinSuccess extends OrganizationState {
   ) : super(organization);
 }
 
+class OrganizationJoinFailure extends OrganizationState {
+  final String errMessage;
+
+  const OrganizationJoinFailure({required this.errMessage}) : super(null);
+}
+
 class OrganizationPostsLoading extends OrganizationState {
   const OrganizationPostsLoading() : super(null);
 }
