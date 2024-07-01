@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:estegatha/features/sign-in/data/api/signin_http_client.dart';
+import 'package:estegatha/utils/helpers/helper_functions.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 
 part 'forget_password_state.dart';
@@ -7,42 +9,80 @@ part 'forget_password_state.dart';
 class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
   ForgetPasswordCubit() : super(ForgetPasswordInitial());
 
-  Future checkEmailToResetPassword({required String email}) async {
-    emit(ForgetPasswordLoading());
+  Future createResetToken({required String email}) async {
+    emit(CreateResetTokenLoading());
 
     try {
-      final response = await SignInHttpClient.resetPasswordEmail(email);
+      final response = await SignInHttpClient.createResetToken(email);
 
-      if (response.statusCode == 200) {
-        emit(ForgetPasswordSuccess());
+      if (response.statusCode == 201) {
+        emit(CreateResetTokenSuccess());
       } else {
-        emit(ForgetPasswordFailure(errMessage: "Failed to send email!"));
+        emit(CreateResetTokenFailure(errMessage: "Failed to send email!"));
         print("response: ${response.body}");
       }
     } catch (e) {
-      emit(ForgetPasswordFailure(errMessage: "Email not found!"));
+      emit(CreateResetTokenFailure(errMessage: "Email not found!"));
       return;
     }
   }
 
-  Future changePassword(
-      {required String email,
-      required String newPassword,
-      required String token}) async {
-    emit(ChangePasswordLoading());
+  Future sendResetToken({required String email}) async {
+    emit(SendResetTokenLoading());
 
     try {
-      final response =
-          await SignInHttpClient.changePassword(email, newPassword, token);
+      final response = await SignInHttpClient.sendResetToken(email);
 
       if (response.statusCode == 200) {
-        emit(ChangePasswordSuccess());
+        emit(SendResetTokenSuccess());
       } else {
-        emit(ChangePasswordFailure(errMessage: "Failed to send email!"));
+        emit(SendResetTokenFailure(errMessage: "Failed to send email!"));
         print("response: ${response.body}");
       }
     } catch (e) {
-      emit(ChangePasswordFailure(errMessage: "Email not found!"));
+      emit(SendResetTokenFailure(errMessage: "Email not found!"));
+      return;
+    }
+  }
+
+  Future resendResetToken(BuildContext context, {required String email}) async {
+    emit(SendResetTokenLoading());
+
+    try {
+      final response = await SignInHttpClient.sendResetToken(email);
+
+      if (response.statusCode == 200) {
+        emit(SendResetTokenSuccess());
+
+        HelperFunctions.showSnackBar(context, "Reset link sent");
+      } else {
+        emit(SendResetTokenFailure(errMessage: "Failed to send email!"));
+        print("response: ${response.body}");
+      }
+    } catch (e) {
+      emit(SendResetTokenFailure(errMessage: "Email not found!"));
+      return;
+    }
+  }
+
+  Future resetPassword(
+      {required String email,
+      required String newPassword,
+      required String token}) async {
+    emit(ResetPasswordLoading());
+
+    try {
+      final response =
+          await SignInHttpClient.resetPassword(email, newPassword, token);
+
+      if (response.statusCode == 200) {
+        emit(ResetPasswordSuccess());
+      } else {
+        emit(ResetPasswordFailure(errMessage: "Failed to send email!"));
+        print("response: ${response.body}");
+      }
+    } catch (e) {
+      emit(ResetPasswordFailure(errMessage: "Email not found!"));
       return;
     }
   }

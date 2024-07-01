@@ -19,13 +19,15 @@ class ProgressIndicatorBar extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                stepTitle!,
-                textAlign: TextAlign.end,
-                style: TextStyle(
-                    fontSize: SizeConfig.font16,
-                    color: ConstantColors.textPrimary,
-                    fontWeight: ConstantSizes.fontWeightSemiBold),
+              SizedBox(
+                width: SizeConfig.screenWidth * 0.5,
+                child: Text(
+                  stepTitle!,
+                  style: TextStyle(
+                      fontSize: SizeConfig.font16,
+                      color: ConstantColors.textPrimary,
+                      fontWeight: ConstantSizes.fontWeightSemiBold),
+                ),
               ),
               Text(
                 "$step of 4",

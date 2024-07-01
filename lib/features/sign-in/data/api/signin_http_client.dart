@@ -64,9 +64,9 @@ class SignInHttpClient {
   //       'POST', Uri.parse('$authBaseUrl/reset-password-link?email=$email'));
   // }
 
-  static Future<http.Response> resetPasswordEmail(String email) async {
+  static Future<http.Response> createResetToken(String email) async {
     final res = await http.post(
-      Uri.parse('$authBaseUrl/reset-password-link?email=$email'),
+      Uri.parse('$authBaseUrl/create-reset-token?email=$email'),
       headers: {'Content-Type': 'application/json'},
     );
 
@@ -76,18 +76,37 @@ class SignInHttpClient {
     return res;
   }
 
-  static Future<http.Response> changePassword(
+  static Future<http.Response> sendResetToken(String email) async {
+    final res = await http.post(
+      Uri.parse('$authBaseUrl/send-reset-token?email=$email'),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    print("response: ${res.body}");
+    print("status code: ${res.statusCode}");
+
+    return res;
+  }
+
+  static Future<http.Response> resetPassword(
       String email, String newPassword, String token) async {
     final res = await http.post(
-      Uri.parse('$authBaseUrl/reset'),
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": 'Bearer $token'
-      },
-      body: jsonEncode({
-        'email': email,
-        'newPassword': newPassword,
-      }),
+      Uri.parse('$authBaseUrl/reset-password'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(
+          {'email': email, 'newPassword': newPassword, 'token': token}),
+    );
+
+    print("response: ${res.body}");
+    print("status code: ${res.statusCode}");
+
+    return res;
+  }
+
+  static Future<http.Response> resendResetToken(String email) async {
+    final res = await http.post(
+      Uri.parse('$authBaseUrl/resend-reset-token?email=$email'),
+      headers: {'Content-Type': 'application/json'},
     );
 
     print("response: ${res.body}");

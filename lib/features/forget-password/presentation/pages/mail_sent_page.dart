@@ -26,7 +26,7 @@ class MailSentPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<ForgetPasswordCubit, ForgetPasswordState>(
       listener: (context, state) {
-        if (state is ForgetPasswordLoading) {
+        if (state is ResetPasswordLoading) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Row(
@@ -41,13 +41,13 @@ class MailSentPage extends StatelessWidget {
               ),
             ),
           );
-        } else if (state is ForgetPasswordSuccess) {
+        } else if (state is ResetPasswordSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text("Email sent"),
             ),
           );
-        } else if (state is ForgetPasswordFailure) {
+        } else if (state is ResetPasswordFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.errMessage),
@@ -108,7 +108,7 @@ class MailSentPage extends StatelessWidget {
                 TextButton(
                   onPressed: () async {
                     BlocProvider.of<ForgetPasswordCubit>(context)
-                        .checkEmailToResetPassword(
+                        .createResetToken(
                       email: email,
                     );
 
