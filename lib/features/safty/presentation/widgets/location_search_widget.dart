@@ -16,7 +16,8 @@ class LocationSearchWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.bottomLeft,
-      padding: EdgeInsets.symmetric(horizontal: responsiveWidth(ConstantSizes.sm)),
+      padding:
+          EdgeInsets.symmetric(horizontal: responsiveWidth(ConstantSizes.sm)),
       decoration: const BoxDecoration(
         border: Border(
           bottom: BorderSide(
@@ -26,7 +27,10 @@ class LocationSearchWidget extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const Icon(Icons.location_pin),
+          const Icon(
+            Icons.location_pin,
+            color: ConstantColors.primary,
+          ),
           Expanded(
             child: TextField(
               decoration: const InputDecoration(

@@ -35,16 +35,17 @@ class SosApi extends SosRepo {
     Dio dio = await DioAuth.getDio();
     for(var organization in organizations){
       Response response = await dio.post(baseUrl + sendSosEndPoint, data: {
-        latKey: location.latitude,
-        langKey: location.longitude,
         subjectKey: 'Emergency',
         contentKey: 'your friend ${member.username} in organization ${organization.name} needs help',
-        'userId': member.id.toString(),
-        'organizationId': organization.id.toString(),
+        "type": "INIT_SOS",
+        'data':{
+          'userId': member.id.toString(),
+          'organizationId': organization.id.toString(),
+        }
       }, queryParameters: {
-        'name': organization.id.toString(),
+        'organizationId': organization.id.toString(),
       });
-      if(response.statusCode == 200){
+      if(response.statusCode == 201){
         success++;
       }
     }

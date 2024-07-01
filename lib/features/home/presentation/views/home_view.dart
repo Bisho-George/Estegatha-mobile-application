@@ -3,6 +3,7 @@ import 'package:estegatha/features/home/presentation/views/widgets/animated_orga
 import 'package:estegatha/features/home/presentation/views/widgets/dangerous_dialog.dart';
 import 'package:estegatha/features/home/presentation/views/widgets/draggable_scroll_sheet.dart';
 import 'package:estegatha/features/home/presentation/views/widgets/google_map.dart';
+import 'package:estegatha/features/sos/presentation/pages/send_sos.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +18,8 @@ import '../view_models/home_view_model.dart';
 
 class HomeView extends StatefulWidget {
   static const String routeName = '/home';
-
+  BuildContext ?parentContext;
+  HomeView({super.key, this.parentContext});
   @override
   _HomeViewState createState() => _HomeViewState();
 }
@@ -154,25 +156,35 @@ class _HomeViewState extends State<HomeView>
                               horizontal: ConstantSizes.defaultSpace,
                               vertical: 10,
                             ),
-                            child: Row(
-                              children: [
-                                SvgPicture.asset(
-                                  fit: BoxFit.cover,
-                                  ConstantImages.safetySolidIcon,
-                                ),
-                                SizedBox(
-                                  width: ConstantSizes.spaceBtwItems,
-                                ),
-                                Text(
-                                  "Safety",
-                                  style: TextStyle(
-                                    color: ConstantColors.primary,
-                                    fontSize: ConstantSizes.fontSizeMd,
-                                    fontWeight:
-                                        ConstantSizes.fontWeightSemiBold,
+                            child: GestureDetector(
+                              onTap: (){
+                                Navigator.push(
+                                  widget.parentContext ?? context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SendSos(),
                                   ),
-                                ),
-                              ],
+                                );
+                              },
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset(
+                                    fit: BoxFit.cover,
+                                    ConstantImages.safetySolidIcon,
+                                  ),
+                                  SizedBox(
+                                    width: ConstantSizes.spaceBtwItems,
+                                  ),
+                                  Text(
+                                    "Safety",
+                                    style: TextStyle(
+                                      color: ConstantColors.primary,
+                                      fontSize: ConstantSizes.fontSizeMd,
+                                      fontWeight:
+                                          ConstantSizes.fontWeightSemiBold,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),

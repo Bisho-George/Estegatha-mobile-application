@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 class ConstantVariables {
   static const String uri =
       kIsWeb ? 'http://127.0.0.1:8080' : 'http://10.0.2.2:8080';
+  // kIsWeb ? 'http://127.0.0.1:8080' : 'http://192.168.1.13:8080';
   // 'http://192.168.1.13:8080' => ahmed IP
 
   static final List<Map<String, dynamic>> memberHelpNotes = [
