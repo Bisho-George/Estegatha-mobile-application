@@ -1,6 +1,12 @@
+import 'package:dio/dio.dart';
 import 'package:estegatha/features/organization/presentation/view_model/current_organization_cubit.dart';
 import 'package:estegatha/features/organization/presentation/view_model/user_organizations_cubit.dart';
 import 'package:estegatha/features/safety/presentation/view_model/user_health_cubit.dart';
+import 'package:estegatha/features/sign-up/data/data_source/signup_data_source.dart';
+import 'package:estegatha/features/sign-up/data/repos/signup_repo_imp.dart';
+import 'package:estegatha/features/sign-up/domain/use_cases/sign_up_use_case.dart';
+import 'package:estegatha/features/sign-up/presentation/view_models/sign_up_cubit.dart';
+import 'package:estegatha/utils/services/api_service.dart';
 import 'package:flutter_bloc/src/bloc_provider.dart';
 import 'package:provider/single_child_widget.dart';
 
@@ -58,5 +64,8 @@ List<SingleChildWidget> providers = [
   ),
   BlocProvider<UserHealthCubit>(
     create: (context) => UserHealthCubit(),
+  ),
+  BlocProvider<SignUpCubit>(
+    create: (context) => SignUpCubit(SignupUseCase(SignupRepoImp(signupDataSource: SignupDataSourceImp(ApiService(Dio()))))),
   ),
 ];

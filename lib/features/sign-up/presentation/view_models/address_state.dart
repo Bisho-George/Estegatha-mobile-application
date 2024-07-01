@@ -18,4 +18,15 @@ class InitialAddressState extends AddressState {
   );
 }
 
+class AddressParsedState extends AddressState {
+  final List<Placemark> placemarks;
 
+  AddressParsedState({
+    required Set<Marker> markers,
+    required CameraPosition cameraPosition,
+    required this.placemarks,
+  }) : super(
+    markers: markers,
+    cameraPosition: cameraPosition,
+  );
+}

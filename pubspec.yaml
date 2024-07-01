@@ -41,8 +41,10 @@ dependencies:
   flutter_bloc: ^8.1.5
   flutter_local_notifications: ^17.1.2
   flutter_screenutil: ^5.9.0
+  flutter_secure_storage: ^8.1.0
   flutter_svg: ^2.0.10+1
   font_awesome_flutter: ^10.7.0
+  geocoding: ^3.0.0
   geolocator: ^11.0.0
   get_storage: ^2.1.1
   google_maps_flutter: ^2.6.1
@@ -54,12 +56,8 @@ dependencies:
   persistent_bottom_nav_bar: ^5.0.2
   shared_preferences: ^2.2.3
   wakelock: ^0.6.2
+
 dev_dependencies:
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
   flutter_lints: ^3.0.0
   flutter_test:
     sdk: flutter

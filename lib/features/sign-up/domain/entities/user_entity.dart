@@ -1,18 +1,21 @@
-import 'package:estegatha/features/sign-up/domain/models/personal_info_model.dart';
+import 'package:estegatha/features/sign-up/domain/entities/personal_info_entity.dart';
 
-class UserModel {
-  PersonalInfoModel? personalInfo;
+class UserEntity {
+  PersonalInfoEntity? personalInfo;
   String? email;
   String? password;
   String? address;
+  String? lat;
+  String? lang;
 
   // Constructor
-  UserModel({
-    required this.personalInfo,
-    required this.email,
-    required this.password,
-    required this.address,
-  });
+  UserEntity(
+      {required this.personalInfo,
+      required this.email,
+      required this.password,
+      required this.address,
+      required this.lat,
+      required this.lang});
 
   // // Method to create a UserModel from JSON
   // factory UserModel.fromJson(Map<String, dynamic> json) {

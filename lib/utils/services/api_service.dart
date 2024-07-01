@@ -11,7 +11,7 @@ class ApiService {
     return response.data;
   }
 
-  Future<Map<String, dynamic>> post(
+  Future<dynamic> post(
       {required String endpoint,
       required Map<String, dynamic> data,
       Map<String, dynamic>? headers}) async {
@@ -20,6 +20,6 @@ class ApiService {
       data: data,
       options: Options(headers: headers),
     );
-    return response.data;
+    return response;
   }
 }

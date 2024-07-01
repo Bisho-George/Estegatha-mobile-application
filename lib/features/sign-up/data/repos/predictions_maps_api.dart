@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
-import '../../domain/models/places_autocomplete_model/place_autocomplete_model.dart';
+import '../models/places_autocomplete_model/place_autocomplete_model.dart';
 
 class PredictionsMapsApi {
   final String _baseUrl = 'https://maps.googleapis.com/maps/api/place';

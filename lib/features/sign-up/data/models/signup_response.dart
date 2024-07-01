@@ -1,5 +1,5 @@
 class SignupResponse {
-  final String status;
+  final int status;
 
   SignupResponse({
     required this.status,

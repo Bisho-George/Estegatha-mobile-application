@@ -1,13 +1,15 @@
-class PersonalInfoModel {
+import 'package:intl/intl.dart';
+
+class PersonalInfoEntity {
   String? firstName;
   String? lastName;
-  DateTime? birthday;
+  DateTime? birthDate;
   String? phoneNumber;
 
-  PersonalInfoModel({
+  PersonalInfoEntity({
     this.firstName,
     this.lastName,
-    this.birthday,
+    this.birthDate,
     this.phoneNumber,
   });
 }

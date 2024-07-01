@@ -5,6 +5,8 @@ import 'package:estegatha/core/firebase/fcm_setup.dart';
 import 'package:estegatha/features/organization/domain/models/member.dart';
 import 'package:estegatha/features/sign-in/presentation/pages/sign_in_page.dart';
 import 'package:estegatha/features/sign-in/presentation/veiw_models/user_cubit.dart';
+import 'package:estegatha/features/sign-up/presentation/views/address_view.dart';
+import 'package:estegatha/features/sign-up/presentation/views/otp_view.dart';
 import 'package:estegatha/features/sign-up/presentation/views/personal_info_view.dart';
 import 'package:estegatha/features/sos/presentation/pages/send_sos.dart';
 import 'package:estegatha/main_menu.dart';
@@ -52,7 +54,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final ValueNotifier<Widget> home = ValueNotifier<Widget>(SignInPage());
+  final ValueNotifier<Widget> home = ValueNotifier<Widget>(PersonalInfoView());
   final String initialRoute = PersonalInfoView.routeName;
   @override
   void initState() {
@@ -73,14 +75,14 @@ class _MyAppState extends State<MyApp> {
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => SosScreen(message: message)));
     });
-    FirebaseMessaging.onBackgroundMessage((message) async {
-      var user = await HelperFunctions.getUser();
-      if (message.data['userId'] != user.id.toString()) {
-        NotificationService notificationService = NotificationService();
-        notificationService.showNotification(
-            message.notification!.title!, message.notification!.body!);
-      }
-    });
+    // FirebaseMessaging.onBackgroundMessage((message) async {
+    //   var user = await HelperFunctions.getUser();
+    //   if (message.data['userId'] != user.id.toString()) {
+    //     NotificationService notificationService = NotificationService();
+    //     notificationService.showNotification(
+    //         message.notification!.title!, message.notification!.body!);
+    //   }
+    // });
   }
 
   Future<void> checkUserLoggedIn() async {

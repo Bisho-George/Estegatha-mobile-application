@@ -11,6 +11,8 @@ class SignupRepoImp extends SignupRepo {
 
   SignupRepoImp({required this.signupDataSource});
 
+
+
   @override
   Future<Either<Failure, SignupResponse>> signup(
       SignupRequestBody signupRequestBody) async {
@@ -18,7 +20,12 @@ class SignupRepoImp extends SignupRepo {
       var result = await signupDataSource.signup(signupRequestBody);
       return Right(result);
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      if (e is DioException) {
+        return Left(ServerFailure.fromDioError(e));
+      }
+      else {
+        return Left(ServerFailure(e.toString()));
+      }
     }
   }
 }

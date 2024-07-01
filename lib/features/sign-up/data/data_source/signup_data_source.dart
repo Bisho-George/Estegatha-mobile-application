@@ -21,8 +21,7 @@ class SignupDataSourceImp extends SignupDataSource {
       'address': signupRequestBody.address,
       'lat': signupRequestBody.lat,
       'lng': signupRequestBody.lng,
-      'roles': signupRequestBody.roles,
     });
-    return SignupResponse(status: result['status']);
+    return SignupResponse(status: result.statusCode);
   }
 }

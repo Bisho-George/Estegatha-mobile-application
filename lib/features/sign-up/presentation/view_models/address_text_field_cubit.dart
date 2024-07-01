@@ -1,5 +1,5 @@
 import 'package:estegatha/features/sign-up/data/repos/predictions_maps_api.dart';
-import 'package:estegatha/features/sign-up/domain/models/places_autocomplete_model/place_autocomplete_model.dart';
+import 'package:estegatha/features/sign-up/data/models/places_autocomplete_model/place_autocomplete_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
