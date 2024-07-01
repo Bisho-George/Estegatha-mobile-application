@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:estegatha/core/firebase/SosScreen.dart';
 import 'package:estegatha/core/firebase/cloud_messaging.dart';
 import 'package:estegatha/core/firebase/fcm_setup.dart';
+import 'package:estegatha/features/forget-password/presentation/pages/forget_password_screen_3.dart';
 
 import 'package:estegatha/features/organization/domain/models/member.dart';
 import 'package:estegatha/features/safty/presentation/pages/health_tracker_welcome_page.dart';
@@ -52,16 +53,17 @@ class MyApp extends StatefulWidget {
   @override
   State<MyApp> createState() => _MyAppState();
 }
+
 class _MyAppState extends State<MyApp> {
   final ValueNotifier<Widget> home = ValueNotifier<Widget>(SignInPage());
   final String initialRoute = SignInPage.routeName;
-
   @override
   void initState() {
     super.initState();
     checkUserLoggedIn(home, context);
     subscribeToMessages();
   }
+
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<Widget>(

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
 import 'package:estegatha/features/sign-in/data/api/signin_http_client.dart';
 import 'package:estegatha/utils/helpers/helper_functions.dart';
@@ -17,6 +19,20 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
 
       if (response.statusCode == 201) {
         emit(CreateResetTokenSuccess());
+      } else if (jsonDecode(response.body)['success'] == false &&
+          jsonDecode(response.body)['message']
+              .toString()
+              .contains("No User with This Email")) {
+        emit(CreateResetTokenFailure(
+            errMessage: jsonDecode(response.body)['message']));
+        print("response: ${response.body}");
+      } else if (jsonDecode(response.body)['success'] == false &&
+          (jsonDecode(response.body)['message'])
+              .toString()
+              .contains("duplicate key value violates unique constraint")) {
+        emit(CreateResetTokenFailure(
+            errMessage: "Reset password session is already created!"));
+        print("response: ${response.body}");
       } else {
         emit(CreateResetTokenFailure(errMessage: "Failed to send email!"));
         print("response: ${response.body}");

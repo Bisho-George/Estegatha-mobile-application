@@ -48,13 +48,13 @@ class ForgetPasswordScreen_0 extends StatelessWidget {
               },
             ),
           );
-        } else if (state is SendResetTokenFailure) {
+        } else if (state is CreateResetTokenFailure) {
           HelperFunctions.showSnackBar(context, state.errMessage);
         }
       },
       child: ModalProgressHUD(
         inAsyncCall: context.select((ForgetPasswordCubit cubit) =>
-            cubit.state is SendResetTokenLoading),
+            cubit.state is CreateResetTokenLoading),
         child: Scaffold(
           body: Padding(
             padding: const EdgeInsets.only(

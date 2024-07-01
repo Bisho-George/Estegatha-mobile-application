@@ -23,14 +23,16 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class ForgetPasswordScreen_2 extends StatelessWidget {
   String email;
-  ForgetPasswordScreen_2({super.key, required this.email});
+  String newPassword;
+  ForgetPasswordScreen_2(
+      {super.key, required this.email, required this.newPassword});
 
   final GlobalKey<FormState> formKey = GlobalKey();
 
   // email controller
   TextEditingController verificationCode = TextEditingController();
-  TextEditingController newPassword = TextEditingController();
-  TextEditingController confirmNewPassword = TextEditingController();
+  // TextEditingController newPassword = TextEditingController();
+  // TextEditingController confirmNewPassword = TextEditingController();
 
   bool isLoading = false;
 
@@ -92,7 +94,7 @@ class ForgetPasswordScreen_2 extends StatelessWidget {
                               ConstantSizes.defaultSpace),
                         ),
                         ProgressIndicatorBar(
-                          stepTitle: "Add Your New Password",
+                          stepTitle: "Enter the verification code",
                           percentage: 0.75,
                           step: "Step 3",
                         ),
@@ -104,67 +106,34 @@ class ForgetPasswordScreen_2 extends StatelessWidget {
                           key: formKey,
                           child: Column(
                             children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    flex: 3,
-                                    child: CustomTextField(
-                                        labelText: "Verification Code",
-                                        onChanged: (value) {
-                                          verificationCode.text = value;
-                                        },
-                                        prefixIcon: const Icon(Icons.lock),
-                                        validator: (value) {
-                                          if (value!.isEmpty) {
-                                            return "Verification code is required";
-                                          }
+                              CustomTextField(
+                                  labelText: "Verification Code",
+                                  onChanged: (value) {
+                                    verificationCode.text = value;
+                                  },
+                                  prefixIcon: const Icon(Icons.lock),
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "Verification code is required";
+                                    }
 
-                                          return null;
-                                        }),
-                                  ),
-                                  SizedBox(
-                                      width: getProportionateScreenWidth(
-                                          ConstantSizes.spaceBtwInputFields)),
-                                  Expanded(
-                                    child: CustomElevatedButton(
-                                      onPressed: () {
-                                        BlocProvider.of<ForgetPasswordCubit>(
-                                                context)
-                                            .resendResetToken(context,
-                                                email: email);
-                                      },
-                                      labelText: 'Resend',
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                    return null;
+                                  }),
                               SizedBox(
-                                  height: getProportionateScreenHeight(
-                                      ConstantSizes.defaultSpace)),
-                              CustomTextField(
-                                labelText: "New Password",
-                                onChanged: (value) {
-                                  newPassword.text = value;
-                                },
-                                prefixIcon: const Icon(Icons.password),
-                                validator: (value) =>
-                                    Validation.validatePassword(value),
-                              ),
-                              SizedBox(
-                                  height: getProportionateScreenHeight(
-                                      ConstantSizes.defaultSpace)),
-                              CustomTextField(
-                                labelText: "Confirm Password",
-                                onChanged: (value) {
-                                  confirmNewPassword.text = value;
-                                },
-                                prefixIcon: const Icon(Icons.password),
-                                validator: (value) =>
-                                    Validation.validateConfirmPassword(
-                                        newPassword.text, value!),
-                              ),
+                                  width: getProportionateScreenWidth(
+                                      ConstantSizes.spaceBtwInputFields)),
                             ],
                           ),
+                        ),
+                        SizedBox(
+                            height: getProportionateScreenHeight(
+                                ConstantSizes.defaultSpace)),
+                        CustomElevatedButton(
+                          onPressed: () {
+                            BlocProvider.of<ForgetPasswordCubit>(context)
+                                .resendResetToken(context, email: email);
+                          },
+                          labelText: 'Resend',
                         ),
                         SizedBox(
                             height: getProportionateScreenHeight(
@@ -196,7 +165,7 @@ class ForgetPasswordScreen_2 extends StatelessWidget {
                                 BlocProvider.of<ForgetPasswordCubit>(context)
                                     .resetPassword(
                                         email: email,
-                                        newPassword: newPassword.text,
+                                        newPassword: newPassword,
                                         token: verificationCode.text);
                               }
                             },

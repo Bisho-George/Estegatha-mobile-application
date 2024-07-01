@@ -30,21 +30,14 @@ class ForgetPasswordScreen_3 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return BlocListener<ForgetPasswordCubit, ForgetPasswordState>(
       listener: (context, state) {
         if (state is ResetPasswordLoading) {
           isLoading = true;
         } else if (state is ResetPasswordSuccess) {
-          // HelperFunctions.showSnackBar(context, "Reset link sent");
           Navigator.pushReplacement(
             context,
-            // MaterialPageRoute(
-            //   builder: (context) {
-            //     return MailSentPage(
-            //       email: email!,
-            //     );
-            //   },
-            // ),
             MaterialPageRoute(
               builder: (context) {
                 return ForgetPasswordScreen_3();
@@ -94,7 +87,7 @@ class ForgetPasswordScreen_3 extends StatelessWidget {
                               ConstantSizes.defaultSpace),
                         ),
                         ProgressIndicatorBar(
-                          stepTitle: "Password Reset",
+                          stepTitle: "You are good to go!",
                           percentage: 1,
                           step: "Step 4",
                         ),
@@ -102,9 +95,34 @@ class ForgetPasswordScreen_3 extends StatelessWidget {
                           height: getProportionateScreenHeight(
                               ConstantSizes.spaceBtwSections),
                         ),
-                        SizedBox(
-                            height: getProportionateScreenHeight(
-                                ConstantSizes.spaceBtwSections * 2)),
+                        Container(
+                          width: getProportionateScreenWidth(double.infinity),
+                          height: getProportionateScreenHeight(250),
+                          decoration: BoxDecoration(
+                              color: ConstantColors.grey,
+                              borderRadius: BorderRadius.circular(
+                                  ConstantSizes.buttonRadius)),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.check_circle,
+                                color: ConstantColors.primary,
+                                size: getProportionateScreenHeight(100),
+                              ),
+                              SizedBox(
+                                height: getProportionateScreenHeight(
+                                    ConstantSizes.spaceBtwItems),
+                              ),
+                              Text('Password reseated successfully',
+                                  style: TextStyle(
+                                    fontSize: SizeConfig.font18,
+                                    color: ConstantColors.darkGrey,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                            ],
+                          ),
+                        ),
                         SizedBox(
                           height: getProportionateScreenHeight(
                               ConstantSizes.spaceBtwSections),

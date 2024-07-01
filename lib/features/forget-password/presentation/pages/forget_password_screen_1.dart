@@ -21,9 +21,13 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class ForgetPasswordScreen_1 extends StatelessWidget {
   String email;
+
   ForgetPasswordScreen_1({super.key, required this.email});
 
   final GlobalKey<FormState> formKey = GlobalKey();
+
+  TextEditingController _newPassword = TextEditingController();
+  TextEditingController _confirmNewPassword = TextEditingController();
 
   bool isLoading = false;
 
@@ -42,6 +46,7 @@ class ForgetPasswordScreen_1 extends StatelessWidget {
               builder: (context) {
                 return ForgetPasswordScreen_2(
                   email: email,
+                  newPassword: _confirmNewPassword.text,
                 );
               },
             ),
@@ -89,9 +94,9 @@ class ForgetPasswordScreen_1 extends StatelessWidget {
                               ConstantSizes.defaultSpace),
                         ),
                         ProgressIndicatorBar(
-                          stepTitle: "Enter your email address",
-                          percentage: 0.25,
-                          step: "Step 1",
+                          stepTitle: "Enter your New Password",
+                          percentage: 0.5,
+                          step: "Step 2",
                         ),
                         SizedBox(
                           height: getProportionateScreenHeight(
@@ -99,14 +104,31 @@ class ForgetPasswordScreen_1 extends StatelessWidget {
                         ),
                         Form(
                           key: formKey,
-                          child: CustomTextField(
-                            labelText: "Email",
-                            onChanged: (value) {
-                              email = value;
-                            },
-                            prefixIcon: const Icon(Icons.email),
-                            validator: (value) =>
-                                Validation.validateEmail(value),
+                          child: Column(
+                            children: [
+                              CustomTextField(
+                                labelText: "New Password",
+                                onChanged: (value) {
+                                  _newPassword.text = value;
+                                },
+                                prefixIcon: const Icon(Icons.password),
+                                validator: (value) =>
+                                    Validation.validatePassword(value),
+                              ),
+                              SizedBox(
+                                  height: getProportionateScreenHeight(
+                                      ConstantSizes.defaultSpace)),
+                              CustomTextField(
+                                labelText: "Confirm Password",
+                                onChanged: (value) {
+                                  _confirmNewPassword.text = value;
+                                },
+                                prefixIcon: const Icon(Icons.password),
+                                validator: (value) =>
+                                    Validation.validateConfirmPassword(
+                                        _newPassword.text, value!),
+                              ),
+                            ],
                           ),
                         ),
                         SizedBox(

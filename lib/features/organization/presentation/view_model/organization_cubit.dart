@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:estegatha/core/firebase/cloud_messaging.dart';
 import 'package:estegatha/features/organization/domain/api/organization_api.dart';
 import 'package:estegatha/features/organization/domain/models/organization.dart';
 import 'package:estegatha/features/organization/domain/models/organizationMember.dart';
@@ -72,6 +73,8 @@ class OrganizationCubit extends Cubit<OrganizationState> {
             await OrganizationHttpClient.joinOrganizationByCode(code);
 
         if (response.statusCode == 200) {
+          // subscribe to the notifications service
+
           final Organization organization =
               Organization.fromJson(jsonDecode(response.body));
 
