@@ -38,6 +38,7 @@ class _OtpViewState extends State<OtpView> {
   int _timeRemaining = 0;
   TimerManager _timerManager = TimerManager();
   late OtpViewModel _otpViewModel;
+  bool _isResendButtonDisabled = false;
 
   @override
   void initState() {
@@ -47,25 +48,30 @@ class _OtpViewState extends State<OtpView> {
   }
 
   void _startTimer(int time) {
-    _timerManager.startTimer(time, (remainingTime) {
+    setState(() {
+      _isResendButtonDisabled = true;
+    });
+    _timerManager.startTimer(3, (remainingTime) {
       setState(() {
         _timeRemaining = remainingTime;
       });
     }, () {
       setState(() {
         _timeRemaining = 0;
+        _isResendButtonDisabled = false;
       });
     });
   }
 
   void _resetTimer() {
-    _timerManager.resetTimer(120, (remainingTime) {
+    _timerManager.resetTimer(3, (remainingTime) {
       setState(() {
         _timeRemaining = remainingTime;
       });
     }, () {
       setState(() {
         _timeRemaining = 0;
+        _isResendButtonDisabled = false;
       });
     });
   }
@@ -136,20 +142,23 @@ class _OtpViewState extends State<OtpView> {
                         Builder(
                           builder: (context) {
                             return TextButton(
-                              onPressed: () {
-                                BlocProvider.of<ResendOtpCubit>(context).resendOtp();
+                              onPressed: _isResendButtonDisabled
+                                  ? null
+                                  : () {
+                                BlocProvider.of<ResendOtpCubit>(context)
+                                    .resendOtp();
                                 _resetTimer();
                               },
-                              child: const Text(
+                              child: Text(
                                 "Resend Code",
                                 style: TextStyle(
-                                  color: ConstantColors.textPrimary,
+                                  color: _isResendButtonDisabled ? ConstantColors.buttonDisabled : ConstantColors.textPrimary,
                                   fontWeight: ConstantSizes.fontWeightBold,
                                   fontSize: ConstantSizes.md,
                                 ),
                               ),
                             );
-                          }
+                          },
                         ),
                         ProgressIndicatorBar(
                           percentage: .5,

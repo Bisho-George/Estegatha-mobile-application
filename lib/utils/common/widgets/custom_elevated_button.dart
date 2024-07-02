@@ -1,3 +1,4 @@
+
 import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ class CustomElevatedButton extends StatelessWidget {
     this.formKey,
     this.focusNode,
     this.isPrimary = true,
+    this.isLoading = false,
   });
 
   final GlobalKey<FormState>? formKey;
@@ -17,6 +19,7 @@ class CustomElevatedButton extends StatelessWidget {
   final String labelText;
   FocusNode? focusNode;
   final bool isPrimary;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -29,19 +32,20 @@ class CustomElevatedButton extends StatelessWidget {
           backgroundColor: ConstantColors.primary,
           disabledForegroundColor: ConstantColors.darkGrey,
           disabledBackgroundColor: ConstantColors.grey,
-          // side: const BorderSide(color: ConstantColors.primary),
-          padding:
-              const EdgeInsets.symmetric(vertical: ConstantSizes.buttonHeight),
+          padding: const EdgeInsets.symmetric(vertical: ConstantSizes.buttonHeight),
           textStyle: const TextStyle(
               fontSize: ConstantSizes.fontSizeMd,
               color: ConstantColors.textWhite,
               fontWeight: FontWeight.w600),
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(ConstantSizes.buttonRadius)
-          ),
+              borderRadius: BorderRadius.circular(ConstantSizes.buttonRadius)),
         ),
-        onPressed: onPressed,
-        child: Text(labelText),
+        onPressed: isLoading ? null : onPressed,
+        child: isLoading
+            ? const CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+        )
+            : Text(labelText),
       ),
     );
   }

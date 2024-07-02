@@ -64,6 +64,9 @@ class SignUpCubit extends Cubit<SignUpState> {
         address != null &&
         location != null
     ) {
+      print(personalInfo!.birthDate);
+      print(location!.latitude);
+      print(location!.longitude);
       emit(SignupLoadingState());
       var result = await signupUseCase.call(SignupRequestBody(
         email: email!,

@@ -1,10 +1,8 @@
-
 import 'package:estegatha/features/sign-up/data/repos/predictions_maps_api.dart';
 import 'package:estegatha/features/sign-up/presentation/view_models/address_text_field_cubit.dart';
 import 'package:estegatha/features/sign-up/presentation/view_models/sign_up_cubit.dart';
 import 'package:estegatha/features/sign-up/presentation/view_models/sign_up_view_model.dart';
 import 'package:estegatha/features/sign-up/presentation/views/email_view.dart';
-import 'package:estegatha/features/sign-up/presentation/views/otp_view.dart';
 import 'package:estegatha/features/sign-up/presentation/views/personal_info_view.dart';
 import 'package:estegatha/features/sign-up/presentation/views/widgets/address_text_field.dart';
 import 'package:estegatha/features/sign-up/presentation/views/widgets/custom_google_maps.dart';
@@ -21,12 +19,25 @@ import '../../../../utils/constant/colors.dart';
 import '../../../../utils/constant/sizes.dart';
 import '../view_models/address_view_model.dart';
 
-class AddressView extends StatelessWidget {
+class AddressView extends StatefulWidget {
   static const String routeName = 'sign-up/address';
   final SignUpViewModel signUpViewModel = SignUpViewModel();
   final AddressViewModel addressViewModel = AddressViewModel();
 
   AddressView({super.key});
+
+  @override
+  _AddressViewState createState() => _AddressViewState();
+}
+
+class _AddressViewState extends State<AddressView> {
+  bool _isLoadingNext = false;
+
+  void _onLoadingAddressChanged(bool isLoading) {
+    setState(() {
+      _isLoadingNext = isLoading;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,12 +60,15 @@ class AddressView extends StatelessWidget {
           ),
         ),
         actions: [
-          TextButton(onPressed: () {
-            BlocProvider.of<SignUpCubit>(context).updateAddress("");
-            BlocProvider.of<SignUpCubit>(context).updateLocation(LatLng(0, 0));
-            BlocProvider.of<SignUpCubit>(context).signUp();
-            Navigator.pushNamed(context, EmailView.routeName);
-          }, child: const Text("Remind me later")),
+          TextButton(
+            onPressed: () {
+              BlocProvider.of<SignUpCubit>(context).updateAddress("");
+              BlocProvider.of<SignUpCubit>(context).updateLocation(LatLng(0, 0));
+              BlocProvider.of<SignUpCubit>(context).signUp();
+              Navigator.pushNamed(context, EmailView.routeName);
+            },
+            child: const Text("Remind me later"),
+          ),
         ],
       ),
       resizeToAvoidBottomInset: false,
@@ -67,7 +81,7 @@ class AddressView extends StatelessWidget {
             ),
             const SizedBox(height: ConstantSizes.spaceBtwItems),
             Form(
-              key: signUpViewModel.addressFormKey,
+              key: widget.signUpViewModel.addressFormKey,
               child: BlocProvider(
                 create: (context) => AddressTextFieldCubit(PredictionsMapsApi()),
                 child: Expanded(
@@ -80,7 +94,7 @@ class AddressView extends StatelessWidget {
                         child: BlocBuilder<AddressTextFieldCubit, AddressTextFieldState>(
                           builder: (context, state) {
                             return AddressTextField(
-                              controller: addressViewModel.addressController,
+                              controller: widget.addressViewModel.addressController,
                             );
                           },
                         ),
@@ -100,10 +114,13 @@ class AddressView extends StatelessWidget {
                           horizontal: ConstantSizes.defaultSpace,
                         ),
                         child: CustomElevatedButton(
-                          onPressed: () {
+                          onPressed: _isLoadingNext
+                              ? null
+                              : () {
                             Navigator.pushNamed(context, EmailView.routeName);
                           },
                           labelText: "Next",
+                          isLoading: _isLoadingNext,
                         ),
                       ),
                       const SizedBox(height: ConstantSizes.defaultSpace),
@@ -112,10 +129,11 @@ class AddressView extends StatelessWidget {
                           children: [
                             CustomGoogleMaps(
                               onAddressSelected: (String address, LatLng position) {
-                                addressViewModel.addressController.text = address;
+                                widget.addressViewModel.addressController.text = address;
                                 context.read<SignUpCubit>().updateAddress(address);
                                 context.read<SignUpCubit>().updateLocation(position);
                               },
+                              onLoadingAddressChanged: _onLoadingAddressChanged,
                             ),
                             Container(
                               width: double.infinity,

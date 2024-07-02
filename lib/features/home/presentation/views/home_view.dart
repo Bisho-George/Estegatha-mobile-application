@@ -2,7 +2,6 @@ import 'package:estegatha/features/home/presentation/views/widgets/animated_orga
 import 'package:estegatha/features/home/presentation/views/widgets/custom_fab.dart';
 import 'package:estegatha/features/home/presentation/views/widgets/custom_home_appbar.dart';
 import 'package:estegatha/features/home/presentation/views/widgets/custom_person_appbar.dart';
-import 'package:estegatha/features/home/presentation/views/widgets/dangerous_dialog.dart';
 import 'package:estegatha/features/home/presentation/views/widgets/draggable_scroll_sheet.dart';
 import 'package:estegatha/features/home/presentation/views/widgets/google_map.dart';
 import 'package:estegatha/responsive/size_config.dart';
@@ -13,7 +12,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../utils/common/widgets/bottom_navbar.dart';
 import '../../../../utils/common/widgets/bottom_navbar_fab.dart';
-import '../../../../utils/common/widgets/custom_app_bar.dart';
 import '../../../../utils/constant/colors.dart';
 import '../../../../utils/constant/image_strings.dart';
 import '../view_models/home_state.dart';

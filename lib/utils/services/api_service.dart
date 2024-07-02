@@ -11,15 +11,20 @@ class ApiService {
     return response.data;
   }
 
-  Future<dynamic> post(
-      {required String endpoint,
-      required Map<String, dynamic> data,
-      Map<String, dynamic>? headers}) async {
+
+  Future<dynamic> post({
+    required String endpoint,
+    Map<String, dynamic>? data,
+    Map<String, dynamic>? headers,
+    Map<String, dynamic>? queryParams,
+  }) async {
     var response = await _dio.post(
       '${ConstantVariables.uri}/$endpoint',
       data: data,
       options: Options(headers: headers),
+      queryParameters: queryParams,
     );
     return response;
   }
+
 }

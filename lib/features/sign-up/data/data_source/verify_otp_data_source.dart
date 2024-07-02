@@ -19,7 +19,7 @@ class VerifyOtpDataSourceImp extends VerifyOtpDataSource {
       'otp': verifyOtpRequest.otp,
     });
     return VerifyOtpResponse(
-      success: result?.data['status'],
+      success: result.data['status'] ?? true,
       message: result.data['message'] ?? result.data,
     );
   }
