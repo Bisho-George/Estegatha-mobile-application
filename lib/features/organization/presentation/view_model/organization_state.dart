@@ -157,6 +157,22 @@ class UpdateOrganizationSuccess extends OrganizationState {
   ) : super(organization);
 }
 
+class PostsLoading extends OrganizationState {
+  const PostsLoading() : super(null);
+}
+
+class PostsSuccess extends OrganizationState {
+  final List<Post> posts;
+
+  const PostsSuccess(this.posts) : super(null);
+}
+
+class PostsFailure extends OrganizationState {
+  final String errMessage;
+
+  const PostsFailure({required this.errMessage}) : super(null);
+}
+
 class CreatePostLoading extends OrganizationState {
   const CreatePostLoading() : super(null);
 }

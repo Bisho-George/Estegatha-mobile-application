@@ -1,5 +1,6 @@
 import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
+import 'package:estegatha/utils/helpers/responsive.dart';
 import 'package:flutter/material.dart';
 
 class CustomElevatedButton extends StatelessWidget {
@@ -30,14 +31,16 @@ class CustomElevatedButton extends StatelessWidget {
           disabledForegroundColor: ConstantColors.darkGrey,
           disabledBackgroundColor: ConstantColors.grey,
           // side: const BorderSide(color: ConstantColors.primary),
-          padding:
-              const EdgeInsets.symmetric(vertical: ConstantSizes.buttonHeight),
-          textStyle: const TextStyle(
-              fontSize: ConstantSizes.fontSizeMd,
+          padding: EdgeInsets.symmetric(
+              vertical:
+                  getProportionateScreenHeight(ConstantSizes.buttonHeight)),
+          textStyle: TextStyle(
+              fontSize: SizeConfig.font20,
               color: ConstantColors.textWhite,
               fontWeight: FontWeight.w600),
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(ConstantSizes.buttonRadius)),
+              borderRadius: BorderRadius.circular(
+                  getProportionateScreenHeight(ConstantSizes.buttonRadius))),
         ),
         onPressed: onPressed,
         child: Text(labelText),

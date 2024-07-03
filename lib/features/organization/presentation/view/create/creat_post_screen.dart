@@ -115,10 +115,23 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               SizedBox(height: 16.0),
               BlocConsumer<OrganizationCubit, OrganizationState>(
                 listener: (context, state) {
-                  if (state is CreatePostSuccess) {
+                  if (state is CreatePostLoading) {
+                    const CircularProgressIndicator();
+                  } else if (state is CreatePostSuccess) {   
+
+
+
+
+
+
+                    
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Post created successfully!')),
+                      const SnackBar(
+                          content: Text('Post created successfully!')),
                     );
+                    context
+                        .read<OrganizationCubit>()
+                        .getOrganizationPosts(widget.orgId);
                     Navigator.pop(context);
                   } else if (state is CreatePostFailure) {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -127,9 +140,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   }
                 },
                 builder: (context, state) {
-                  if (state is CreatePostLoading) {
-                    return const Center(child: Loader());
-                  }
                   return CustomElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {

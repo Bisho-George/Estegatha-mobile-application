@@ -83,20 +83,19 @@ class OrganizationCubit extends Cubit<OrganizationState> {
 
           emit(OrganizationJoinSuccess(organization));
           await joinToOrganizationNotification(organization.id!);
-          Dio dio = await DioAuth.getDio();
           Member member = await HelperFunctions.getUser();
-          await dio.post(baseUrl + notifyMembersEndPoint, data: {
-            subjectKey: 'New Member',
-            contentKey:
-                'your friend ${member.username} has join ${organization.name}, welcome him/her',
-            "type": 'JOIN_ORG',
-            'data': {
-              'userId': member.id.toString(),
-              'organizationId': organization.id.toString(),
-            }
-          }, queryParameters: {
-            'organizationId': organization.id.toString(),
-          });
+          await sendNotification(
+              subject: "New Member",
+              content:
+                  'your friend ${member.username} has join ${organization.name}. Say Hi! 👋',
+              type: 'JOIN_ORG',
+              customData: {
+                'userId': member.id.toString(),
+                'organizationId': organization.id.toString(),
+              },
+              parameters: {
+                'organizationId': organization.id.toString(),
+              });
         } else {
           emit(const OrganizationFailure(
               errMessage: "Something went wrong, try again!"));
@@ -183,6 +182,9 @@ class OrganizationCubit extends Cubit<OrganizationState> {
             (responseBody as List).map((post) => Post.fromJson(post)).toList();
 
         emit(OrganizationPostsSuccess(posts));
+
+        // join the notification to get the new post notification
+        await joinToOrganizationNotification(orgId);
         return posts;
       } else {
         emit(const OrganizationFailure(
@@ -448,7 +450,10 @@ class OrganizationCubit extends Cubit<OrganizationState> {
 
   Future<void> createPost(
       BuildContext context, String title, String content, int orgId) async {
+    print("Enter createPost function");
     final userCubit = context.read<UserCubit>();
+    final Organization? organization = await getOrganizationById(orgId);
+    List<OrganizationMember> members = await getOrganizationMembers(orgId);
     if (userCubit.state is UserLoaded) {
       emit(const CreatePostLoading());
 
@@ -457,8 +462,36 @@ class OrganizationCubit extends Cubit<OrganizationState> {
             await OrganizationHttpClient.createPost(title, content, orgId);
 
         if (response.statusCode == 201) {
-          emit(const CreatePostSuccess());
+          print("Post created successfully!");
+          final posts = await getOrganizationPosts(orgId);
+
           await getOrganizationById(orgId);
+
+          // await joinToOrganizationNotification(orgId);
+
+          // exclude the current user from the notification
+          members.removeWhere(
+              (member) => member.userId == userCubit.getCurrentUser()?.id);
+
+          print(
+              "====================================Members Length====================================  ${members.length}");
+
+          for (var member in members) {
+            await sendNotification(
+                subject: "New Post",
+                content: "New post from ${organization?.name}. Read it now.",
+                type: "CREATE_POST",
+                customData: {
+                  "userId": member.userId.toString(),
+                  "organizationId": orgId.toString(),
+                  "username": member.username,
+                  "role": member.role,
+                },
+                parameters: {
+                  "organizationId": orgId.toString()
+                });
+          }
+          emit(CreatePostSuccess());
         } else {
           emit(const CreatePostFailure(
               errMessage: "Something went wrong, try again!"));
