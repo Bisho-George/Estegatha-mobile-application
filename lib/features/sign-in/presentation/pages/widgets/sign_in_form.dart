@@ -2,6 +2,7 @@ import 'package:estegatha/features/forget-password/presentation/pages/change_pas
 import 'package:estegatha/features/forget-password/presentation/pages/forget_password_screen_0.dart';
 import 'package:estegatha/features/forget-password/presentation/pages/forget_password_screen_1.dart';
 import 'package:estegatha/features/sign-in/presentation/veiw_models/login_cubit/login_cubit.dart';
+import 'package:estegatha/responsive/size_config.dart';
 import 'package:estegatha/utils/common/widgets/custom_elevated_button.dart';
 import 'package:estegatha/utils/common/widgets/custom_text_field.dart';
 import 'package:estegatha/utils/constant/sizes.dart';

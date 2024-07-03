@@ -4,6 +4,7 @@ String createSosEndPoint = 'api/v1/users/sos';
 String getOrganizationsEndPoint = 'api/v1/users/organizations';
 String getOrganizationMembersEndPoint = 'api/v1/organizations/members';
 String joinNotificationEndPoint = 'api/v1/notification/join';
+String exitNotificationEndPoint = 'api/v1/notification/exit';
 String notifyMembersEndPoint = 'api/v1/notification';
 String addContactEndPoint = 'api/v1/users/contact';
 String fetchContactsEndPoint = 'api/v1/users/contact';

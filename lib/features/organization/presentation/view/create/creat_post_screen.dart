@@ -117,14 +117,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 listener: (context, state) {
                   if (state is CreatePostLoading) {
                     const CircularProgressIndicator();
-                  } else if (state is CreatePostSuccess) {   
-
-
-
-
-
-
-                    
+                  } else if (state is CreatePostSuccess) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                           content: Text('Post created successfully!')),

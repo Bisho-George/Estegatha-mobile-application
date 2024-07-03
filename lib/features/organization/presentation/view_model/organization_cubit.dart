@@ -183,8 +183,6 @@ class OrganizationCubit extends Cubit<OrganizationState> {
 
         emit(OrganizationPostsSuccess(posts));
 
-        // join the notification to get the new post notification
-        await joinToOrganizationNotification(orgId);
         return posts;
       } else {
         emit(const OrganizationFailure(
@@ -357,6 +355,9 @@ class OrganizationCubit extends Cubit<OrganizationState> {
   Future<bool> changeMemberRole(
       BuildContext context, int orgId, int userId, String newRole) async {
     final userCubit = context.read<UserCubit>();
+    final organization = await getOrganizationById(orgId);
+
+    final currentUser = await HelperFunctions.getUser();
     if (userCubit.state is UserLoaded) {
       emit(const ChangeMemberRoleLoading());
 
@@ -385,7 +386,25 @@ class OrganizationCubit extends Cubit<OrganizationState> {
 
         if (response.statusCode == 200) {
           emit(const ChangeMemberRoleSuccess());
+
           await getOrganizationById(orgId);
+          for (var member in members) {
+            await sendNotification(
+                subject: "Role Change",
+                content: userId == currentUser.id
+                    ? "Your role has been changed in ${organization?.name} to $newRole"
+                    : "A member role has been changed in ${organization?.name}. Tab to see the changes.",
+                type: "CHANGE_ROLE",
+                customData: {
+                  "userId": member.userId.toString(),
+                  "organizationId": orgId.toString(),
+                  "username": member.username,
+                  "role": member.role,
+                },
+                parameters: {
+                  "organizationId": orgId.toString()
+                });
+          }
           return true;
         } else {
           emit(const OrganizationFailure(
@@ -463,15 +482,12 @@ class OrganizationCubit extends Cubit<OrganizationState> {
 
         if (response.statusCode == 201) {
           print("Post created successfully!");
-          final posts = await getOrganizationPosts(orgId);
+
+          // await getOrganizationById(orgId);
+
+          emit(const CreatePostSuccess());
 
           await getOrganizationById(orgId);
-
-          // await joinToOrganizationNotification(orgId);
-
-          // exclude the current user from the notification
-          members.removeWhere(
-              (member) => member.userId == userCubit.getCurrentUser()?.id);
 
           print(
               "====================================Members Length====================================  ${members.length}");
@@ -491,7 +507,6 @@ class OrganizationCubit extends Cubit<OrganizationState> {
                   "organizationId": orgId.toString()
                 });
           }
-          emit(CreatePostSuccess());
         } else {
           emit(const CreatePostFailure(
               errMessage: "Something went wrong, try again!"));
@@ -499,6 +514,28 @@ class OrganizationCubit extends Cubit<OrganizationState> {
       } catch (e) {
         print(e);
         emit(const CreatePostFailure(errMessage: "Failed to create post!"));
+      }
+    }
+  }
+
+  Future<void> deletePost(BuildContext context, int postId, int orgId) async {
+    final userCubit = context.read<UserCubit>();
+    if (userCubit.state is UserLoaded) {
+      // emit(const OrganizationLoading());
+
+      try {
+        final response = await OrganizationHttpClient.deletePost(orgId, postId);
+
+        if (response.statusCode == 204) {
+          emit(const DeletePostSuccess());
+          await getOrganizationById(orgId);
+        } else {
+          emit(const DeletePostFailure(
+              errMessage: "Something went wrong, try again!"));
+        }
+      } catch (e) {
+        print(e);
+        emit(const DeletePostFailure(errMessage: "Failed to delete post!"));
       }
     }
   }

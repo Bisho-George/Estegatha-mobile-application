@@ -14,20 +14,37 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class PostsList extends StatelessWidget {
-  Organization organization;
+class PostsList extends StatefulWidget {
+  final Organization organization;
   final List<Post> posts;
-  bool? isAdmin = false;
+  final bool? isAdmin;
 
-  PostsList(
-      {super.key,
-      required this.posts,
-      required this.isAdmin,
-      required this.organization});
+  PostsList({
+    super.key,
+    required this.posts,
+    required this.isAdmin,
+    required this.organization,
+  });
+
+  @override
+  _PostsListState createState() => _PostsListState();
+}
+
+class _PostsListState extends State<PostsList> {
+  void deletePostAtIndex(int index) {
+    final postId = widget.posts[index].id!;
+    final orgId = widget.organization.id!;
+    // Call the delete method on the cubit
+    context.read<OrganizationCubit>().deletePost(context, postId, orgId);
+    // Remove the post from the local list and update the UI
+    setState(() {
+      widget.posts.removeAt(index);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (posts.isEmpty) {
+    if (widget.posts.isEmpty) {
       return TabStatus(
           image: ConstantImages.organizationPostIcon,
           title: 'No Posts Found',
@@ -46,7 +63,7 @@ class PostsList extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (context) => CreatePostScreen(
-                                orgId: organization.id!,
+                                orgId: widget.organization.id!,
                               )));
                 },
                 style: OutlinedButton.styleFrom(
@@ -67,7 +84,7 @@ class PostsList extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: ConstantSizes.bottomNavBarHeight),
       child: Column(
         children: [
-          if (isAdmin!)
+          if (widget.isAdmin!)
             SettingItem(
                 label: "Create Post",
                 icon: Icons.create,
@@ -76,7 +93,7 @@ class PostsList extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => CreatePostScreen(
-                        orgId: organization.id!,
+                        orgId: widget.organization.id!,
                       ),
                     ),
                   );
@@ -85,61 +102,75 @@ class PostsList extends StatelessWidget {
           RefreshIndicator(
             onRefresh: () async {
               BlocProvider.of<OrganizationCubit>(context)
-                  .getOrganizationPosts(organization.id!);
+                  .getOrganizationPosts(widget.organization.id!);
             },
             child: ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: posts.length,
+              itemCount: widget.posts.length,
               itemBuilder: (context, index) {
-                Post post = posts[index];
+                Post post = widget.posts[index];
                 return Container(
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     border: Border(
                       bottom: BorderSide(
                         color: ConstantColors.grey,
-                        width: 0.5,
+                        width: 1,
                       ),
                     ),
                   ),
-                  child: ListTile(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        left: getProportionateScreenWidth(ConstantSizes.sm)),
+                    child: ListTile(
                       title: Text(
-                        post.title!,
+                        post.title!.length > 15
+                            ? "${post.title!.substring(0, 15)}..."
+                            : post.title!,
                         style: const TextStyle(
                           color: ConstantColors.primary,
                           fontSize: ConstantSizes.fontSizeLg,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      subtitle: Text(post.content!.length > 40
-                          ? "${post.content!.substring(0, 40)}..."
+                      subtitle: Text(post.content!.length > 30
+                          ? "${post.content!.substring(0, 30)}..."
                           : post.content!),
                       trailing: SizedBox(
                         height: getProportionateScreenHeight(28),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            elevation: 0,
-                            backgroundColor: ConstantColors.primary,
-                          ),
-                          child: const Text(
-                            'View',
-                            style: TextStyle(
-                                color: ConstantColors.white,
-                                letterSpacing: 0.75),
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => PostDetailScreen(
-                                  post: post,
-                                ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              tooltip: "Read More",
+                              icon: const Icon(
+                                Icons.read_more,
+                                color: ConstantColors.primary,
                               ),
-                            );
-                          },
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PostDetailScreen(
+                                      post: post,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            if (widget.isAdmin!)
+                              IconButton(
+                                  onPressed: () => deletePostAtIndex(index),
+                                  icon: const Icon(
+                                    Icons.delete,
+                                    color: ConstantColors.error,
+                                  ))
+                          ],
                         ),
-                      )),
+                      ),
+                    ),
+                  ),
                 );
               },
             ),

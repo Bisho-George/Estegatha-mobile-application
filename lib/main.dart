@@ -13,6 +13,7 @@ import 'package:estegatha/features/sign-in/presentation/pages/sign_in_page.dart'
 import 'package:estegatha/features/sign-in/presentation/veiw_models/user_cubit.dart';
 import 'package:estegatha/main_menu.dart';
 import 'package:estegatha/providers.dart';
+import 'package:estegatha/responsive/size_config.dart';
 import 'package:estegatha/utils/helpers/helper_functions.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await FirebaseMessaging.instance.setAutoInitEnabled(true);
   WidgetsFlutterBinding.ensureInitialized();
   NotificationService notificationService = NotificationService();
   await notificationService.initialize();
@@ -62,11 +64,13 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     checkUserLoggedIn(home, context);
+    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
     subscribeToMessages();
   }
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return ValueListenableBuilder<Widget>(
       valueListenable: home,
       builder: (context, isLoggedIn, child) {

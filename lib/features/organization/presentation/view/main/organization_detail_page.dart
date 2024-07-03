@@ -162,7 +162,7 @@ class _OrganizationDetailPageState extends State<OrganizationDetailPage> {
                                         element.role == 'OWNER'),
                               ) ??
                               false,
-                          organization: state.organization,
+                          organization: state.organization!,
                         );
                       } else {
                         return Padding(

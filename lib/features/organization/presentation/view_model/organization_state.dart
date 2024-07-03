@@ -186,3 +186,17 @@ class CreatePostFailure extends OrganizationState {
 
   const CreatePostFailure({required this.errMessage}) : super(null);
 }
+
+class DeletePostLoading extends OrganizationState {
+  const DeletePostLoading() : super(null);
+}
+
+class DeletePostSuccess extends OrganizationState {
+  const DeletePostSuccess() : super(null);
+}
+
+class DeletePostFailure extends OrganizationState {
+  final String errMessage;
+
+  const DeletePostFailure({required this.errMessage}) : super(null);
+}
