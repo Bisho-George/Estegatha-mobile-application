@@ -49,6 +49,48 @@ class UserHealthCubit extends Cubit<UserHealthState> {
     }
   }
 
+  Future<void> deleteUserDisease(String disease) async {
+    emit(DeleteUserDiseaseLoading());
+
+    try {
+      final response = await UserHttpClient.deleteUserDisease(disease);
+
+      if (response.statusCode == 200) {
+        emit(DeleteUserDiseaseSuccess());
+        await getUserHealthInfo();
+      } else {
+        print('Response body: ${response.body}');
+        emit(const DeleteUserDiseaseFailure(
+            errMessage: "Failed to delete disease!"));
+      }
+    } catch (e) {
+      print('Exception: $e');
+      emit(const DeleteUserDiseaseFailure(
+          errMessage: "Failed to delete disease!"));
+    }
+  }
+
+  Future<void> deleteUserMedicine(String medicine) async {
+    emit(DeleteUserMedicineLoading());
+
+    try {
+      final response = await UserHttpClient.deleteUserMedicine(medicine);
+
+      if (response.statusCode == 200) {
+        emit(DeleteUserMedicineSuccess());
+        await getUserHealthInfo();
+      } else {
+        print('Response body: ${response.body}');
+        emit(const DeleteUserMedicineFailure(
+            errMessage: "Failed to delete medicine!"));
+      }
+    } catch (e) {
+      print('Exception: $e');
+      emit(const DeleteUserMedicineFailure(
+          errMessage: "Failed to delete medicine!"));
+    }
+  }
+
   Future<UserHealthInfo> getUserHealthInfo() async {
     emit(UserHealthInfoLoading());
 

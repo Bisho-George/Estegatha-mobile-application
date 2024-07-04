@@ -1,10 +1,12 @@
 import 'package:estegatha/utils/common/widgets/category_header_widget.dart';
+import 'package:estegatha/utils/constant/colors.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../responsive/size_config.dart';
 import '../../../../utils/common/styles/text_styles.dart';
 import '../../../../utils/constant/sizes.dart';
 import 'preference_widget.dart';
+
 class ProfileWidget extends StatelessWidget {
   ProfileWidget({super.key, required this.userName});
   String userName;
@@ -28,19 +30,21 @@ class ProfileWidget extends StatelessWidget {
               children: [
                 const Spacer(),
                 Padding(
-                  padding: EdgeInsets.only(left: responsiveWidth(ConstantSizes.md)),
+                  padding:
+                      EdgeInsets.only(left: responsiveWidth(ConstantSizes.md)),
                   child: Row(
                     children: [
                       CircleAvatar(
-                        backgroundColor: Colors.green,
-                        child: Text(
-                          userName.isNotEmpty ? userName[0] : '',
-                          style: Styles.getDefaultPrimary().copyWith(color: Colors.white),
-                        ),
-                        radius: responsiveWidth(20.0)
-                      ),
+                          backgroundColor: ConstantColors.iconPrimary,
+                          radius: responsiveWidth(20.0),
+                          child: Text(
+                            userName.isNotEmpty ? userName[0] : '',
+                            style: Styles.getDefaultPrimary()
+                                .copyWith(color: Colors.white),
+                          )),
                       Padding(
-                        padding: EdgeInsets.only(left: responsiveWidth(ConstantSizes.md)),
+                        padding: EdgeInsets.only(
+                            left: responsiveWidth(ConstantSizes.md)),
                         child: Text(
                           userName,
                           style: Styles.getDefaultPrimary(

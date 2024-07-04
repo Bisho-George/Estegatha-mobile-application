@@ -62,20 +62,14 @@ class SettingsScreen extends StatelessWidget {
           child: Column(
             children: <Widget>[
               const SectionHeading(title: "Organization settings"),
-              BlocBuilder<CurrentOrganizationCubit, CurrentOrganizationState>(
-                builder: (context, state) {
-                  print("Current organization ID: ${state.organizationId}");
-
-                  return SettingItem(
-                    label: "Organization Management",
-                    icon: Icons.groups,
-                    onTap: () {
-                      // Assuming you have a method to navigate to the organization-specific settings page
-                      // You can pass the organization ID from the state to that method
-                      navigateToOrganizationSettings(
-                          context, state.organizationId!);
-                    },
-                  );
+              SettingItem(
+                label: "Organization Management",
+                icon: Icons.groups,
+                onTap: () {
+                  // Assuming you have a method to navigate to the organization-specific settings page
+                  // You can pass the organization ID from the state to that method
+                  navigateToOrganizationSettings(
+                      context, 1); //TODO: Replace 1 with the organization ID
                 },
               ),
               SettingItem(

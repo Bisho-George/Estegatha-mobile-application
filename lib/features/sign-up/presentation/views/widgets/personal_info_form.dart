@@ -92,19 +92,19 @@ class PersonalInfoForm extends StatelessWidget {
                 ),
                 border: OutlineInputBorder(
                   borderRadius:
-                  BorderRadius.circular(ConstantSizes.inputFieldRadius),
+                      BorderRadius.circular(ConstantSizes.inputFieldRadius),
                   borderSide: const BorderSide(
                       width: 1, color: ConstantColors.textInputBorder),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius:
-                  BorderRadius.circular(ConstantSizes.inputFieldRadius),
+                      BorderRadius.circular(ConstantSizes.inputFieldRadius),
                   borderSide: const BorderSide(
                       width: 1, color: ConstantColors.textInputBorder),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius:
-                  BorderRadius.circular(ConstantSizes.inputFieldRadius),
+                      BorderRadius.circular(ConstantSizes.inputFieldRadius),
                   borderSide: const BorderSide(
                     width: 1,
                     color: ConstantColors.borderPrimary,
@@ -112,7 +112,7 @@ class PersonalInfoForm extends StatelessWidget {
                 ),
                 errorBorder: OutlineInputBorder(
                   borderRadius:
-                  BorderRadius.circular(ConstantSizes.inputFieldRadius),
+                      BorderRadius.circular(ConstantSizes.inputFieldRadius),
                   borderSide: const BorderSide(
                     width: 1,
                     color: ConstantColors.warning,
@@ -120,7 +120,7 @@ class PersonalInfoForm extends StatelessWidget {
                 ),
                 focusedErrorBorder: OutlineInputBorder(
                   borderRadius:
-                  BorderRadius.circular(ConstantSizes.inputFieldRadius),
+                      BorderRadius.circular(ConstantSizes.inputFieldRadius),
                   borderSide: const BorderSide(
                     width: 2,
                     color: ConstantColors.warning,
@@ -144,7 +144,7 @@ class PersonalInfoForm extends StatelessWidget {
                   if (data.personalInfoFormKey.currentState!.validate()) {
                     // Parse the birthdayController.text to DateTime
                     DateTime? birthday =
-                    datepickerVM.parseDate(data.birthdayController.text);
+                        datepickerVM.parseDate(data.birthdayController.text);
                     PersonalInfoModel personalInfo = PersonalInfoModel(
                       firstName: data.firstNameController.text,
                       lastName: data.lastNameController.text,
@@ -173,7 +173,10 @@ class PersonalInfoForm extends StatelessWidget {
                       fontSize: ConstantSizes.fontSizeMd),
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => SignInPage()));
+                  },
                   child: const Text("Sign in",
                       style: TextStyle(
                           color: ConstantColors.textPrimary,

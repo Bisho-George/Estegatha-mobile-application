@@ -25,11 +25,12 @@ import 'features/home/presentation/views/home_view.dart';
 import 'firebase_options.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  WidgetsFlutterBinding.ensureInitialized();
+  await FirebaseMessaging.instance.setAutoInitEnabled(true);
   NotificationService notificationService = NotificationService();
   await notificationService.initialize();
   FCMSetup.setupFCM((String fcmToken) {
@@ -56,10 +57,12 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     checkUserLoggedIn(home, context);
+    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
     subscribeToMessages();
   }
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return ValueListenableBuilder<Widget>(
       valueListenable: home,
       builder: (context, isLoggedIn, child) {

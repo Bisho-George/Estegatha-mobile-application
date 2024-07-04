@@ -75,8 +75,14 @@ class OrganizationMembersSuccess extends OrganizationState {
 class OrganizationJoinSuccess extends OrganizationState {
   final Organization organization;
   const OrganizationJoinSuccess(
-      this.organization,
-      ) : super(organization);
+    this.organization,
+  ) : super(organization);
+}
+
+class OrganizationJoinFailure extends OrganizationState {
+  final String errMessage;
+
+  const OrganizationJoinFailure({required this.errMessage}) : super(null);
 }
 
 class OrganizationPostsLoading extends OrganizationState {
@@ -136,8 +142,8 @@ class RemoveMemberLoading extends OrganizationState {
 class RemoveMemberSuccess extends OrganizationState {
   final List<OrganizationMember> members;
   const RemoveMemberSuccess(
-      this.members,
-      ) : super(null);
+    this.members,
+  ) : super(null);
 }
 
 class UpdateOrganizationLoading extends OrganizationState {
@@ -147,8 +153,24 @@ class UpdateOrganizationLoading extends OrganizationState {
 class UpdateOrganizationSuccess extends OrganizationState {
   final Organization organization;
   const UpdateOrganizationSuccess(
-      this.organization,
-      ) : super(organization);
+    this.organization,
+  ) : super(organization);
+}
+
+class PostsLoading extends OrganizationState {
+  const PostsLoading() : super(null);
+}
+
+class PostsSuccess extends OrganizationState {
+  final List<Post> posts;
+
+  const PostsSuccess(this.posts) : super(null);
+}
+
+class PostsFailure extends OrganizationState {
+  final String errMessage;
+
+  const PostsFailure({required this.errMessage}) : super(null);
 }
 
 class CreatePostLoading extends OrganizationState {
@@ -163,4 +185,18 @@ class CreatePostFailure extends OrganizationState {
   final String errMessage;
 
   const CreatePostFailure({required this.errMessage}) : super(null);
+}
+
+class DeletePostLoading extends OrganizationState {
+  const DeletePostLoading() : super(null);
+}
+
+class DeletePostSuccess extends OrganizationState {
+  const DeletePostSuccess() : super(null);
+}
+
+class DeletePostFailure extends OrganizationState {
+  final String errMessage;
+
+  const DeletePostFailure({required this.errMessage}) : super(null);
 }

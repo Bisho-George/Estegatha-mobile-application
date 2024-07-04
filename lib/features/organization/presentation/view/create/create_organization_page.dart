@@ -6,6 +6,7 @@ import 'package:estegatha/features/organization/presentation/view_model/organiza
 import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
 import 'package:estegatha/utils/helpers/helper_functions.dart';
+import 'package:estegatha/utils/helpers/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -67,11 +68,12 @@ class CreateOrganizationPageState extends State<CreateOrganizationPage> {
         inAsyncCall: isLoading,
         child: Scaffold(
           appBar: PreferredSize(
-            preferredSize: Size.fromHeight(80.0.r),
+            preferredSize: Size.fromHeight(getProportionateScreenHeight(85)),
             child: AppBar(
               leading: IconButton(
                 icon: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16.h),
+                  padding: EdgeInsets.symmetric(
+                      vertical: getProportionateScreenHeight(ConstantSizes.md)),
                   child: const Icon(Icons.arrow_back),
                 ),
                 onPressed: () {
@@ -82,7 +84,8 @@ class CreateOrganizationPageState extends State<CreateOrganizationPage> {
                 color: ConstantColors.primary,
               ),
               flexibleSpace: Padding(
-                padding: EdgeInsets.symmetric(vertical: 20.h),
+                padding: EdgeInsets.only(
+                    top: getProportionateScreenHeight(ConstantSizes.md)),
                 child: Container(
                   decoration: const BoxDecoration(
                     color: ConstantColors.white,
@@ -100,15 +103,20 @@ class CreateOrganizationPageState extends State<CreateOrganizationPage> {
                       Expanded(
                         child: Padding(
                           padding: EdgeInsets.only(
-                            left: ConstantSizes.defaultSpace * 2,
-                            right: ConstantSizes.defaultSpace * 2,
-                            top: 20.h,
+                            left: getProportionateScreenWidth(
+                                ConstantSizes.defaultSpace * 2),
+                            right: getProportionateScreenWidth(
+                                ConstantSizes.defaultSpace * 2),
+                            top: getProportionateScreenHeight(ConstantSizes.md),
                           ),
                           child: Form(
                             key: formKey,
                             child: SizedBox(
-                              height: ConstantSizes.appBarHeight * 2,
+                              height: getProportionateScreenHeight(
+                                      ConstantSizes.appBarHeight) *
+                                  1.2,
                               child: TextFormField(
+                                maxLines: 3,
                                 validator: (value) {
                                   if (value!.isEmpty) {
                                     return 'Please enter a name';
@@ -119,14 +127,14 @@ class CreateOrganizationPageState extends State<CreateOrganizationPage> {
                                   hintText: 'Name your organization',
                                   hintStyle: TextStyle(
                                     color: ConstantColors.darkGrey,
-                                    fontSize: ConstantSizes.fontSizeLg.sp,
+                                    fontSize: SizeConfig.font20,
                                     fontWeight: ConstantSizes.fontWeightRegular,
                                   ),
                                   border: InputBorder.none,
                                 ),
                                 style: TextStyle(
                                   color: ConstantColors.primary,
-                                  fontSize: ConstantSizes.fontSizeLg.sp,
+                                  fontSize: SizeConfig.font20,
                                 ),
                                 onChanged: (value) {
                                   setState(() {
@@ -145,20 +153,21 @@ class CreateOrganizationPageState extends State<CreateOrganizationPage> {
             ),
           ),
           body: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 0),
+            padding: EdgeInsets.symmetric(
+                vertical: getProportionateScreenHeight(ConstantSizes.md)),
             child: Column(
               children: [
                 SizedBox(
-                  width: 22.w,
-                  height: 22.h,
+                  width: getProportionateScreenWidth(22),
+                  height: getProportionateScreenHeight(22),
                   child: Stack(
                     children: [
                       Positioned(
                         left: 0,
                         top: 0,
                         child: Container(
-                          width: 20.w,
-                          height: 20.h,
+                          width: getProportionateScreenWidth(20),
+                          height: getProportionateScreenHeight(20),
                           decoration: const ShapeDecoration(
                             color: ConstantColors.primary,
                             shape: OvalBorder(),
@@ -166,11 +175,11 @@ class CreateOrganizationPageState extends State<CreateOrganizationPage> {
                         ),
                       ),
                       Positioned(
-                        left: 6.r,
-                        top: 6.r,
+                        left: getProportionateScreenWidth(6),
+                        top: getProportionateScreenHeight(6),
                         child: Container(
-                          width: 8.w,
-                          height: 8.h,
+                          width: getProportionateScreenWidth(8),
+                          height: getProportionateScreenHeight(8),
                           decoration: const ShapeDecoration(
                             color: Colors.grey,
                             shape: OvalBorder(),
@@ -180,19 +189,22 @@ class CreateOrganizationPageState extends State<CreateOrganizationPage> {
                     ],
                   ),
                 ),
-                SizedBox(height: ConstantSizes.sm.h),
                 SizedBox(
-                  width: 180.w,
+                    height: getProportionateScreenHeight(ConstantSizes.sm)),
+                SizedBox(
+                  width: getProportionateScreenWidth(180),
                   child: Text(
                     textAlign: TextAlign.center,
                     "Choose a name for your new organization",
                     style: TextStyle(
                       color: ConstantColors.darkGrey,
-                      fontSize: ConstantSizes.fontSizeMd.sp,
+                      fontSize: SizeConfig.font18,
                     ),
                   ),
                 ),
-                SizedBox(height: ConstantSizes.spaceBtwItems.h),
+                SizedBox(
+                    height: getProportionateScreenHeight(
+                        ConstantSizes.spaceBtwItems)),
                 const SectionHeading(title: "Suggestions"),
                 Expanded(
                   child: SingleChildScrollView(

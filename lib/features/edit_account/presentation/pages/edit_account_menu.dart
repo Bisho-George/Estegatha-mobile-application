@@ -4,6 +4,8 @@ import 'package:estegatha/features/edit_account/presentation/view_models/edit_ac
 import 'package:estegatha/features/edit_account/presentation/view_models/edit_account_state.dart';
 import 'package:estegatha/features/edit_account/presentation/widgets/category_widget.dart';
 import 'package:estegatha/features/edit_account/presentation/widgets/profile_widget.dart';
+import 'package:estegatha/features/organization/domain/models/member.dart';
+import 'package:estegatha/features/sign-in/presentation/veiw_models/user_cubit.dart';
 import 'package:estegatha/utils/common/widgets/custom_app_bar.dart';
 import 'package:estegatha/utils/common/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +32,8 @@ class _EditAccountMenuState extends State<EditAccountMenu> {
         loading: false,
         child: Column(
           children: [
-            ProfileWidget(userName: "Ahmed"),
+            ProfileWidget(
+                userName: context.read<UserCubit>().getCurrentUser()!.username),
             CategoryWidget(
               name: 'Account details',
               preferences: [

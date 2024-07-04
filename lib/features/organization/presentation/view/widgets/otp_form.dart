@@ -94,7 +94,7 @@ class _OTPFormState extends State<OTPForm> {
                     ),
                   ),
                 );
-              } else if (state is OrganizationFailure) {
+              } else if (state is OrganizationJoinFailure) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Invalid OTP. Please try again.'),
@@ -116,10 +116,9 @@ class _OTPFormState extends State<OTPForm> {
                 CustomElevatedButton(
                   focusNode: buttonFocusNode,
                   onPressed: () {
-                    final organizationCubit = context.read<OrganizationCubit>();
                     print("Code: ${otp.join()}");
-                    organizationCubit.joinOrganizationByCode(
-                        context, otp.join());
+                    BlocProvider.of<OrganizationCubit>(context)
+                        .joinOrganizationByCode(context, otp.join());
                   },
                   labelText: 'Submit',
                 ),

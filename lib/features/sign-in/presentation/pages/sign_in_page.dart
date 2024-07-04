@@ -5,6 +5,7 @@ import 'package:estegatha/features/sign-in/presentation/pages/widgets/sign_in_wi
 import 'package:estegatha/features/sign-in/presentation/veiw_models/login_cubit/login_cubit.dart';
 import 'package:estegatha/features/sign-up/presentation/views/personal_info_view.dart';
 import 'package:estegatha/main_menu.dart';
+import 'package:estegatha/responsive/size_config.dart';
 import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
 import 'package:estegatha/utils/helpers/helper_functions.dart';
@@ -24,6 +25,7 @@ class SignInPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return BlocListener<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state is LoginLoading) {

@@ -1,7 +1,7 @@
 import 'package:estegatha/features/home/presentation/views/home_view.dart';
 import 'package:estegatha/features/organization/presentation/view_model/current_organization_cubit.dart';
 import 'package:estegatha/features/organization/presentation/view_model/current_organization_state.dart';
-import 'package:estegatha/features/safety/presentation/view/safetys_creen.dart';
+import 'package:estegatha/features/safety/presentation/view/safety_screen.dart';
 import 'package:estegatha/features/settings/presentation/view/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,7 +13,6 @@ import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 class MainNavMenu extends StatefulWidget {
   const MainNavMenu({super.key});
-
   static String routeName = "/main_nav_menu";
 
   @override
@@ -23,20 +22,13 @@ class MainNavMenu extends StatefulWidget {
 class _MainNavMenuState extends State<MainNavMenu> {
   PersistentTabController controller = PersistentTabController(initialIndex: 0);
 
-  List<Widget> buildScreens(int? organizationId) {
+  List<Widget> buildScreens() {
     return [
-      HomeView(parentContext: context),
-      SafetyScreen(
-        parentContext: context,
+      HomeView(),
+      const SafetyScreen(),
+      OrganizationDetailPage(
+        organizationId: 1, // TODO: change this to organizationId
       ),
-      if (organizationId != null)
-        OrganizationDetailPage(
-          organizationId: organizationId,
-        )
-      else
-        const Center(
-          child: Text("No Organization Selected"),
-        ),
       const Center(
         child: Text("Catalog screen"),
       ),
@@ -50,22 +42,22 @@ class _MainNavMenuState extends State<MainNavMenu> {
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.home),
         title: ("Home"),
-        activeColorPrimary: ConstantColors.secondary,
-        inactiveColorPrimary: Colors.grey,
+        activeColorPrimary: ConstantColors.primary,
+        inactiveColorPrimary: ConstantColors.secondary,
       ),
       // Safety
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.health_and_safety),
         title: ("Safety"),
-        activeColorPrimary: ConstantColors.secondary,
-        inactiveColorPrimary: Colors.grey,
+        activeColorPrimary: ConstantColors.primary,
+        inactiveColorPrimary: ConstantColors.secondary,
       ),
       // Organization
       PersistentBottomNavBarItem(
         iconSize: 28.r,
         icon: const Icon(
           Icons.people,
-          color: Colors.white,
+          color: ConstantColors.primary,
         ),
         inactiveIcon: const Icon(
           Icons.people_outline,
@@ -78,15 +70,15 @@ class _MainNavMenuState extends State<MainNavMenu> {
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.help_center_outlined),
         title: ("Catalog"),
-        activeColorPrimary: ConstantColors.secondary,
-        inactiveColorPrimary: ConstantColors.darkGrey,
+        activeColorPrimary: ConstantColors.primary,
+        inactiveColorPrimary: ConstantColors.secondary,
       ),
       // Settings
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.settings),
         title: ("Setting"),
-        activeColorPrimary: ConstantColors.secondary,
-        inactiveColorPrimary: ConstantColors.darkGrey,
+        activeColorPrimary: ConstantColors.primary,
+        inactiveColorPrimary: ConstantColors.secondary,
       ),
     ];
   }
@@ -98,7 +90,7 @@ class _MainNavMenuState extends State<MainNavMenu> {
         return PersistentTabView(
           navBarHeight: 60.0.h,
           context,
-          screens: buildScreens(state.organizationId),
+          screens: buildScreens(),
           items: navBarsItems(),
           controller: controller,
           confineInSafeArea: true,

@@ -12,7 +12,7 @@ class TabStatus extends StatelessWidget {
 
   final String image;
   final String title;
-  final String subtitle;
+  final Widget subtitle;
 
   @override
   Widget build(BuildContext context) {
@@ -39,17 +39,16 @@ class TabStatus extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             SizedBox(height: ConstantSizes.sm),
-            SizedBox(
-              width: 200,
-              child: Text(
-                subtitle,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: ConstantColors.darkGrey,
-                  fontSize: ConstantSizes.fontSizeSm,
-                ),
-              ),
-            )
+            SizedBox(width: 200, child: subtitle
+                // Text(
+                //   subtitle,
+                //   textAlign: TextAlign.center,
+                //   style: TextStyle(
+                //     color: ConstantColors.darkGrey,
+                //     fontSize: ConstantSizes.fontSizeSm,
+                //   ),
+                // ),
+                )
           ],
         ),
       ),
