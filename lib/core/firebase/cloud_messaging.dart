@@ -1,9 +1,16 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
+import 'package:estegatha/constants.dart';
+import 'package:estegatha/core/data/api/dio_auth.dart';
 import 'package:estegatha/core/domain/model/messages_types.dart';
+import 'package:estegatha/core/firebase/notification.dart';
 import 'package:estegatha/features/home/presentation/view_models/home_view_model.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../features/organization/domain/models/member.dart';
+import '../../utils/helpers/helper_functions.dart';
 
 handleMessages(RemoteMessage message, String appState) {
   switch (message.data['type']) {
@@ -36,7 +43,10 @@ handleMessages(RemoteMessage message, String appState) {
     case MessageTypes.REMOVE_MEMBER:
       break;
   }
+  NotificationService notificationService = NotificationService();
+  notificationService.showNotification(message.notification!.title!, message.notification!.body!);
 }
+
 subscribeToMessages(){
   FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
     handleMessages(message, 'foreground');
@@ -44,4 +54,14 @@ subscribeToMessages(){
   FirebaseMessaging.onBackgroundMessage((message) async {
     handleMessages(message, 'background');
   });
+}
+joinToOrganizationNotification(int orgId) async{
+  Dio dio = await DioAuth.getDio();
+  String ?token = await FirebaseMessaging.instance.getToken();
+  if(token != null){
+    dio.post('$baseUrl$joinNotificationEndPoint', queryParameters: {
+      'organizationId': orgId.toString(), // organization id to join
+      'token': token,
+    });
+  }
 }

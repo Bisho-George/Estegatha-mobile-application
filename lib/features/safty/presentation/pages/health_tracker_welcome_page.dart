@@ -13,49 +13,48 @@ import '../widgets/health_welcome_widget.dart';
 
 class HealthTrackerWelcomePage extends StatelessWidget {
   HealthTrackerWelcomePage({super.key});
+
   PageController pageController = PageController();
+  PagesInfo pagesInfo = PagesInfo();
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      body: Stack(
-        children: [
-          Positioned(
-            bottom: responsiveHeight(77),
-            right: responsiveWidth(55),
-            child: GestureDetector(
-              onTap: () {
-                if(pageController.page?.round() == healthWelcomeModelList.length - 1) {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const HealthTrackerConnectPage()));
-                }
-                else{
-                  pageController.nextPage(
-                      duration: const Duration(milliseconds: 10),
-                      curve: Curves.easeInOut);
-                }
-              },
-              child: const CircleAvatar(
-                backgroundColor: ConstantColors.primary,
-                radius: 28,
-                child: Icon(
-                  Icons.arrow_forward,
-                  color: Colors.white,
-                  size: 27,
-                ),
+      appBar: CustomAppBar.buildAppBar(title: 'Health Tracker'),
+      body: CustomPageView(
+        itemCount: healthWelcomeModelList.length,
+        itemBuilder: (context, index) {
+          return HealthWelcomeWidget(
+            healthWelcomeModel: healthWelcomeModelList[index],
+          );
+        },
+        pageController: pageController,
+        pagesInfo: pagesInfo,
+        height: responsiveHeight(500),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          if(pagesInfo.isLastPage){
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const HealthTrackerConnectPage(),
               ),
-            ),
-          ),
-          CustomPageView(
-            itemCount: healthWelcomeModelList.length,
-            itemBuilder: (context, index) {
-              return HealthWelcomeWidget(
-                healthWelcomeModel: healthWelcomeModelList[index],
-              );
-            },
-            pageController: pageController,
-            height: responsiveHeight(700),
-          ),
-        ],
+            );
+          }
+          else{
+            pageController.nextPage(
+                duration: const Duration(milliseconds: 10),
+                curve: Curves.easeInOut);
+          }
+        },
+        child: const Icon(
+          Icons.arrow_forward,
+          color: ConstantColors.white,
+        ),
+        shape: const CircleBorder(),
+        backgroundColor: ConstantColors.primary,
       ),
     );
   }

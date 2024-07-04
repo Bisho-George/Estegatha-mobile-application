@@ -13,6 +13,7 @@ import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 class MainNavMenu extends StatefulWidget {
   const MainNavMenu({super.key});
+
   static String routeName = "/main_nav_menu";
 
   @override
@@ -25,7 +26,9 @@ class _MainNavMenuState extends State<MainNavMenu> {
   List<Widget> buildScreens(int? organizationId) {
     return [
       HomeView(parentContext: context),
-      SafetyScreen(parentContext: context,),
+      SafetyScreen(
+        parentContext: context,
+      ),
       if (organizationId != null)
         OrganizationDetailPage(
           organizationId: organizationId,

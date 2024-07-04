@@ -11,7 +11,7 @@ import 'features/edit_account/presentation/view_models/edit_phone_cubit.dart';
 import 'features/forget-password/presentation/veiw_models/forget-password/forget_password_cubit.dart';
 import 'features/landing/presentation/view_model/permissions_cubit.dart';
 import 'features/organization/presentation/view_model/organization_cubit.dart';
-import 'features/safty/presentation/view_models/cotact_cubit.dart';
+import 'features/safty/presentation/view_models/contact_cubit.dart';
 import 'features/sign-in/presentation/veiw_models/login_cubit/login_cubit.dart';
 import 'features/sign-in/presentation/veiw_models/user_cubit.dart';
 import 'features/sos/presentation/view_models/cubit/create_pin_cubit.dart';

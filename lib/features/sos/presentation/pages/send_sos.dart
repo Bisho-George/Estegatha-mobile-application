@@ -25,7 +25,7 @@ class SendSos extends StatelessWidget {
     SizeConfig().init(context);
     return Scaffold(
       appBar: CustomAppBar.buildAppBar(title: 'SOS'),
-      body: Container(
+      body: SizedBox(
         width: double.infinity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

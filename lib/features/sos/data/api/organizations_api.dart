@@ -4,7 +4,6 @@ import 'package:estegatha/features/organization/domain/models/organizationMember
 import 'package:estegatha/features/sos/domain/repositories/organizations_repo.dart';
 import 'package:estegatha/constants.dart';
 
-import '../../../organization/domain/models/member.dart';
 import '../../../organization/domain/models/organization.dart';
 
 class OrganizationsApi extends OrganizationsRepo{

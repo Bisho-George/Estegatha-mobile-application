@@ -34,7 +34,7 @@ class SosApi extends SosRepo {
     int success = 0;
     Dio dio = await DioAuth.getDio();
     for(var organization in organizations){
-      Response response = await dio.post(baseUrl + sendSosEndPoint, data: {
+      Response response = await dio.post(baseUrl + notifyMembersEndPoint, data: {
         subjectKey: 'Emergency',
         contentKey: 'your friend ${member.username} in organization ${organization.name} needs help',
         "type": "INIT_SOS",

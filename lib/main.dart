@@ -1,10 +1,7 @@
 import 'dart:convert';
 
-import 'package:estegatha/core/firebase/SosScreen.dart';
 import 'package:estegatha/core/firebase/cloud_messaging.dart';
 import 'package:estegatha/core/firebase/fcm_setup.dart';
-import 'package:estegatha/features/organization/domain/models/member.dart';
-import 'package:estegatha/features/safty/presentation/pages/health_tracker_welcome_page.dart';
 import 'package:estegatha/features/sign-in/presentation/pages/sign_in_page.dart';
 import 'package:estegatha/features/sign-in/presentation/veiw_models/user_cubit.dart';
 import 'package:estegatha/features/sos/presentation/pages/send_sos.dart';
