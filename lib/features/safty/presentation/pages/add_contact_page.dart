@@ -1,7 +1,8 @@
+import 'package:estegatha/constants.dart';
 import 'package:estegatha/core/domain/model/contact_model.dart';
 import 'package:estegatha/features/safty/presentation/view_models/add_contact_cubit.dart';
 import 'package:estegatha/features/safty/presentation/view_models/add_contact_state.dart';
-import 'package:estegatha/features/safty/presentation/view_models/cotact_cubit.dart';
+import 'package:estegatha/features/safty/presentation/view_models/contact_cubit.dart';
 import 'package:estegatha/utils/common/styles/text_styles.dart';
 import 'package:estegatha/utils/common/widgets/category_header_widget.dart';
 import 'package:estegatha/utils/common/widgets/custom_app_bar.dart';
@@ -17,27 +18,27 @@ class AddContactPage extends StatelessWidget {
   AddContactPage({super.key});
 
   static const String routeName = '/add-contact';
+
   TextEditingController controller = TextEditingController();
+
   TextEditingController phoneController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     SizeConfig sizeConfig = SizeConfig();
     sizeConfig.init(context);
-    FocusNode node = FocusNode();
     return BlocConsumer<AddContactCubit, AddContactState>(
       builder: (context, state) {
         return LoadingWidget(
-          loading: BlocProvider.of<ContactCubit>(context).isLoading,
+          loading: BlocProvider.of<AddContactCubit>(context).isloding,
           child: Scaffold(
             appBar: CustomAppBar.buildAppBar(title: 'Add Contact', actions: [
               IconButton(
                 icon: const Icon(Icons.check),
                 color: ConstantColors.primary,
                 onPressed: () {
-                  BlocProvider.of<ContactCubit>(context).addContact(ContactModel(
+                  BlocProvider.of<AddContactCubit>(context).addContact(ContactModel(
                       name: controller.text, phoneNumber: phoneController.text));
-                  Navigator.pop(context);
                 },
               ),
             ]),
@@ -84,11 +85,7 @@ class AddContactPage extends StatelessWidget {
           );
         }
         else if (state is AddContactSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.message),
-            ),
-          );
+          context.read<ContactCubit>().addContact(state.contactModel);
           Navigator.pop(context);
         }
       }
