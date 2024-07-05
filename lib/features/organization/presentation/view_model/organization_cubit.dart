@@ -79,12 +79,15 @@ class OrganizationCubit extends Cubit<OrganizationState> {
           final Organization organization =
               Organization.fromJson(jsonDecode(response.body));
 
+          final currentUser = await HelperFunctions.getUser();
+
           print("Organization: ${organization.id}");
 
           emit(OrganizationJoinSuccess(organization));
           await joinToOrganizationNotification(organization.id!);
           Member member = await HelperFunctions.getUser();
           await sendNotification(
+              userId: currentUser.id,
               subject: "New Member",
               content:
                   'your friend ${member.username} has join ${organization.name}. Say Hi! 👋',
@@ -352,6 +355,74 @@ class OrganizationCubit extends Cubit<OrganizationState> {
     }
   }
 
+  // Future<bool> changeMemberRole(
+  //     BuildContext context, int orgId, int userId, String newRole) async {
+  //   final userCubit = context.read<UserCubit>();
+  //   final organization = await getOrganizationById(orgId);
+
+  //   final currentUser = await HelperFunctions.getUser();
+  //   if (userCubit.state is UserLoaded) {
+  //     emit(const ChangeMemberRoleLoading());
+
+  //     try {
+  //       // Fetch current organization members
+  //       final members = await getOrganizationMembers(orgId);
+
+  //       // Check if there's at least one member with a role of 'owner' or 'admin'
+  //       bool hasRequiredRole = members.any((member) =>
+  //           (member.role == 'OWNER' || member.role == 'ADMIN') &&
+  //           member.userId != userId);
+
+  //       print("hasRequiredRole: $hasRequiredRole");
+
+  //       // If trying to change the role of an 'owner' or 'admin', ensure another exists
+  //       if (!hasRequiredRole && (newRole != 'OWNER' && newRole != 'ADMIN')) {
+  //         HelperFunctions.showSnackBar(
+  //             context, "Must have at least one 'owner' or 'admin'");
+  //         await getOrganizationById(orgId);
+  //         return false;
+  //       }
+
+  //       // Proceed with role change if condition is met
+  //       final response = await OrganizationHttpClient.changeMemberRole(
+  //           orgId, userId, newRole);
+
+  //       if (response.statusCode == 200) {
+  //         emit(const ChangeMemberRoleSuccess());
+
+  //         await getOrganizationById(orgId);
+
+  //         print("User id: $userId");
+  //         print("Current user id: ${currentUser.id}");
+  //         await sendNotification(
+  //             subject: "Role Change",
+  //             content: userId == currentUser.id
+  //                 ? "Your role has been changed in ${organization?.name} to $newRole"
+  //                 : "A member role has been changed in ${organization?.name}. Tab to see the changes.",
+  //             type: "CHANGE_ROLE",
+  //             customData: {
+  //               "userId": userId.toString(),
+  //               "organizationId": orgId.toString(),
+  //             },
+  //             parameters: {
+  //               "organizationId": orgId.toString()
+  //             });
+
+  //         return true;
+  //       } else {
+  //         emit(const OrganizationFailure(
+  //             errMessage: "Something went wrong, try again!"));
+  //       }
+  //     } catch (e) {
+  //       print(e);
+  //       emit(
+  //         const OrganizationFailure(
+  //             errMessage: "Failed to change member role!"),
+  //       );
+  //     }
+  //   }
+  //   return false;
+  // }
   Future<bool> changeMemberRole(
       BuildContext context, int orgId, int userId, String newRole) async {
     final userCubit = context.read<UserCubit>();
@@ -388,23 +459,23 @@ class OrganizationCubit extends Cubit<OrganizationState> {
           emit(const ChangeMemberRoleSuccess());
 
           await getOrganizationById(orgId);
-          for (var member in members) {
-            await sendNotification(
-                subject: "Role Change",
-                content: userId == currentUser.id
-                    ? "Your role has been changed in ${organization?.name} to $newRole"
-                    : "A member role has been changed in ${organization?.name}. Tab to see the changes.",
-                type: "CHANGE_ROLE",
-                customData: {
-                  "userId": member.userId.toString(),
-                  "organizationId": orgId.toString(),
-                  "username": member.username,
-                  "role": member.role,
-                },
-                parameters: {
-                  "organizationId": orgId.toString()
-                });
-          }
+
+          // Send specific or general notification based on the user
+          await sendNotification(
+              userId: currentUser.id,
+              subject: "Role Change",
+              content: currentUser.id != userId
+                  ? "Your role has been changed in ${organization?.name} to $newRole"
+                  : "A member role has been changed in ${organization?.name}. Tab to see the changes.",
+              type: "CHANGE_ROLE",
+              customData: {
+                "userId": userId.toString(),
+                "organizationId": orgId.toString(),
+              },
+              parameters: {
+                "organizationId": orgId.toString()
+              });
+
           return true;
         } else {
           emit(const OrganizationFailure(
@@ -491,9 +562,10 @@ class OrganizationCubit extends Cubit<OrganizationState> {
 
           print(
               "====================================Members Length====================================  ${members.length}");
-
+          final currentUser = await HelperFunctions.getUser();
           for (var member in members) {
             await sendNotification(
+                userId: currentUser.id,
                 subject: "New Post",
                 content: "New post from ${organization?.name}. Read it now.",
                 type: "CREATE_POST",

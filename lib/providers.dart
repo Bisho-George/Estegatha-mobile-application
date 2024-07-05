@@ -1,3 +1,4 @@
+import 'package:estegatha/features/catalog/persentation/view-model/catalog_cubit.dart';
 import 'package:estegatha/features/organization/presentation/view_model/current_organization_cubit.dart';
 import 'package:estegatha/features/organization/presentation/view_model/user_organizations_cubit.dart';
 import 'package:estegatha/features/safety/presentation/view_model/user_health_cubit.dart';
@@ -62,5 +63,8 @@ List<SingleChildWidget> providers = [
   ),
   BlocProvider<AddContactCubit>(
     create: (context) => AddContactCubit(),
+  ),
+  BlocProvider<CatalogCubit>(
+    create: (context) => CatalogCubit(),
   ),
 ];

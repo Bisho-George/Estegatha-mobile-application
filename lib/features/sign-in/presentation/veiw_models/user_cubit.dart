@@ -85,15 +85,17 @@ class UserCubit extends Cubit<UserState> {
 
         print("Exit notification system for each organization");
       }
-      emit(UserInitial());
-      await deleteUserFromPreferences();
-      // context.read<CurrentOrganizationCubit>().resetCurrentOrganizationState();
-
-      PersistentNavBarNavigator.pushNewScreen(
-        context,
-        screen: SignInPage(),
-        withNavBar: false,
-      );
+    } else if (userOrganizationResponse.statusCode != 200) {
+      return print("Failed to fetch user organizations");
     }
+    emit(UserInitial());
+    await deleteUserFromPreferences();
+    // context.read<CurrentOrganizationCubit>().resetCurrentOrganizationState();
+
+    PersistentNavBarNavigator.pushNewScreen(
+      context,
+      screen: SignInPage(),
+      withNavBar: false,
+    );
   }
 }

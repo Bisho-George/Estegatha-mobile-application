@@ -1,4 +1,5 @@
 import 'package:estegatha/features/organization/domain/models/organizationMember.dart';
+import 'package:estegatha/features/tracking/presentation/view/order_tracking_screen.dart';
 import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
 import 'package:flutter/material.dart';
@@ -59,7 +60,14 @@ class MembersList extends StatelessWidget {
                       color: ConstantColors.white, letterSpacing: 0.75),
                 ),
                 onPressed: () {
-                  print("Member ID: ${member.userId} is being tracked");
+                  if (badgeLabel == 'Track') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const OrderTrackingScreen(),
+                      ),
+                    );
+                  }
                   // Handle track button press
                 },
               ),
