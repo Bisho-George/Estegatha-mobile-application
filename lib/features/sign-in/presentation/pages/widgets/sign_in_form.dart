@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../home/presentation/views/home_view.dart';
+
 class SignInForm extends StatefulWidget {
   const SignInForm({super.key, required this.signInWithPhone});
 
@@ -108,6 +110,7 @@ class _SignInFormState extends State<SignInForm> {
                     );
                   }
                 }
+                Navigator.pushNamed(context, HomeView.routeName);
               },
               labelText: "Login",
             ),

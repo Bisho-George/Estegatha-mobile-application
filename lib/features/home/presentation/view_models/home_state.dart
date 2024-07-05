@@ -1,4 +1,6 @@
 
+import 'package:estegatha/features/organization/domain/models/organization.dart';
+import 'package:estegatha/features/organization/domain/models/organizationMember.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -45,3 +47,5 @@ class HomeState {
     );
   }
 }
+
+

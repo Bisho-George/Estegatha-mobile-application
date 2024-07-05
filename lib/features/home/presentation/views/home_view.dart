@@ -1,19 +1,21 @@
+import 'package:estegatha/features/home/presentation/view_models/organization_member_cubit.dart';
 import 'package:estegatha/features/home/presentation/views/widgets/animated_organizations_widget.dart';
 import 'package:estegatha/features/home/presentation/views/widgets/custom_fab.dart';
 import 'package:estegatha/features/home/presentation/views/widgets/custom_home_appbar.dart';
 import 'package:estegatha/features/home/presentation/views/widgets/custom_person_appbar.dart';
 import 'package:estegatha/features/home/presentation/views/widgets/draggable_scroll_sheet.dart';
 import 'package:estegatha/features/home/presentation/views/widgets/google_map.dart';
+import 'package:estegatha/features/organization/presentation/view_model/user_organizations_cubit.dart';
+import 'package:estegatha/features/sos/data/api/organizations_api.dart';
 import 'package:estegatha/responsive/size_config.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../../utils/common/widgets/bottom_navbar.dart';
-import '../../../../utils/common/widgets/bottom_navbar_fab.dart';
 import '../../../../utils/constant/colors.dart';
 import '../../../../utils/constant/image_strings.dart';
+import '../../../organization/presentation/view_model/current_organization_cubit.dart';
 import '../view_models/home_state.dart';
 import '../view_models/home_view_model.dart';
 
@@ -33,6 +35,11 @@ class _HomeViewState extends State<HomeView>
   @override
   void initState() {
     super.initState();
+    BlocProvider.of<UserOrganizationsCubit>(context)
+        .getUserOrganizationsWithoutId();
+    BlocProvider.of<CurrentOrganizationCubit>(context).loadCurrentOrganization();
+    BlocProvider.of<OrganizationMemberHomeCubit>(context).getCurrentOrganizationMembers();
+
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 300),
       vsync: this,
@@ -72,7 +79,7 @@ class _HomeViewState extends State<HomeView>
     var width = MediaQuery.sizeOf(context).height;
     SizeConfig().init(context);
     return BlocProvider(
-      create: (context) => HomeCubit(),
+      create: (context) => HomeCubit(OrganizationsApi()),
       child: Scaffold(
         body: BlocConsumer<HomeCubit, HomeState>(
           listener: (context, state) async {
@@ -102,7 +109,7 @@ class _HomeViewState extends State<HomeView>
                       child: const CustomPersonAppBar(),
                     ),
                   Positioned(
-                    bottom: height * .4,
+                    bottom: height * .33,
                     left: width * .03,
                     child: SlideTransition(
                       position: _slideAnimation,
@@ -148,9 +155,11 @@ class _HomeViewState extends State<HomeView>
                     ),
                   ),
                   Positioned(
-                    bottom: height * .4,
+                    bottom: height * .33,
                     right: width * .03,
-                    child: CustomFAB(slideAnimation: _slideAnimation, isButtonVisible: _isButtonVisible),
+                    child: CustomFAB(
+                        slideAnimation: _slideAnimation,
+                        isButtonVisible: _isButtonVisible),
                   ),
                   Positioned(
                     left: 0,
@@ -168,17 +177,17 @@ class _HomeViewState extends State<HomeView>
                             height: MediaQuery.of(context).size.height * .88,
                             child: const DraggableScrollSheet(),
                           ),
-                          const BottomNavBar(),
+                          // const BottomNavBar(),
                         ],
                       ),
                     ),
                   ),
-                  Positioned(
-                    bottom: 30,
-                    // Adjusted to not overlap with BottomNavBar and DraggableScrollSheet
-                    left: MediaQuery.of(context).size.width / 2 - 30,
-                    child: const BottomNavBarFAB(),
-                  ),
+                  // Positioned(
+                  //   bottom: 30,
+                  //   // Adjusted to not overlap with BottomNavBar and DraggableScrollSheet
+                  //   left: MediaQuery.of(context).size.width / 2 - 30,
+                  //   child: const BottomNavBarFAB(),
+                  // ),
                 ],
               ),
             );

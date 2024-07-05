@@ -2,29 +2,26 @@ import 'dart:convert';
 
 import 'package:estegatha/core/firebase/SosScreen.dart';
 import 'package:estegatha/core/firebase/fcm_setup.dart';
+import 'package:estegatha/features/home/presentation/views/home_view.dart';
 import 'package:estegatha/features/organization/domain/models/member.dart';
 import 'package:estegatha/features/sign-in/presentation/pages/sign_in_page.dart';
 import 'package:estegatha/features/sign-in/presentation/veiw_models/user_cubit.dart';
-import 'package:estegatha/features/sign-up/presentation/views/address_view.dart';
-import 'package:estegatha/features/sign-up/presentation/views/otp_view.dart';
 import 'package:estegatha/features/sign-up/presentation/views/personal_info_view.dart';
-import 'package:estegatha/features/sos/presentation/pages/send_sos.dart';
 import 'package:estegatha/main_menu.dart';
 import 'package:estegatha/providers.dart';
 import 'package:estegatha/utils/helpers/helper_functions.dart';
+import 'package:estegatha/utils/helpers/simple_bloc_observer.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:estegatha/features/landing/presentation/pages/landing_intro.dart';
 import 'package:estegatha/routes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'core/firebase/notification.dart';
-import 'features/home/presentation/views/home_view.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -44,6 +41,7 @@ void main() async {
       child: const MyApp(),
     ),
   );
+  Bloc.observer = SimpleBlocObserver();
 }
 
 class MyApp extends StatefulWidget {
@@ -54,8 +52,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final ValueNotifier<Widget> home = ValueNotifier<Widget>(PersonalInfoView());
-  final String initialRoute = PersonalInfoView.routeName;
+  final ValueNotifier<Widget> home = ValueNotifier<Widget>(SignInPage());
+  final String initialRoute = SignInPage.routeName;
   @override
   void initState() {
     super.initState();
