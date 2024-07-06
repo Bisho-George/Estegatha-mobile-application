@@ -7,11 +7,11 @@ import 'fitness_connect_state.dart';
 
 class FitnessDataCubit extends Cubit<FitnessDataState>{
   FitnessDataCubit():super(FitnessDataInitial());
-  final repository = FitnessConnectApi();
+  final _repository = FitnessConnectApi();
   bool loading = false;
   void changeAccount() async{
     try{
-      await repository.changeAccount();
+      await _repository.changeAccount();
       emit(FitnessDataSuccess('Account changed'));
     }catch(e){
       emit(FitnessDataFailure('Failed to change account'));
@@ -20,7 +20,7 @@ class FitnessDataCubit extends Cubit<FitnessDataState>{
   void fetchData() async{
     loading = true;
     try{
-      await repository.fetchData();
+      await _repository.fetchData();
       emit(FitnessDataSuccess('Data fetched'));
     }catch(e){
       emit(FitnessDataFailure('Failed to fetch data'));

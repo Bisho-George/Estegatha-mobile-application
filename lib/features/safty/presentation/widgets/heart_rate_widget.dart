@@ -15,17 +15,19 @@ class HeartRateWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: responsiveWidth(370),
-      height: responsiveHeight(250),
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(
+        horizontal: responsiveWidth(20),
+        vertical: responsiveHeight(10),
+      ),
+      height: responsiveHeight(215),
       decoration: BoxDecoration(
         color: ConstantColors.secondary,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(
-            height: responsiveHeight(20),
-          ),
           Text(
             'Health Rate',
             style: Styles.getPrimaryLarge(),
@@ -34,10 +36,8 @@ class HeartRateWidget extends StatelessWidget {
             height: responsiveHeight(20),
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
-                width: responsiveWidth(40),
-              ),
               Stack(
                 alignment: Alignment.center,
                 children: [

@@ -18,7 +18,6 @@ class FitnessConnectApi extends FitnessConnectRepository {
 
   @override
   Future<bool> connect() async {
-    await Permissions().grantPermissions();
     return await health.requestAuthorization(healthTypes);
   }
 
