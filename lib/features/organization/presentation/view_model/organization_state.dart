@@ -200,3 +200,21 @@ class DeletePostFailure extends OrganizationState {
 
   const DeletePostFailure({required this.errMessage}) : super(null);
 }
+
+class OrganizationSettingLoading extends OrganizationState {
+  const OrganizationSettingLoading() : super(null);
+}
+
+class OrganizationSettingSuccess extends OrganizationState {
+  final Organization organization;
+  final List<OrganizationMember> members;
+
+  const OrganizationSettingSuccess(this.organization, this.members)
+      : super(organization);
+}
+
+class OrganizationSettingFailure extends OrganizationState {
+  final String errMessage;
+
+  const OrganizationSettingFailure({required this.errMessage}) : super(null);
+}

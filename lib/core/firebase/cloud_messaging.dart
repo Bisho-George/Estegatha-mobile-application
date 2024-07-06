@@ -7,9 +7,7 @@ import 'package:estegatha/core/domain/model/messages_types.dart';
 import 'package:estegatha/core/firebase/notification.dart';
 import 'package:estegatha/features/organization/domain/models/organization.dart';
 import 'package:estegatha/features/sign-in/presentation/veiw_models/user_cubit.dart';
-import 'package:estegatha/utils/helpers/helper_functions.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 handleMessages(RemoteMessage message, String appState) {
   switch (message.data['type']) {
@@ -43,42 +41,31 @@ handleMessages(RemoteMessage message, String appState) {
       break;
   }
 
-  // if (appState == 'background') {
-  //   NotificationService notificationService = NotificationService();
-  //   notificationService.showNotification(
-  //       message.notification!.title!, message.notification!.body!);
-  // } else {
-  //   // If the app is in the foreground, you can handle the message differently if needed
-  //   print("Message received in foreground: ${message.notification!.title}");
-  // }
-  NotificationService notificationService = NotificationService();
-  notificationService.showNotification(
-      message.notification!.title!, message.notification!.body!);
+  if (appState == 'foreground') {
+    print(
+        " ===========> The app is already opened, no need to show notification... <===========");
+  } else {
+    NotificationService notificationService = NotificationService();
+    notificationService.showNotification(
+        message.notification!.title!, message.notification!.body!);
+    print("Message received in background: ${message.notification!.title}");
+  }
 }
-
-// Future<void> backgroundMessageHandler(RemoteMessage message) async {
-//   FirebaseMessaging.onBackgroundMessage((message) async {
-//     handleMessages(message, 'background');
-//   });
-//   // Your background message handling logic here
-//   print("Handling a background message: ${message.messageId}");
-// }
 
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("================Enter onBackgroundMessage================");
   handleMessages(message, 'background');
 }
 
+Future<void> firebaseMessagingForegroundHandler(RemoteMessage message) async {
+  print("================Enter foreground listen================");
+  handleMessages(message, 'foreground');
+}
+
 subscribeToMessages() {
   FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-    print("================Enter onMessage.listen================");
     handleMessages(message, 'foreground');
   });
-  // FirebaseMessaging.onBackgroundMessage((message) async {
-  //   print("================Enter onBackgroundMessage================");
-  //   handleMessages(message, 'background');
-  // });
-  // FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 }
 
 Future<void> joinToOrganizationNotification(int orgId) async {
@@ -111,9 +98,15 @@ Future<void> sendNotification({
   required String type,
   required Map<String, dynamic> customData,
   required Map<String, dynamic>? parameters,
+  required int userId,
 }) async {
   try {
     Dio dio = await DioAuth.getDio();
+
+    // if userId is equal to the current user id, then don't send notification
+    if (userId == UserCubit().getCurrentUser()?.id) {
+      return;
+    }
 
     final response = await dio.post(baseUrl + notifyMembersEndPoint,
         data: {
@@ -122,7 +115,6 @@ Future<void> sendNotification({
           'type': type,
           'data': customData,
         },
-        // 'organizationId': organizationId.toString(),
         queryParameters: parameters);
 
     print("Notification sent successfully: ${response.data}");

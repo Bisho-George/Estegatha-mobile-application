@@ -79,12 +79,15 @@ class OrganizationCubit extends Cubit<OrganizationState> {
           final Organization organization =
               Organization.fromJson(jsonDecode(response.body));
 
+          final currentUser = await HelperFunctions.getUser();
+
           print("Organization: ${organization.id}");
 
           emit(OrganizationJoinSuccess(organization));
           await joinToOrganizationNotification(organization.id!);
           Member member = await HelperFunctions.getUser();
           await sendNotification(
+              userId: currentUser.id,
               subject: "New Member",
               content:
                   'your friend ${member.username} has join ${organization.name}. Say Hi! 👋',
@@ -237,6 +240,7 @@ class OrganizationCubit extends Cubit<OrganizationState> {
   Future<bool> leaveOrganization(BuildContext context, int orgId) async {
     final userCubit = context.read<UserCubit>();
     final userId = userCubit.getCurrentUser()?.id;
+    final Organization? organization = await getOrganizationById(orgId);
     if (userCubit.state is UserLoaded) {
       try {
         final response =
@@ -246,28 +250,26 @@ class OrganizationCubit extends Cubit<OrganizationState> {
         print("Leave organization response: ${response.body}");
 
         if (response.statusCode == 200) {
-          updateOrganizationsList(context);
-
-          final userOrganizationResponse =
-              await UserHttpClient.getUserOrganizations(userId);
-
-          if (userOrganizationResponse.statusCode == 200) {
-            List<dynamic> userOrganizations =
-                jsonDecode(userOrganizationResponse.body);
-            if (userOrganizations.isNotEmpty) {
-              int firstOrganizationId = userOrganizations[0]['id'];
-              print("New current organization id: $firstOrganizationId");
-              context
-                  .read<CurrentOrganizationCubit>()
-                  .setCurrentOrganization(firstOrganizationId);
-            }
-            return true;
-          } else {
-            print("Failed to fetch user organizations");
-          }
-
           emit(const LeaveOrganizationSuccess());
+          await getOrganizationById(orgId);
+          final currentUser = await HelperFunctions.getUser();
+          await sendNotification(
+              userId: currentUser.id,
+              subject: "Member Left",
+              content:
+                  "${currentUser.username} has left the ${organization?.name} organization. Tab to get more details.",
+              type: "LEAVE_ORG",
+              customData: {
+                "userId": userId.toString(),
+                "organizationId": orgId.toString(),
+              },
+              parameters: {
+                "organizationId": orgId.toString()
+              });
+
+          return true;
         } else if (jsonDecode(response.body)['success'] == false) {
+          print("Enter the else if statement");
           final responseData = jsonDecode(response.body);
           emit(LeaveOrganizationFailure(errMessage: responseData['message']));
           await getOrganizationById(orgId);
@@ -275,9 +277,8 @@ class OrganizationCubit extends Cubit<OrganizationState> {
         } else {
           emit(const LeaveOrganizationFailure(
               errMessage: "Something went wrong, try again!"));
+          return false;
         }
-        await getOrganizationById(orgId);
-        return false;
       } catch (e) {
         print(e);
         emit(const LeaveOrganizationFailure(
@@ -310,6 +311,26 @@ class OrganizationCubit extends Cubit<OrganizationState> {
             print("New Members length: ${newMembers.length}");
             emit(RemoveMemberSuccess(newMembers));
             await getOrganizationById(orgId);
+
+            // send notification
+            final currentUser = await HelperFunctions.getUser();
+            await sendNotification(
+                userId: currentUser.id,
+                subject: "Removed Member",
+                content: currentUser.id != userId
+                    ? "You have been Removed from ${orgId.toString()} organization"
+                    : "A member has been removed from ${orgId.toString()} organization. Tab to get more details",
+                type: "REMOVE_MEMBER",
+                customData: {
+                  "userId": userId.toString(),
+                  "organizationId": orgId.toString(),
+                },
+                parameters: {
+                  "organizationId": orgId.toString()
+                });
+
+            // exit that removed member from the organization notification system
+            // await exitOrganizationNotification(orgId);
           } else {
             emit(const OrganizationFailure(
                 errMessage: "Something went wrong, try again!"));
@@ -388,23 +409,23 @@ class OrganizationCubit extends Cubit<OrganizationState> {
           emit(const ChangeMemberRoleSuccess());
 
           await getOrganizationById(orgId);
-          for (var member in members) {
-            await sendNotification(
-                subject: "Role Change",
-                content: userId == currentUser.id
-                    ? "Your role has been changed in ${organization?.name} to $newRole"
-                    : "A member role has been changed in ${organization?.name}. Tab to see the changes.",
-                type: "CHANGE_ROLE",
-                customData: {
-                  "userId": member.userId.toString(),
-                  "organizationId": orgId.toString(),
-                  "username": member.username,
-                  "role": member.role,
-                },
-                parameters: {
-                  "organizationId": orgId.toString()
-                });
-          }
+
+          // Send specific or general notification based on the user
+          await sendNotification(
+              userId: currentUser.id,
+              subject: "Role Change",
+              content: currentUser.id != userId
+                  ? "Your role has been changed in ${organization?.name} to $newRole"
+                  : "A member role has been changed in ${organization?.name}. Tab to see the changes.",
+              type: "CHANGE_ROLE",
+              customData: {
+                "userId": userId.toString(),
+                "organizationId": orgId.toString(),
+              },
+              parameters: {
+                "organizationId": orgId.toString()
+              });
+
           return true;
         } else {
           emit(const OrganizationFailure(
@@ -470,6 +491,8 @@ class OrganizationCubit extends Cubit<OrganizationState> {
   Future<void> createPost(
       BuildContext context, String title, String content, int orgId) async {
     print("Enter createPost function");
+
+    emit(const CreatePostLoading());
     final userCubit = context.read<UserCubit>();
     final Organization? organization = await getOrganizationById(orgId);
     List<OrganizationMember> members = await getOrganizationMembers(orgId);
@@ -483,30 +506,23 @@ class OrganizationCubit extends Cubit<OrganizationState> {
         if (response.statusCode == 201) {
           print("Post created successfully!");
 
-          // await getOrganizationById(orgId);
-
           emit(const CreatePostSuccess());
 
           await getOrganizationById(orgId);
 
-          print(
-              "====================================Members Length====================================  ${members.length}");
+          final currentUser = await HelperFunctions.getUser();
 
-          for (var member in members) {
-            await sendNotification(
-                subject: "New Post",
-                content: "New post from ${organization?.name}. Read it now.",
-                type: "CREATE_POST",
-                customData: {
-                  "userId": member.userId.toString(),
-                  "organizationId": orgId.toString(),
-                  "username": member.username,
-                  "role": member.role,
-                },
-                parameters: {
-                  "organizationId": orgId.toString()
-                });
-          }
+          await sendNotification(
+              userId: currentUser.id,
+              subject: "New Post",
+              content: "New post from ${organization?.name}. Read it now.",
+              type: "CREATE_POST",
+              customData: {
+                "organizationId": orgId.toString(),
+              },
+              parameters: {
+                "organizationId": orgId.toString()
+              });
         } else {
           emit(const CreatePostFailure(
               errMessage: "Something went wrong, try again!"));

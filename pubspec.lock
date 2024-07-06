@@ -294,6 +294,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.19"
+  flutter_polyline_points:
+    dependency: "direct main"
+    description:
+      name: flutter_polyline_points
+      sha256: "3a1c8c30abee9fb0fbe44c70d5d1cedb10ef28ec7ea285c669f02b3e183483aa"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
   flutter_screenutil:
     dependency: "direct main"
     description:
@@ -440,6 +448,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.8"
+  google_places_flutter:
+    dependency: "direct main"
+    description:
+      name: google_places_flutter
+      sha256: "0b30d1ebb6bd4264aa5dc775870a05d3c22107a1009ac6f328ca2077ec0ee2f2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.8"
   health:
     dependency: "direct main"
     description:
@@ -752,6 +768,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.2"
+  rxdart:
+    dependency: transitive
+    description:
+      name: rxdart
+      sha256: "0c7c0cedd93788d996e33041ffecda924cc54389199cde4e6a34b440f50044cb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.27.7"
   sanitize_html:
     dependency: transitive
     description:
@@ -997,6 +1021,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.1"
+  widgets_to_image:
+    dependency: "direct main"
+    description:
+      name: widgets_to_image
+      sha256: "9a251b95d3a9f10d72420dde9b7e3b0da5eddd47fb19cad066bc68c60b0d1dfb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   win32:
     dependency: transitive
     description:
