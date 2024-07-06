@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:estegatha/core/firebase/SosScreen.dart';
 import 'package:estegatha/core/firebase/fcm_setup.dart';
+import 'package:estegatha/features/add_place/presentation/views/add_home_view.dart';
+import 'package:estegatha/features/add_place/presentation/views/add_place_view.dart';
 import 'package:estegatha/features/home/presentation/views/home_view.dart';
 import 'package:estegatha/features/organization/domain/models/member.dart';
 import 'package:estegatha/features/sign-in/presentation/pages/sign_in_page.dart';
@@ -22,6 +24,7 @@ import 'package:estegatha/features/landing/presentation/pages/landing_intro.dart
 import 'package:estegatha/routes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'core/firebase/notification.dart';
+import 'features/add_place/presentation/views/add_new_place.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -52,8 +55,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final ValueNotifier<Widget> home = ValueNotifier<Widget>(SignInPage());
-  final String initialRoute = SignInPage.routeName;
+  final ValueNotifier<Widget> home = ValueNotifier<Widget>(HomeView());
+  final String initialRoute = HomeView.routeName;
   @override
   void initState() {
     super.initState();
@@ -91,7 +94,7 @@ class _MyAppState extends State<MyApp> {
       print("User object from shared preferences => $userJson");
       final user = Member.fromJson(jsonDecode(userJson));
       BlocProvider.of<UserCubit>(context).setUser(user);
-      home.value = MainNavMenu();
+      home.value = const MainNavMenu();
       // home.value = SendSos();
     } else {
       checkFirstTime();

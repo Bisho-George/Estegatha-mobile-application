@@ -25,7 +25,7 @@ class CustomHomeAppBar extends StatelessWidget {
               onPressed: () {},
             ),
           ),
-          AnimatedOrganizationHeader(isExpanded: false, organizationName: "graduation project",),
+          AnimatedOrganizationHeader(isExpanded: false),
           Container(
               decoration: BoxDecoration(
                 color: ConstantColors.white,

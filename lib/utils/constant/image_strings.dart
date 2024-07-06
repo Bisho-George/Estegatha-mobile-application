@@ -66,4 +66,7 @@ class ConstantImages {
   static const String organizationHealthIcon = "assets/org_health_icon.png";
   static const String organizationPostIcon = "assets/org_post_icon.png";
 
+  // add place view
+  static const String addPlaceHomeIcon = "assets/add_place_home_icon.svg";
+
 }

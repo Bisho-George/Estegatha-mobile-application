@@ -1,4 +1,5 @@
 import 'package:estegatha/features/home/presentation/view_models/organization_member_cubit.dart';
+import 'package:estegatha/features/home/presentation/views/widgets/animated_organization_header.dart';
 import 'package:estegatha/features/home/presentation/views/widgets/animated_organizations_widget.dart';
 import 'package:estegatha/features/home/presentation/views/widgets/custom_fab.dart';
 import 'package:estegatha/features/home/presentation/views/widgets/custom_home_appbar.dart';

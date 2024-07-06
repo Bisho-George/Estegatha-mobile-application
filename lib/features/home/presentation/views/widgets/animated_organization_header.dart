@@ -1,3 +1,4 @@
+import 'package:estegatha/features/organization/presentation/view_model/current_organization_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -10,10 +11,9 @@ import '../../view_models/home_view_model.dart';
 class AnimatedOrganizationHeader extends StatefulWidget {
   bool isExpanded;
 
-  final String organizationName;
 
   AnimatedOrganizationHeader(
-      {super.key, required this.isExpanded, required this.organizationName});
+      {super.key, required this.isExpanded});
 
   @override
   State<AnimatedOrganizationHeader> createState() =>
@@ -29,7 +29,7 @@ class _AnimatedOrganizationHeaderState extends State<AnimatedOrganizationHeader>
   @override
   void initState() {
     super.initState();
-
+    BlocProvider.of<CurrentOrganizationCubit>(context).loadCurrentOrganization();
     _controller = AnimationController(
       duration: const Duration(milliseconds: 200),
       vsync: this,
@@ -79,8 +79,8 @@ class _AnimatedOrganizationHeaderState extends State<AnimatedOrganizationHeader>
           decoration: BoxDecoration(
             color: ConstantColors.white,
             borderRadius: BorderRadius.circular(50),
-            boxShadow: [
-              BoxShadow(
+            boxShadow: const [
+               BoxShadow(
                 color: ConstantColors.grey,
                 offset: Offset(0, 2),
                 blurRadius: 4,

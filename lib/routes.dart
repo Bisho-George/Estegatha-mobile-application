@@ -1,4 +1,7 @@
 
+import 'package:estegatha/features/add_place/presentation/views/add_home_view.dart';
+import 'package:estegatha/features/add_place/presentation/views/add_new_place.dart';
+import 'package:estegatha/features/add_place/presentation/views/add_place_view.dart';
 import 'package:estegatha/features/edit_account/presentation/pages/change_email.dart';
 import 'package:estegatha/features/edit_account/presentation/pages/change_password_page.dart';
 import 'package:estegatha/features/edit_account/presentation/pages/change_phone_number.dart';
@@ -7,8 +10,6 @@ import 'package:estegatha/features/landing/presentation/pages/landing1.dart';
 import 'package:estegatha/features/landing/presentation/pages/landing2.dart';
 import 'package:estegatha/features/landing/presentation/pages/landing_intro.dart';
 import 'package:estegatha/features/organization/presentation/view/create/create_organization_page.dart';
-import 'package:estegatha/features/organization/presentation/view/create/invite_to_organization_page.dart';
-import 'package:estegatha/features/organization/presentation/view/join/final_join_organization_page.dart';
 import 'package:estegatha/features/safty/presentation/pages/add_contact_page.dart';
 import 'package:estegatha/features/safty/presentation/pages/emergency_contact_page.dart';
 import 'package:estegatha/features/safty/presentation/pages/location_feedback_page.dart';
@@ -51,6 +52,9 @@ final Map<String, WidgetBuilder> routes = {
   CancelSos.routeName: (context) => const CancelSos(),
   HomeView.routeName: (context) => HomeView(),
   MainNavMenu.routeName: (context) => const MainNavMenu(),
+  AddPlaceView.routeName: (context) => const AddPlaceView(),
+  AddNewPlaceView.routeName: (context) => const AddNewPlaceView(),
+  AddHomeView.routeName: (context) => const AddHomeView()
 
 
 };
