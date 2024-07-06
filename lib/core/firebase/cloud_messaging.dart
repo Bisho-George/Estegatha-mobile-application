@@ -38,6 +38,7 @@ handleMessages(RemoteMessage message, String appState) {
     case MessageTypes.REMOVE_BOUNDARY:
       break;
     case MessageTypes.REMOVE_MEMBER:
+      exitOrganizationNotification(message.data['organizationId']);
       break;
   }
 

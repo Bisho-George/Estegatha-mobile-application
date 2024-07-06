@@ -1,9 +1,7 @@
 import 'package:estegatha/features/home/presentation/views/widgets/animated_organization_header.dart';
-import 'package:estegatha/features/organization/presentation/view_model/current_organization_cubit.dart';
 import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/image_strings.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
 class CustomHomeAppBar extends StatelessWidget {
@@ -13,30 +11,29 @@ class CustomHomeAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: ConstantColors.white,
-              borderRadius: BorderRadius.circular(50),
-            ),
-            child: IconButton(
-              icon: SvgPicture.asset(
-                  ConstantImages.settingsAppbarIcon),
-              onPressed: () {},
-            ),
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+      Container(
+        decoration: BoxDecoration(
+          color: ConstantColors.white,
+          borderRadius: BorderRadius.circular(50),
+        ),
+        child: IconButton(
+          icon: SvgPicture.asset(ConstantImages.settingsAppbarIcon),
+          onPressed: () {},
+        ),
+      ),
+      AnimatedOrganizationHeader(
+        isExpanded: false,
+        organizationName: "graduation project",
+      ),
+      Container(
+          decoration: BoxDecoration(
+            color: ConstantColors.white,
+            borderRadius: BorderRadius.circular(50),
           ),
-          AnimatedOrganizationHeader(isExpanded: false, organizationName: BlocProvider.of<CurrentOrganizationCubit>,
-          Container(
-              decoration: BoxDecoration(
-                color: ConstantColors.white,
-                borderRadius: BorderRadius.circular(50),
-              ),
-              child: IconButton(
-                  onPressed: () {},
-                  icon: SvgPicture.asset(
-                      ConstantImages.messagesIcon)))
-        ]);
+          child: IconButton(
+              onPressed: () {},
+              icon: SvgPicture.asset(ConstantImages.messagesIcon)))
+    ]);
   }
 }

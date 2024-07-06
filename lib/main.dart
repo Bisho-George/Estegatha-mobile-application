@@ -1,6 +1,5 @@
 import 'package:estegatha/core/firebase/cloud_messaging.dart';
 import 'package:estegatha/core/firebase/fcm_setup.dart';
-
 import 'package:estegatha/features/sign-in/presentation/pages/sign_in_page.dart';
 import 'package:estegatha/providers.dart';
 import 'package:estegatha/responsive/size_config.dart';
