@@ -1,7 +1,9 @@
 import 'package:estegatha/utils/common/widgets/custom_elevated_button.dart';
 import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
+import 'package:estegatha/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -88,9 +90,14 @@ class InviteToOrganizationPage extends StatelessWidget {
                               horizontal: ConstantSizes.defaultSpace.w * 2),
                           child: CustomElevatedButton(
                               onPressed: () {
-                                // Add functionality for sending the code
+                                String codeToCopy = organizationCode;
+                                Clipboard.setData(
+                                    ClipboardData(text: codeToCopy));
+
+                                HelperFunctions.showSnackBar(
+                                    context, 'Code copied');
                               },
-                              labelText: "Send Code"),
+                              labelText: "Copy Code"),
                         )
                       ],
                     ),

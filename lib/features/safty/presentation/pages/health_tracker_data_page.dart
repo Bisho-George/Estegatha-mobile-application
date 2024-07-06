@@ -27,7 +27,7 @@ class HealthTrackerDataPage extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.switch_account),
-            onPressed: () async{
+            onPressed: () async {
               BlocProvider.of<FitnessDataCubit>(context).changeAccount();
             },
             color: ConstantColors.primary,
@@ -46,45 +46,43 @@ class HealthTrackerDataPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: BlocConsumer<FitnessDataCubit, FitnessDataState>(
-              builder: (context, state) {
-                return LoadingWidget(
-                  loading: BlocProvider.of<FitnessDataCubit>(context).loading,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      HeartRateWidget(
-                        heartRate: '82',
-                        quality: 80,
-                      ),
-                      HealthMetricesWidget(
-                        type: 'Blood Pressure',
-                        value: '120/80',
-                        unit: 'mm Hg',
-                      ),
-                      HealthMetricesWidget(
-                        type: 'Blood Oxygen',
-                        value: '98',
-                        unit: '%',
-                      ),
-                      HealthMetricesWidget(
-                        type: 'Temperature',
-                        value: '36.5',
-                        unit: '°C',
-                      ),
-                    ],
-                  ),
-                );
-              },
-              listener: (context, state){
-                if(state is FitnessDataSuccess){
-                  HelperFunctions.showSnackBar(context, state.message);
-                }else if(state is FitnessDataFailure){
-                  HelperFunctions.showSnackBar(context, state.message);
-                }
+                builder: (context, state) {
+              return LoadingWidget(
+                loading: BlocProvider.of<FitnessDataCubit>(context).loading,
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    HeartRateWidget(
+                      heartRate: '82',
+                      quality: 80,
+                    ),
+                    HealthMetricesWidget(
+                      type: 'Blood Pressure',
+                      value: '120/80',
+                      unit: 'mm Hg',
+                    ),
+                    HealthMetricesWidget(
+                      type: 'Blood Oxygen',
+                      value: '98',
+                      unit: '%',
+                    ),
+                    HealthMetricesWidget(
+                      type: 'Temperature',
+                      value: '36.5',
+                      unit: '°C',
+                    ),
+                  ],
+                ),
+              );
+            }, listener: (context, state) {
+              if (state is FitnessDataSuccess) {
+                HelperFunctions.showSnackBar(context, state.message);
+              } else if (state is FitnessDataFailure) {
+                HelperFunctions.showSnackBar(context, state.message);
               }
-            ),
+            }),
           ),
           Positioned(
             bottom: responsiveHeight(120),

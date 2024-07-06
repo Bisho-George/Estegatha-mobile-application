@@ -38,6 +38,7 @@ import 'package:estegatha/utils/common/custom_app_bar.dart';
 import 'package:estegatha/utils/common/widgets/custom_elevated_button.dart';
 import 'package:estegatha/utils/common/widgets/custom_text_field.dart';
 import 'package:estegatha/utils/constant/colors.dart';
+import 'package:estegatha/utils/constant/sizes.dart';
 import 'package:estegatha/utils/helpers/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -99,7 +100,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 16.0),
+              SizedBox(height: getProportionateScreenHeight(ConstantSizes.md)),
               CustomTextField(
                 controller: _contentController,
                 labelText: 'Content',
@@ -112,11 +113,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 16.0),
+              SizedBox(height: getProportionateScreenHeight(ConstantSizes.md)),
               BlocConsumer<OrganizationCubit, OrganizationState>(
                 listener: (context, state) {
                   if (state is CreatePostLoading) {
-                    const CircularProgressIndicator();
+                    const Loader();
                   } else if (state is CreatePostSuccess) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(

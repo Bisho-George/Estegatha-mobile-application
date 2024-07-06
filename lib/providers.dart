@@ -69,4 +69,10 @@ List<SingleChildWidget> providers = [
   BlocProvider<CatalogCubit>(
     create: (context) => CatalogCubit(),
   ),
+  BlocProvider<FitnessConnectCubit>(
+    create: (context) => FitnessConnectCubit(),
+  ),
+  BlocProvider<FitnessDataCubit>(
+    create: (context) => FitnessDataCubit(),
+  ),
 ];
