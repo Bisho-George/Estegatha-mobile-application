@@ -111,8 +111,7 @@ class ConstantSizes {
 
   // Button sizes
   static const double buttonHeight = 18.0;
-  static const double buttonPadding = 16.0;
-  static const double buttonRadius = 120.0;
+  static const double buttonRadius = 12.0;
   static const double buttonWidth = 120.0;
   static const double buttonElevation = 4.0;
   static const double buttonFontSize = 20.0;

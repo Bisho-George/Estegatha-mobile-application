@@ -11,6 +11,7 @@ import 'package:estegatha/features/organization/presentation/view_model/organiza
 import 'package:estegatha/features/sign-in/data/api/signin_http_client.dart';
 import 'package:estegatha/features/sign-in/data/api/user_http_client.dart';
 import 'package:estegatha/features/sign-in/presentation/pages/sign_in_page.dart';
+import 'package:estegatha/features/sos/data/api/organizations_api.dart';
 import 'package:estegatha/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -65,18 +66,13 @@ class UserCubit extends Cubit<UserState> {
   }
 
   Future<void> logout(BuildContext context) async {
-    final user = await HelperFunctions.getUser();
 
     // get user organization
-    final userOrganizationResponse =
-        await UserHttpClient.getUserOrganizations(user.id);
-    if (userOrganizationResponse.statusCode == 200) {
+    final userOrganizationResponse = await OrganizationsApi().fetchOrganizations();
+    if (userOrganizationResponse.isNotEmpty) {
       print("======= enter user organizations ======");
-      List<dynamic> jsonResponse = jsonDecode(userOrganizationResponse.body);
       // Convert each item in the list to an Organization object
-      List<Organization> userOrganizations = jsonResponse
-          .map((organizationJson) => Organization.fromJson(organizationJson))
-          .toList();
+      List<Organization> userOrganizations = userOrganizationResponse;
 
       print("======= organizations length ${userOrganizations.length}");
       if (userOrganizations.isNotEmpty) {
@@ -85,8 +81,6 @@ class UserCubit extends Cubit<UserState> {
 
         print("Exit notification system for each organization");
       }
-    } else if (userOrganizationResponse.statusCode != 200) {
-      return print("Failed to fetch user organizations");
     }
     emit(UserInitial());
     await deleteUserFromPreferences();

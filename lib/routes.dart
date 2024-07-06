@@ -23,6 +23,8 @@ import 'package:estegatha/features/sos/presentation/pages/send_sos.dart';
 import 'package:estegatha/main_menu.dart';
 import 'package:flutter/material.dart';
 
+import 'features/home/presentation/views/home_view.dart';
+import 'features/safety/presentation/view/safetys_creen.dart';
 import 'features/sign-up/presentation/views/personal_info_view.dart';
 import 'features/sos/presentation/pages/sos_alert_intro.dart';
 

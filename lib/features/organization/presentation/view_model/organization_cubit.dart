@@ -146,7 +146,6 @@ class OrganizationCubit extends Cubit<OrganizationState> {
   Future<List<OrganizationMember>> getCurrentOrganizationMembers() async {
     try {
       final CurrentOrganizationCubit currentOrganizationCubit = CurrentOrganizationCubit();
-      await currentOrganizationCubit.loadCurrentOrganization();
       int? orgId = currentOrganizationCubit.state.organizationId;
 
       if (orgId != null) {
@@ -236,7 +235,6 @@ class OrganizationCubit extends Cubit<OrganizationState> {
           for (var org in responseBody) {
             organizations.add(Organization.fromJson(org));
           }
-
           emit(UserOrganizationsSuccess(organizations));
           return organizations;
         } else {
