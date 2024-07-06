@@ -12,7 +12,12 @@
           "package_name": "com.estegatha.firebasepushnotification"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "670051743143-9fqtqerssauap9tc04hu9t3kelivjr67.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDAi2XluzSbTa9_F-9IzAOv3QoIO9mL4vc"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "670051743143-9fqtqerssauap9tc04hu9t3kelivjr67.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "670051743143-d3ijhgrcii33lrofvjkp3ra7hfhhicgc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.estegatha"
+              }
+            }
+          ]
         }
       }
     },
@@ -31,7 +48,12 @@
           "package_name": "com.estegatha.firebasepushnotificationapp"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "670051743143-9fqtqerssauap9tc04hu9t3kelivjr67.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDAi2XluzSbTa9_F-9IzAOv3QoIO9mL4vc"
@@ -39,7 +61,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "670051743143-9fqtqerssauap9tc04hu9t3kelivjr67.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "670051743143-d3ijhgrcii33lrofvjkp3ra7hfhhicgc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.estegatha"
+              }
+            }
+          ]
         }
       }
     },
@@ -50,7 +84,12 @@
           "package_name": "com.example.estegatha"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "670051743143-9fqtqerssauap9tc04hu9t3kelivjr67.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDAi2XluzSbTa9_F-9IzAOv3QoIO9mL4vc"
@@ -58,7 +97,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "670051743143-9fqtqerssauap9tc04hu9t3kelivjr67.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "670051743143-d3ijhgrcii33lrofvjkp3ra7hfhhicgc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.estegatha"
+              }
+            }
+          ]
         }
       }
     },
@@ -69,7 +120,20 @@
           "package_name": "com.example.graduatedummy"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "670051743143-9jglp23c35t6sqrgct1hm48r709ot6qm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.graduatedummy",
+            "certificate_hash": "5b74b81717f28608262a2b7e7d49b80ad3d6a770"
+          }
+        },
+        {
+          "client_id": "670051743143-9fqtqerssauap9tc04hu9t3kelivjr67.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDAi2XluzSbTa9_F-9IzAOv3QoIO9mL4vc"
@@ -77,7 +141,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "670051743143-9fqtqerssauap9tc04hu9t3kelivjr67.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "670051743143-d3ijhgrcii33lrofvjkp3ra7hfhhicgc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.estegatha"
+              }
+            }
+          ]
         }
       }
     },
@@ -88,7 +164,20 @@
           "package_name": "com.example.push_notification"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "670051743143-uf5l20hk8pchdf52se5mt2detn81pl51.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.push_notification",
+            "certificate_hash": "7de0b572904d8afbb1735b158c8c90410ff087a0"
+          }
+        },
+        {
+          "client_id": "670051743143-9fqtqerssauap9tc04hu9t3kelivjr67.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDAi2XluzSbTa9_F-9IzAOv3QoIO9mL4vc"
@@ -96,7 +185,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "670051743143-9fqtqerssauap9tc04hu9t3kelivjr67.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "670051743143-d3ijhgrcii33lrofvjkp3ra7hfhhicgc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.estegatha"
+              }
+            }
+          ]
         }
       }
     }

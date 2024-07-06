@@ -56,7 +56,6 @@ dependencies:
   intl: ^0.17.0
   wakelock: ^0.6.2
   health: ^6.0.0
-  google_sign_in: ^6.2.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

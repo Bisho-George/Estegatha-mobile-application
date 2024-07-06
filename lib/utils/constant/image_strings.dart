@@ -67,8 +67,10 @@ class ConstantImages {
   static const String organizationHealthIcon = "assets/org_health_icon.png";
   static const String organizationPostIcon = "assets/org_post_icon.png";
   static const String healthRecordIcon = "assets/org_post_icon.png";
+
   static const String healthTrackerImage1 = "assets/health_tracker_image1.jpg";
   static const String healthTrackerImage2 = "assets/health_tracker_image2.jpg";
   static const String healthTrackerImage3 = "assets/health_tracker_image3.jpg";
+  static const String healthTrackerCharacter = 'assets/character_track.svg';
 
 }

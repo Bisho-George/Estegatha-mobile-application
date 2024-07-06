@@ -13,6 +13,7 @@ import 'features/forget-password/presentation/veiw_models/forget-password/forget
 import 'features/landing/presentation/view_model/permissions_cubit.dart';
 import 'features/organization/presentation/view_model/organization_cubit.dart';
 import 'features/safty/presentation/view_models/contact_cubit.dart';
+import 'features/safty/presentation/view_models/fitness_data_cubit.dart';
 import 'features/sign-in/presentation/veiw_models/login_cubit/login_cubit.dart';
 import 'features/sign-in/presentation/veiw_models/user_cubit.dart';
 import 'features/sos/presentation/view_models/cubit/create_pin_cubit.dart';
@@ -66,5 +67,8 @@ List<SingleChildWidget> providers = [
   ),
   BlocProvider<FitnessConnectCubit>(
     create: (context) => FitnessConnectCubit(),
+  ),
+  BlocProvider<FitnessDataCubit>(
+    create: (context) => FitnessDataCubit(),
   ),
 ];

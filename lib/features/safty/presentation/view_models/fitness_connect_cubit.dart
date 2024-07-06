@@ -7,9 +7,8 @@ import '../../domain/repositories/fitness_connect_repo.dart';
 class FitnessConnectCubit extends Cubit<FitnessConnectState> {
   bool loading = false;
   FitnessConnectCubit() : super(FitnessConnectInitial());
-
+  final FitnessConnectRepository repository = FitnessConnectApi();
   void connect() async {
-    final FitnessConnectRepository repository = FitnessConnectApi();
     loading = true;
     try {
       await repository.connect();
