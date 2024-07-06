@@ -18,7 +18,7 @@ class HealthWelcomeWidget extends StatelessWidget {
         Image(
           image: AssetImage(healthWelcomeModel.imagePath),
           width: double.infinity,
-          height: responsiveHeight(325),
+          height: responsiveHeight(250),
           fit: BoxFit.fill,
         ),
         SizedBox(
@@ -29,7 +29,7 @@ class HealthWelcomeWidget extends StatelessWidget {
           child: Text(
             healthWelcomeModel.title,
             style: Styles.getDefaultPrimary(
-              fontSize: 36,
+              fontSize: ConstantSizes.headingMd,
               weight: ConstantSizes.fontWeightSemiBold,
             ),
           ),

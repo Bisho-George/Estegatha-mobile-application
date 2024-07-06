@@ -1,3 +1,5 @@
+import '../../../../core/domain/model/contact_model.dart';
+
 class AddContactState{}
 class AddContactInitial extends AddContactState{}
 class AddContactFailure extends AddContactState{
@@ -5,6 +7,6 @@ class AddContactFailure extends AddContactState{
   String message;
 }
 class AddContactSuccess extends AddContactState{
-  AddContactSuccess(this.message);
-  String message;
+  AddContactSuccess(this.contactModel);
+  ContactModel contactModel;
 }

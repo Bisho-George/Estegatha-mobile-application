@@ -8,20 +8,27 @@ import '../../../../utils/common/styles/text_styles.dart';
 import '../../domain/models/landing_featues.dart';
 
 class CustomPageView extends StatefulWidget {
-  CustomPageView({super.key, required this.itemBuilder, required this.itemCount, this.pageController, this.height = double.infinity});
+  CustomPageView({super.key, required this.itemBuilder, required this.itemCount, this.pageController, this.height = double.infinity, this.pagesInfo});
   NullableIndexedWidgetBuilder itemBuilder;
   double height;
   int itemCount;
   PageController ?pageController;
+  PagesInfo ?pagesInfo;
   @override
   CustomPageViewState createState() => CustomPageViewState();
 }
-
+class PagesInfo{
+  int currentIndex = 0;
+  late int itemCount;
+  PagesInfo();
+  bool get isLastPage => currentIndex == itemCount - 1;
+}
 class CustomPageViewState extends State<CustomPageView> {
-  int _currentIndex = 0;
   @override
   Widget build(BuildContext context) {
     PageController pageController = widget.pageController ?? PageController();
+    PagesInfo pagesInfo = widget.pagesInfo ?? PagesInfo();
+    pagesInfo.itemCount = widget.itemCount;
     return Column(
       children: [
         SizedBox(
@@ -31,7 +38,7 @@ class CustomPageViewState extends State<CustomPageView> {
             itemCount: widget.itemCount,
             onPageChanged: (index) {
               setState(() {
-                _currentIndex = index;
+                pagesInfo.currentIndex = index;
               });
             },
             itemBuilder: widget.itemBuilder,
@@ -45,7 +52,7 @@ class CustomPageViewState extends State<CustomPageView> {
             (index) => GestureDetector(
               onTap: () {
                 setState(() {
-                  _currentIndex = index;
+                  pagesInfo.currentIndex = index;
                 });
                 pageController.jumpToPage(index);
               },
@@ -54,7 +61,7 @@ class CustomPageViewState extends State<CustomPageView> {
                 width: 12.0, // Adjust this value as needed
                 height: 12.0, // Adjust this value as needed
                 decoration: BoxDecoration(
-                  color: _currentIndex == index ? ConstantColors.primary : ConstantColors.secondary, // Replace 'Colors.blue' with your primary color
+                  color: pagesInfo.currentIndex == index ? ConstantColors.primary : ConstantColors.secondary, // Replace 'Colors.blue' with your primary color
                   shape: BoxShape.circle,
                 ),
               ),
