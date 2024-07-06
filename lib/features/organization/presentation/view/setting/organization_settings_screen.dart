@@ -62,7 +62,16 @@ class _OrganizationSettingsScreenState
       body: BlocBuilder<OrganizationCubit, OrganizationState>(
         builder: (context, state) {
           if (state is OrganizationLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(),
+                  SizedBox(height: 10),
+                  Text('Loading...'),
+                ],
+              ),
+            );
           } else if (state is OrganizationDetailSuccess) {
             SizeConfig().init(context);
             isOwner = state.members!.any((member) =>

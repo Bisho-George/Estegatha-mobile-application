@@ -267,6 +267,9 @@ class OrganizationCubit extends Cubit<OrganizationState> {
                 "organizationId": orgId.toString()
               });
 
+              // leave the organization notification system
+              await exitOrganizationNotification(orgId);
+
           return true;
         } else if (jsonDecode(response.body)['success'] == false) {
           print("Enter the else if statement");
