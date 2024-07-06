@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+
 import '../../../../../utils/constant/colors.dart';
 import '../../../../../utils/constant/image_strings.dart';
 import '../../../../../utils/constant/sizes.dart';
 import '../../view_models/home_view_model.dart';
 
-
 class AnimatedOrganizationHeader extends StatefulWidget {
-   bool isExpanded;
-   AnimatedOrganizationHeader({super.key,
-    required this.isExpanded,
-   });
+  bool isExpanded;
+
+  final String organizationName;
+
+  AnimatedOrganizationHeader(
+      {super.key, required this.isExpanded, required this.organizationName});
 
   @override
   State<AnimatedOrganizationHeader> createState() =>
@@ -23,7 +25,6 @@ class _AnimatedOrganizationHeaderState extends State<AnimatedOrganizationHeader>
   late AnimationController _controller;
   late Animation<Offset> _offsetAnimation;
   late Animation<double> _opacityAnimation;
-
 
   @override
   void initState() {
@@ -78,6 +79,13 @@ class _AnimatedOrganizationHeaderState extends State<AnimatedOrganizationHeader>
           decoration: BoxDecoration(
             color: ConstantColors.white,
             borderRadius: BorderRadius.circular(50),
+            boxShadow: [
+              BoxShadow(
+                color: ConstantColors.grey,
+                offset: Offset(0, 2),
+                blurRadius: 4,
+              ),
+            ],
           ),
           child: IconButton(
             icon: Padding(
@@ -101,7 +109,7 @@ class _AnimatedOrganizationHeaderState extends State<AnimatedOrganizationHeader>
                     turns: widget.isExpanded ? 0.5 : 0.0,
                     duration: Duration(milliseconds: 500),
                     child:
-                    SvgPicture.asset(ConstantImages.organizationArrowIcon),
+                        SvgPicture.asset(ConstantImages.organizationArrowIcon),
                   ),
                 ],
               ),

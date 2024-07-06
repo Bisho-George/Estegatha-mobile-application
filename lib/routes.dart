@@ -9,7 +9,6 @@ import 'package:estegatha/features/landing/presentation/pages/landing_intro.dart
 import 'package:estegatha/features/organization/presentation/view/create/create_organization_page.dart';
 import 'package:estegatha/features/organization/presentation/view/create/invite_to_organization_page.dart';
 import 'package:estegatha/features/organization/presentation/view/join/final_join_organization_page.dart';
-import 'package:estegatha/features/safety/presentation/view/safetys_creen.dart';
 import 'package:estegatha/features/safty/presentation/pages/add_contact_page.dart';
 import 'package:estegatha/features/safty/presentation/pages/emergency_contact_page.dart';
 import 'package:estegatha/features/safty/presentation/pages/location_feedback_page.dart';
@@ -51,4 +50,6 @@ final Map<String, WidgetBuilder> routes = {
   CancelSos.routeName: (context) => const CancelSos(),
   MainNavMenu.routeName: (context) => const MainNavMenu(),
   SafetyScreen.routeName: (context) => SafetyScreen(),
+  HomeView.routeName: (context) => HomeView(),
+
 };

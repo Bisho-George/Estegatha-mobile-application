@@ -1,28 +1,28 @@
+
+import 'package:estegatha/features/home/presentation/views/widgets/animated_organization_members_sliver_list_bloc_consumer.dart';
 import 'package:estegatha/features/home/presentation/views/widgets/draggable_scroll_sheet_button.dart';
+import 'package:estegatha/features/home/presentation/views/widgets/draggable_scroll_sheet_options.dart';
+import 'package:estegatha/features/home/presentation/views/widgets/sliding_helper.dart';
+import 'package:estegatha/features/organization/presentation/view_model/organization_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../utils/constant/colors.dart';
 import '../../../../../utils/constant/image_strings.dart';
 import '../../../../../utils/constant/sizes.dart';
-import '../../view_models/draggable_scroll_sheet/draggable_scroll_sheet_cubit.dart';
-import '../../view_models/draggable_scroll_sheet/draggable_scroll_sheet_state.dart';
-import 'draggable_scroll_sheet_list_item.dart';
-import 'organization_option.dart';
 
 class DraggableScrollSheet extends StatelessWidget {
   const DraggableScrollSheet({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => DraggableScrollSheetCubit(),
-      child: DraggableScrollSheetView(),
-    );
+    return const DraggableScrollSheetView();
   }
 }
 
 class DraggableScrollSheetView extends StatefulWidget {
+  const DraggableScrollSheetView({super.key});
+
   @override
   State<DraggableScrollSheetView> createState() =>
       _DraggableScrollSheetViewState();
@@ -36,22 +36,47 @@ class _DraggableScrollSheetViewState extends State<DraggableScrollSheetView> {
   final GlobalKey _keySection2 = GlobalKey();
   final GlobalKey _keySection3 = GlobalKey();
 
+  bool isExpanded = false;
+  double opacity1 = 1.0;
+  double opacity2 = 0.5;
+  double opacity3 = 0.5;
+  bool isSelected1 = true;
+  bool isSelected2 = false;
+  bool isSelected3 = false;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     controller.addListener(onChanged);
+    BlocProvider.of<OrganizationCubit>(context).getCurrentOrganizationMembers();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    super.dispose();
     controller.removeListener(onChanged);
     _scrollController.dispose();
     controller.dispose();
+    super.dispose();
   }
 
+  void toggleSelection(int index) {
+    setState(() {
+      isSelected1 = index == 0;
+      isSelected2 = index == 1;
+      isSelected3 = index == 2;
+      opacity1 = index == 0 ? 1.0 : 0.5;
+      opacity2 = index == 1 ? 1.0 : 0.5;
+      opacity3 = index == 2 ? 1.0 : 0.5;
+    });
+  }
+
+  void toggleExpanded() {
+    setState(() {
+      isExpanded = !isExpanded;
+    });
+
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,180 +87,111 @@ class _DraggableScrollSheetViewState extends State<DraggableScrollSheetView> {
       initialChildSize: .35,
       expand: true,
       snap: true,
+      controller: controller,
       builder: (BuildContext context, ScrollController scrollController) {
-        return Container(
-          decoration: BoxDecoration(
-            color: ConstantColors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(ConstantSizes.defaultSpace),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Container(
-                    width: 30,
-                    height: 7,
-                    decoration: BoxDecoration(
-                      color: Color(0xFFE0E0E0),
-                      borderRadius: BorderRadius.circular(50),
-                    ),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: ConstantColors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
                   ),
                 ),
-                SizedBox(
-                  height: ConstantSizes.defaultSpace,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    BlocBuilder<DraggableScrollSheetCubit,
-                        DraggableScrollSheetState>(
-                      builder: (context, state) {
-                        return DraggableScrollSheetButton(
-                            opacity: state.opacity1,
-                            isSelected: state.isSelected1,
+                padding: const EdgeInsets.all(ConstantSizes.defaultSpace),
+                child: CustomScrollView(
+                  controller: scrollController,
+                  slivers: [
+                    const SliverToBoxAdapter(
+                      child: Center(
+                        child: SlidingHelper(),
+                      ),
+                    ),
+                    const SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: ConstantSizes.defaultSpace,
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          DraggableScrollSheetButton(
+                            opacity: opacity1,
+                            isSelected: isSelected1,
                             iconPath: ConstantImages.peopleIcon,
                             onPressed: () {
-                              context
-                                  .read<DraggableScrollSheetCubit>()
-                                  .toggleSelection(1);
+                              toggleSelection(0);
                               _scrollToSection(_keySection1);
-                            });
-                      },
-                    ),
-                    BlocBuilder<DraggableScrollSheetCubit,
-                        DraggableScrollSheetState>(
-                      builder: (context, state) {
-                        return DraggableScrollSheetButton(
-                            opacity: state.opacity2,
-                            isSelected: state.isSelected2,
+                            },
+                          ),
+                          DraggableScrollSheetButton(
+                            opacity: opacity2,
+                            isSelected: isSelected2,
                             iconPath: ConstantImages.wayIcon,
                             onPressed: () {
-                              context
-                                  .read<DraggableScrollSheetCubit>()
-                                  .toggleSelection(2);
+                              toggleSelection(1);
                               _scrollToSection(_keySection2);
-                            });
-                      },
-                    ),
-                    BlocBuilder<DraggableScrollSheetCubit,
-                        DraggableScrollSheetState>(
-                      builder: (context, state) {
-                        return DraggableScrollSheetButton(
-                            opacity: state.opacity3,
-                            isSelected: state.isSelected3,
+                            },
+                          ),
+                          DraggableScrollSheetButton(
+                            opacity: opacity3,
+                            isSelected: isSelected3,
                             iconPath: ConstantImages.buildingIcon,
                             onPressed: () {
-                              context
-                                  .read<DraggableScrollSheetCubit>()
-                                  .toggleSelection(3);
+                              toggleSelection(2);
                               _scrollToSection(_keySection3);
-                            });
-                      },
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: ConstantSizes.defaultSpace),
+                          Text(
+                            key: _keySection1,
+                            "People",
+                            style: const TextStyle(
+                              color: ConstantColors.black,
+                              fontSize: ConstantSizes.fontSizeLg,
+                              fontWeight: ConstantSizes.fontWeightBold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    AnimatedOrganizationMembersSliverListBlocConsumer(
+                      isExpanded: isExpanded,
+                    ),
+                    SliverToBoxAdapter(
+                      child: IconButton(
+                        onPressed: toggleExpanded,
+                        icon: isExpanded
+                            ? const Icon(Icons.arrow_upward)
+                            : const Icon(Icons.arrow_downward),
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: DraggableScrollSheetOptions(
+                        keySection2: _keySection2,
+                        keySection3: _keySection3,
+                      ),
                     ),
                   ],
                 ),
-                Expanded(
-                  child: CustomScrollView(
-                    controller: scrollController,
-                    slivers: [
-                      SliverToBoxAdapter(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(height: ConstantSizes.defaultSpace),
-                            Text(
-                                key: _keySection1,
-                                "People",
-                                style: TextStyle(
-                                  color: ConstantColors.black,
-                                  fontSize: ConstantSizes.fontSizeLg,
-                                  fontWeight: ConstantSizes.fontWeightBold,
-                                )),
-                          ],
-                        ),
-                      ),
-                      BlocBuilder<DraggableScrollSheetCubit,
-                          DraggableScrollSheetState>(
-                        builder: (context, state) {
-                          return SliverAnimatedList(
-                            key: state.listKey,
-                            initialItemCount: state.items.length,
-                            itemBuilder: (context, index, animation) {
-                              return SizeTransition(
-                                sizeFactor: animation,
-                                child: DraggableScrollSheetListItem(),
-                              );
-                            },
-                          );
-                        },
-                      ),
-                      SliverToBoxAdapter(
-                        child: BlocBuilder<DraggableScrollSheetCubit,
-                            DraggableScrollSheetState>(
-                          builder: (context, state) {
-                            return IconButton(
-                              onPressed: () => context
-                                  .read<DraggableScrollSheetCubit>()
-                                  .toggleExpanded(),
-                              icon: state.isExpanded
-                                  ? Icon(Icons.arrow_upward)
-                                  : Icon(Icons.arrow_downward),
-                            );
-                          },
-                        ),
-                      ),
-                      SliverToBoxAdapter(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            OrganizationOption(
-                                optionName: 'Add a member',
-                                iconPath: ConstantImages.peopleIcon),
-                            SizedBox(height: ConstantSizes.spaceBtwItems),
-                            Text(
-                                key: _keySection2,
-                                "Track",
-                                style: TextStyle(
-                                  color: ConstantColors.black,
-                                  fontSize: ConstantSizes.fontSizeMd,
-                                  fontWeight: ConstantSizes.fontWeightBold,
-                                )),
-                            SizedBox(height: ConstantSizes.spaceBtwItems),
-                            OrganizationOption(
-                                optionName: 'Track member',
-                                iconPath: ConstantImages.wayIcon),
-                            SizedBox(height: ConstantSizes.spaceBtwItems),
-                            Text(
-                                key: _keySection3,
-                                "Places",
-                                style: TextStyle(
-                                  color: ConstantColors.black,
-                                  fontSize: ConstantSizes.fontSizeMd,
-                                  fontWeight: ConstantSizes.fontWeightBold,
-                                )),
-                            SizedBox(height: ConstantSizes.spaceBtwItems),
-                            OrganizationOption(
-                                optionName: 'Manage places',
-                                iconPath: ConstantImages.buildingIcon),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
+          ],
         );
       },
     );
   }
-
 
   void onChanged() {
     final currentSize = controller.size;
@@ -251,8 +207,14 @@ class _DraggableScrollSheetViewState extends State<DraggableScrollSheetView> {
   void hide() => animatedSheet(getSheet.minChildSize);
 
   void animatedSheet(double size) {
-    controller.animateTo(size,
-        duration: const Duration(microseconds: 50), curve: Curves.easeInOut);
+    if (controller.isAttached) {
+      size = size.clamp(0.0, 1.0); // Clamping the size value
+      controller.animateTo(
+        size,
+        duration: const Duration(milliseconds: 50), // Changed to non-zero duration
+        curve: Curves.easeInOut,
+      );
+    }
   }
 
   DraggableScrollableSheet get getSheet =>
@@ -261,8 +223,11 @@ class _DraggableScrollSheetViewState extends State<DraggableScrollSheetView> {
   void _scrollToSection(GlobalKey key) {
     final context = key.currentContext;
     if (context != null) {
-      Scrollable.ensureVisible(context,
-          duration: Duration(seconds: 1), curve: Curves.easeInOut);
+      Scrollable.ensureVisible(
+        context,
+        duration: const Duration(seconds: 1),
+        curve: Curves.easeInOut,
+      );
     }
   }
 }

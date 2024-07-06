@@ -45,6 +45,9 @@ class UserHttpClient {
   static Future<http.Response> getUserOrganizations(int userId) async {
     return customHttpRequest('GET', Uri.parse('$userBaseUrl/organizations'));
   }
+  static Future<http.Response> getUserOrganizationsWithoutUserId() async {
+    return customHttpRequest('GET', Uri.parse('$userBaseUrl/organizations'));
+  }
 
   static Future<http.Response> addUserDisease(String disease) async {
     return customHttpRequest(

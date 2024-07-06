@@ -72,6 +72,8 @@ class OrganizationMembersSuccess extends OrganizationState {
   const OrganizationMembersSuccess(this.members) : super(null);
 }
 
+
+
 class OrganizationJoinSuccess extends OrganizationState {
   final Organization organization;
   const OrganizationJoinSuccess(
