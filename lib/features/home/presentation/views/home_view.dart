@@ -15,8 +15,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../utils/constant/colors.dart';
 import '../../../../utils/constant/image_strings.dart';
-import '../../../organization/presentation/view_model/current_organization_cubit.dart';
 import '../../../sos/presentation/pages/send_sos.dart';
+import '../view_models/current_oragnization_cubit/current_organization_cubit.dart';
 import '../view_models/home_state.dart';
 import '../view_models/home_view_model.dart';
 

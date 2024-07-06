@@ -35,6 +35,7 @@ class _AnimatedOrganizationsWidgetState
     _animationController.forward();
   }
 
+
   @override
   void initState() {
     // TODO: implement initState
@@ -56,6 +57,10 @@ class _AnimatedOrganizationsWidgetState
     // TODO: implement dispose
     super.dispose();
     _animationController.dispose();
+  }
+  Future<bool> _onWillPop() async {
+    await _animationController.reverse();
+    return true;
   }
 
   @override
@@ -88,7 +93,6 @@ class _AnimatedOrganizationsWidgetState
                       children: [
                         AnimatedOrganizationHeader(
                           isExpanded: state.organizationsVisible,
-                          organizationName: "graduation project",
                         ),
                         const SizedBox(width: ConstantSizes.defaultSpace + 10),
                         IconButton(
@@ -126,4 +130,3 @@ class _AnimatedOrganizationsWidgetState
     );
   }
 }
-

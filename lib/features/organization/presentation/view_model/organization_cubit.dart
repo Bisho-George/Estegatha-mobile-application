@@ -5,7 +5,6 @@ import 'package:estegatha/features/organization/domain/api/organization_api.dart
 import 'package:estegatha/features/organization/domain/models/organization.dart';
 import 'package:estegatha/features/organization/domain/models/organizationMember.dart';
 import 'package:estegatha/features/organization/domain/models/post.dart';
-import 'package:estegatha/features/organization/presentation/view_model/current_organization_cubit.dart';
 import 'package:estegatha/features/organization/presentation/view_model/user_organizations_cubit.dart'
     as userOrgCubit;
 import 'package:estegatha/features/sign-in/data/api/user_http_client.dart';
@@ -17,6 +16,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../constants.dart';
 import '../../../../core/data/api/dio_auth.dart';
+import '../../../home/presentation/view_models/current_oragnization_cubit/current_organization_cubit.dart';
 import '../../domain/models/member.dart';
 import 'organization_state.dart';
 
@@ -146,10 +146,10 @@ class OrganizationCubit extends Cubit<OrganizationState> {
   Future<List<OrganizationMember>> getCurrentOrganizationMembers() async {
     try {
       final CurrentOrganizationCubit currentOrganizationCubit = CurrentOrganizationCubit();
-      int? orgId = currentOrganizationCubit.state.organizationId;
+      Organization? currentOrganization = currentOrganizationCubit.currentOrganization;
 
-      if (orgId != null) {
-        return await getOrganizationMembers(orgId);
+      if (currentOrganization != null) {
+        return await getOrganizationMembers(currentOrganization.id!);
       } else {
         print('No current organization');
         return [];

@@ -2,8 +2,6 @@ import 'package:estegatha/features/organization/domain/models/organization.dart'
 import 'package:estegatha/features/organization/presentation/view/boarding_page.dart';
 import 'package:estegatha/features/organization/presentation/view/join/join_organization_page.dart';
 import 'package:estegatha/features/organization/presentation/view/main/organization_detail_page.dart';
-import 'package:estegatha/features/organization/presentation/view_model/current_organization_cubit.dart';
-import 'package:estegatha/features/organization/presentation/view_model/current_organization_state.dart';
 import 'package:estegatha/features/organization/presentation/view_model/user_organizations_cubit.dart';
 import 'package:estegatha/features/sign-in/presentation/veiw_models/user_cubit.dart';
 import 'package:estegatha/utils/common/widgets/custom_elevated_button.dart';
@@ -12,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'features/home/presentation/view_models/current_oragnization_cubit/current_organization_cubit.dart';
 
 class HomePage extends StatefulWidget {
   static const String id = 'home_page';
@@ -89,7 +89,7 @@ class _HomePageState extends State<HomePage> {
                     CurrentOrganizationState>(
                   builder: (context, currentOrgState) {
                     final currentOrganization = organizations.firstWhere(
-                      (org) => org.id == currentOrgState.organizationId,
+                      (org) => org == currentOrgState,
                       orElse: () => organizations.first,
                     );
                     return DropdownButton<Organization>(
@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> {
                         if (newOrganization != null) {
                           context
                               .read<CurrentOrganizationCubit>()
-                              .setCurrentOrganization(newOrganization.id!);
+                              .setCurrentOrganization(newOrganization);
                         }
                       },
                       items: organizations.map<DropdownMenuItem<Organization>>(

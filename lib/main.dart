@@ -1,5 +1,7 @@
 import 'package:estegatha/core/firebase/cloud_messaging.dart';
 import 'package:estegatha/core/firebase/fcm_setup.dart';
+import 'package:estegatha/features/home/presentation/views/home_view.dart';
+
 import 'package:estegatha/features/sign-in/presentation/pages/sign_in_page.dart';
 import 'package:estegatha/providers.dart';
 import 'package:estegatha/responsive/size_config.dart';
@@ -44,8 +46,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final ValueNotifier<Widget> home = ValueNotifier<Widget>(SignInPage());
-  final String initialRoute = SignInPage.routeName;
+  final ValueNotifier<Widget> home = ValueNotifier<Widget>(HomeView());
+  final String initialRoute = HomeView.routeName;
   @override
   void initState() {
     super.initState();

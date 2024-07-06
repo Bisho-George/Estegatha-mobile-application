@@ -3,8 +3,6 @@ import 'package:estegatha/features/organization/presentation/view/boarding_page.
 import 'package:estegatha/features/organization/presentation/view/join/join_organization_page.dart';
 import 'package:estegatha/features/organization/presentation/view/setting/organization_settings_screen.dart';
 import 'package:estegatha/features/organization/presentation/view/widgets/section_heading.dart';
-import 'package:estegatha/features/organization/presentation/view_model/current_organization_cubit.dart';
-import 'package:estegatha/features/organization/presentation/view_model/current_organization_state.dart';
 import 'package:estegatha/features/settings/presentation/view/widgets/setting_item.dart';
 import 'package:estegatha/features/sign-in/presentation/veiw_models/user_cubit.dart';
 import 'package:estegatha/utils/common/custom_app_bar.dart';

@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:estegatha/core/firebase/cloud_messaging.dart';
 import 'package:estegatha/features/organization/domain/models/member.dart';
 import 'package:estegatha/features/organization/domain/models/organization.dart';
-import 'package:estegatha/features/organization/presentation/view_model/current_organization_cubit.dart';
 import 'package:estegatha/features/sign-in/data/api/signin_http_client.dart';
 import 'package:estegatha/features/sign-in/data/api/user_http_client.dart';
 import 'package:estegatha/features/sign-in/presentation/veiw_models/user_cubit.dart';
