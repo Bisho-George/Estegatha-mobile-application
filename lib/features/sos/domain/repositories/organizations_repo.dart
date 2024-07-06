@@ -5,5 +5,5 @@ import '../../../organization/domain/models/organizationMember.dart';
 abstract class OrganizationsRepo {
   Future<List<Organization>> fetchOrganizations();
   Future<List<OrganizationMember>> fetchOrganizationMembers(
-      int organizationId);
+      num organizationId);
 }

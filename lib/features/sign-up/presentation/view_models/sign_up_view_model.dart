@@ -1,5 +1,9 @@
 import 'package:estegatha/features/sign-up/presentation/view_models/date_picker_view_model.dart';
+import 'package:estegatha/features/sign-up/presentation/view_models/sign_up_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../domain/entities/personal_info_entity.dart';
 
 class SignUpViewModel {
   final GlobalKey<FormState> _personalInfoFormKey = GlobalKey<FormState>();
@@ -19,10 +23,7 @@ class SignUpViewModel {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
-  final TextEditingController otpController1 = TextEditingController();
-  final TextEditingController otpController2 = TextEditingController();
-  final TextEditingController otpController3 = TextEditingController();
-  final TextEditingController otpController4 = TextEditingController();
+  final List<TextEditingController> otpControllers = List.generate(6, (_) => TextEditingController());
   DatePickerViewModel datePickerViewModel = DatePickerViewModel();
   final GlobalKey<FormState> formKey = GlobalKey();
 
@@ -59,6 +60,23 @@ class SignUpViewModel {
 
       // Set the formatted date to the birthdayController
       birthdayController.text = formattedDate;
+    }
+  }
+
+  void validateForm(BuildContext context, String routeName, ) {
+    if (personalInfoFormKey.currentState!.validate()) {
+      // Parse the birthdayController.text to DateTime
+      DateTime? birthday = datePickerViewModel.parseDate(birthdayController.text);
+      PersonalInfoEntity personalInfo = PersonalInfoEntity(
+        firstName: firstNameController.text,
+        lastName: lastNameController.text,
+        birthDate: birthday,
+        phoneNumber: phoneController.text,
+      );
+      BlocProvider.of<SignUpCubit>(context).updatePersonalInfo(personalInfo);
+
+      // Navigate to the email page
+      Navigator.pushNamed(context, routeName);
     }
   }
 }

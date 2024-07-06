@@ -1,18 +1,22 @@
-import 'package:estegatha/features/home/presentation/views/widgets/animated_organization_header.dart';
+import 'package:estegatha/features/home/presentation/view_models/organization_member_cubit.dart';
 import 'package:estegatha/features/home/presentation/views/widgets/animated_organizations_widget.dart';
-import 'package:estegatha/features/home/presentation/views/widgets/dangerous_dialog.dart';
+import 'package:estegatha/features/home/presentation/views/widgets/custom_fab.dart';
+import 'package:estegatha/features/home/presentation/views/widgets/custom_home_appbar.dart';
+import 'package:estegatha/features/home/presentation/views/widgets/custom_person_appbar.dart';
 import 'package:estegatha/features/home/presentation/views/widgets/draggable_scroll_sheet.dart';
 import 'package:estegatha/features/home/presentation/views/widgets/google_map.dart';
-import 'package:estegatha/features/sos/presentation/pages/send_sos.dart';
+import 'package:estegatha/features/organization/presentation/view_model/user_organizations_cubit.dart';
+import 'package:estegatha/features/sos/data/api/organizations_api.dart';
+import 'package:estegatha/responsive/size_config.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../../utils/common/widgets/bottom_navbar.dart';
-import '../../../../utils/common/widgets/bottom_navbar_fab.dart';
 import '../../../../utils/constant/colors.dart';
 import '../../../../utils/constant/image_strings.dart';
+import '../../../organization/presentation/view_model/current_organization_cubit.dart';
+import '../../../sos/presentation/pages/send_sos.dart';
 import '../view_models/home_state.dart';
 import '../view_models/home_view_model.dart';
 
@@ -33,6 +37,11 @@ class _HomeViewState extends State<HomeView>
   @override
   void initState() {
     super.initState();
+    BlocProvider.of<UserOrganizationsCubit>(context)
+        .getUserOrganizationsWithoutId();
+    BlocProvider.of<CurrentOrganizationCubit>(context).loadCurrentOrganization();
+    BlocProvider.of<OrganizationMemberHomeCubit>(context).getCurrentOrganizationMembers();
+
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 300),
       vsync: this,
@@ -68,10 +77,11 @@ class _HomeViewState extends State<HomeView>
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
-    var height = MediaQuery.of(context).size.height;
+    var height = MediaQuery.sizeOf(context).height;
+    var width = MediaQuery.sizeOf(context).height;
+    SizeConfig().init(context);
     return BlocProvider(
-      create: (context) => HomeCubit(),
+      create: (context) => HomeCubit(OrganizationsApi()),
       child: Scaffold(
         body: BlocConsumer<HomeCubit, HomeState>(
           listener: (context, state) async {
@@ -83,66 +93,31 @@ class _HomeViewState extends State<HomeView>
             return SafeArea(
               child: Stack(
                 children: [
-                  GoogleMapView(),
+                  const GoogleMapView(),
                   if (state.organizationsVisible)
                     const AnimatedOrganizationsWidget(),
                   if (!state.organizationsVisible)
                     Positioned(
-                        top: 40,
-                        left: 20,
-                        right: 20,
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: ConstantColors.white,
-                                  borderRadius: BorderRadius.circular(50),
-                                ),
-                                child: IconButton(
-                                  icon: SvgPicture.asset(
-                                      ConstantImages.settingsAppbarIcon),
-                                  onPressed: () {},
-                                ),
-                              ),
-                              AnimatedOrganizationHeader(
-                                isExpanded: false,
-                              ),
-                              Container(
-                                  decoration: BoxDecoration(
-                                    color: ConstantColors.white,
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  child: IconButton(
-                                      onPressed: () {},
-                                      icon: SvgPicture.asset(
-                                          ConstantImages.messagesIcon)))
-                            ])),
+                        top: responsiveHeight(20),
+                        left: responsiveWidth(20),
+                        right: responsiveWidth(20),
+                        child: const CustomHomeAppBar()),
                   if (state.position != null && state.customMarker != null)
                     AnimatedPositioned(
-                      duration: Duration(milliseconds: 300),
-                      top: state.isAppBarVisible ? 0 : -100,
+                      duration: const Duration(milliseconds: 300),
+                      top: state.isAppBarVisible ? 0 : responsiveHeight(-100),
                       left: 0,
                       right: 0,
-                      child: AppBar(
-                        leading: IconButton(
-                          icon: Icon(Icons.arrow_back),
-                          onPressed: () {
-                            context.read<HomeCubit>().hideToggleBar();
-                            context.read<HomeCubit>().updateZoom(15);
-                          },
-                        ),
-                        title: Text('Bishoy'),
-                      ),
+                      child: const CustomPersonAppBar(),
                     ),
                   Positioned(
-                    bottom: height * .4,
+                    bottom: height * .33,
                     left: width * .03,
                     child: SlideTransition(
                       position: _slideAnimation,
                       child: AnimatedOpacity(
                         opacity: _isButtonVisible ? 1.0 : 0.0,
-                        duration: Duration(milliseconds: 300),
+                        duration: const Duration(milliseconds: 300),
                         child: IconButton(
                           onPressed: () {
                             //TODO: Implement Safety
@@ -152,7 +127,7 @@ class _HomeViewState extends State<HomeView>
                               color: ConstantColors.white,
                               borderRadius: BorderRadius.circular(50),
                             ),
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                               horizontal: ConstantSizes.defaultSpace,
                               vertical: 10,
                             ),
@@ -171,16 +146,16 @@ class _HomeViewState extends State<HomeView>
                                     fit: BoxFit.cover,
                                     ConstantImages.safetySolidIcon,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: ConstantSizes.spaceBtwItems,
                                   ),
-                                  Text(
+                                  const Text(
                                     "Safety",
                                     style: TextStyle(
                                       color: ConstantColors.primary,
                                       fontSize: ConstantSizes.fontSizeMd,
                                       fontWeight:
-                                          ConstantSizes.fontWeightSemiBold,
+                                      ConstantSizes.fontWeightSemiBold,
                                     ),
                                   ),
                                 ],
@@ -192,65 +167,18 @@ class _HomeViewState extends State<HomeView>
                     ),
                   ),
                   Positioned(
-                    bottom: height * .4,
+                    bottom: height * .33,
                     right: width * .03,
-                    child: Column(
-                      children: [
-                        SlideTransition(
-                          position: _slideAnimation,
-                          child: AnimatedOpacity(
-                            opacity: _isButtonVisible ? 1.0 : 0.0,
-                            duration: Duration(milliseconds: 300),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: ConstantColors.white,
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                              child: IconButton(
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => DangerousDialog(),
-                                  );
-                                },
-                                icon: SvgPicture.asset(
-                                  fit: BoxFit.cover,
-                                  ConstantImages.warningIcon,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: ConstantSizes.spaceBtwItems),
-                        SlideTransition(
-                          position: _slideAnimation,
-                          child: AnimatedOpacity(
-                            opacity: _isButtonVisible ? 1.0 : 0.0,
-                            duration: Duration(milliseconds: 300),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: ConstantColors.white,
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                              child: IconButton(
-                                onPressed: () {},
-                                icon: SvgPicture.asset(
-                                  fit: BoxFit.cover,
-                                  ConstantImages.gpsIcon,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    child: CustomFAB(
+                        slideAnimation: _slideAnimation,
+                        isButtonVisible: _isButtonVisible),
                   ),
                   Positioned(
                     left: 0,
                     right: 0,
                     bottom: 0,
                     child:
-                        NotificationListener<DraggableScrollableNotification>(
+                    NotificationListener<DraggableScrollableNotification>(
                       onNotification: (notification) {
                         _onScroll(notification.extent);
                         return true;
@@ -259,9 +187,9 @@ class _HomeViewState extends State<HomeView>
                         children: [
                           SizedBox(
                             height: MediaQuery.of(context).size.height * .88,
-                            child: DraggableScrollSheet(),
+                            child: const DraggableScrollSheet(),
                           ),
-                          // BottomNavBar(),
+                          // const BottomNavBar(),
                         ],
                       ),
                     ),
@@ -270,7 +198,7 @@ class _HomeViewState extends State<HomeView>
                   //   bottom: 30,
                   //   // Adjusted to not overlap with BottomNavBar and DraggableScrollSheet
                   //   left: MediaQuery.of(context).size.width / 2 - 30,
-                  //   child: BottomNavBarFAB(),
+                  //   child: const BottomNavBarFAB(),
                   // ),
                 ],
               ),

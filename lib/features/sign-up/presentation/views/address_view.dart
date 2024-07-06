@@ -1,209 +1,169 @@
-import 'package:estegatha/features/sign-up/data/repositories/predictions_maps_api.dart';
+import 'package:estegatha/features/sign-up/data/repos/predictions_maps_api.dart';
 import 'package:estegatha/features/sign-up/presentation/view_models/address_text_field_cubit.dart';
+import 'package:estegatha/features/sign-up/presentation/view_models/sign_up_cubit.dart';
 import 'package:estegatha/features/sign-up/presentation/view_models/sign_up_view_model.dart';
+import 'package:estegatha/features/sign-up/presentation/views/email_view.dart';
+import 'package:estegatha/features/sign-up/presentation/views/personal_info_view.dart';
 import 'package:estegatha/features/sign-up/presentation/views/widgets/address_text_field.dart';
 import 'package:estegatha/features/sign-up/presentation/views/widgets/custom_google_maps.dart';
 import 'package:estegatha/features/sign-up/presentation/views/widgets/progress_indicator.dart';
 import 'package:estegatha/features/sign-up/presentation/views/widgets/sign_up_header.dart';
-import 'package:estegatha/utils/constant/image_strings.dart';
+import 'package:estegatha/responsive/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../../utils/common/widgets/custom_elevated_button.dart';
 import '../../../../utils/constant/colors.dart';
 import '../../../../utils/constant/sizes.dart';
 import '../view_models/address_view_model.dart';
 
-class AddressView extends StatelessWidget {
+class AddressView extends StatefulWidget {
   static const String routeName = 'sign-up/address';
-  SignUpViewModel signUpViewModel = SignUpViewModel();
-  AddressViewModel addressViewModel = AddressViewModel();
+  final SignUpViewModel signUpViewModel = SignUpViewModel();
+  final AddressViewModel addressViewModel = AddressViewModel();
 
   AddressView({super.key});
 
   @override
+  _AddressViewState createState() => _AddressViewState();
+}
+
+class _AddressViewState extends State<AddressView> {
+  bool _isLoadingNext = false;
+
+  void _onLoadingAddressChanged(bool isLoading) {
+    setState(() {
+      _isLoadingNext = isLoading;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(
+            FontAwesomeIcons.arrowLeft,
+            color: ConstantColors.textPrimary,
+          ),
+          onPressed: () {
+            Navigator.pushNamed(context, PersonalInfoView.routeName);
+          },
+        ),
+        title: const Text(
+          "Address",
+          style: TextStyle(
+            fontSize: ConstantSizes.fontSizeLg,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              BlocProvider.of<SignUpCubit>(context).updateAddress("");
+              BlocProvider.of<SignUpCubit>(context).updateLocation(LatLng(0, 0));
+              BlocProvider.of<SignUpCubit>(context).signUp();
+              Navigator.pushNamed(context, EmailView.routeName);
+            },
+            child: const Text("Remind me later"),
+          ),
+        ],
+      ),
       resizeToAvoidBottomInset: false,
       body: SafeArea(
-        child: Column(children: [
-          const SignUpHeader(
-              title: "Home", subtitle: "Please enter your home address"),
-          const SizedBox(
-            height: ConstantSizes.spaceBtwItems,
-          ),
-          Stack(
-            children: [
-              Form(
-                  key: signUpViewModel.addressFormKey,
-                  child: BlocProvider(
-                    create: (context) =>
-                        AddressTextFieldCubit(PredictionsMapsApi()),
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: ConstantSizes.defaultSpace),
-                          child: BlocBuilder<AddressTextFieldCubit,
-                              AddressTextFieldState>(
-                            builder: (context, state) {
-                              final cubit =
-                                  context.read<AddressTextFieldCubit>();
-                              return Column(
-                                children: [
-                                  AddressTextField(
-                                    controller: cubit.controller,
-                                    onChanged: (val) {
-                                      if (val.toString().isNotEmpty) {
-                                        BlocProvider.of<AddressTextFieldCubit>(
-                                                context)
-                                            .updatePredictions(val.toString());
-                                      }
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
+        child: Column(
+          children: [
+            const SignUpHeader(
+              title: "Home",
+              subtitle: "Please enter your home address",
+            ),
+            const SizedBox(height: ConstantSizes.spaceBtwItems),
+            Form(
+              key: widget.signUpViewModel.addressFormKey,
+              child: BlocProvider(
+                create: (context) => AddressTextFieldCubit(PredictionsMapsApi()),
+                child: Expanded(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: ConstantSizes.defaultSpace,
                         ),
-                        Column(
+                        child: BlocBuilder<AddressTextFieldCubit, AddressTextFieldState>(
+                          builder: (context, state) {
+                            return AddressTextField(
+                              controller: widget.addressViewModel.addressController,
+                            );
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: ConstantSizes.defaultSpace,
+                          vertical: ConstantSizes.defaultSpace,
+                        ),
+                        child: ProgressIndicatorBar(
+                          percentage: .5,
+                          step: "2",
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: ConstantSizes.defaultSpace,
+                        ),
+                        child: CustomElevatedButton(
+                          onPressed: _isLoadingNext
+                              ? null
+                              : () {
+                            Navigator.pushNamed(context, EmailView.routeName);
+                          },
+                          labelText: "Next",
+                          isLoading: _isLoadingNext,
+                        ),
+                      ),
+                      const SizedBox(height: ConstantSizes.defaultSpace),
+                      Expanded(
+                        child: Stack(
                           children: [
-                            Stack(
-                              children: [
-                                Column(
-                                  children: [
-                                    const SizedBox(
-                                      height: ConstantSizes.defaultSpace,
-                                    ),
-                                    Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal:
-                                              ConstantSizes.defaultSpace),
-                                      child: Column(
-                                        children: [
-                                          ProgressIndicatorBar(
-                                            percentage: 1,
-                                            step: "4",
-                                          ),
-                                          const SizedBox(
-                                            height: ConstantSizes.defaultSpace,
-                                          ),
-                                          CustomElevatedButton(
-                                              onPressed: () {},
-                                              labelText: "Next"),
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: ConstantSizes.defaultSpace,
-                                    ),
-                                    Stack(children: [
-                                      SizedBox(
-                                          width: 450,
-                                          height: 350,
-                                          child: CustomGoogleMaps()),
-                                      Container(
-                                        width: double.infinity,
-                                        color:
-                                            ConstantColors.secondaryBackground,
-                                        child: const Text(
-                                          "Drag the map or enter an address",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              color: ConstantColors.light,
-                                              fontSize: ConstantSizes.md),
-                                        ),
-                                      ),
-                                    ])
-                                  ],
+                            CustomGoogleMaps(
+                              onAddressSelected: (String address, LatLng position) {
+                                widget.addressViewModel.addressController.text = address;
+                                context.read<SignUpCubit>().updateAddress(address);
+                                context.read<SignUpCubit>().updateLocation(position);
+                              },
+                              onLoadingAddressChanged: _onLoadingAddressChanged,
+                            ),
+                            Container(
+                              width: double.infinity,
+                              color: ConstantColors.secondaryBackground,
+                              child: const Text(
+                                "Drag the map or enter an address",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: ConstantColors.light,
+                                  fontSize: ConstantSizes.md,
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: ConstantSizes.defaultSpace),
-                                  child: BlocBuilder<AddressTextFieldCubit,
-                                          AddressTextFieldState>(
-                                      builder: (context, state) {
-                                    if (state is AddressPredictionsLoadingState)
-                                      return const Center(
-                                        child: CircularProgressIndicator(),
-                                      );
-                                    if (state is AddressPredictionsErrorState) {
-                                      return const Center(
-                                        child: Text(
-                                            "Error in making predicitions"),
-                                      );
-                                    }
-                                    if (state
-                                        is AddressPredictionsLoadedState) {
-                                      return SingleChildScrollView(
-                                        child: Column(
-                                          children: [
-                                            Container(
-                                              height: 150,
-                                              color: Colors.white,
-                                              child: RawScrollbar(
-                                                thumbColor:
-                                                    ConstantColors.primary,
-                                                radius:
-                                                    const Radius.circular(10),
-                                                thickness: 5,
-                                                interactive: true,
-                                                controller: addressViewModel
-                                                    .scrollController,
-                                                thumbVisibility: true,
-                                                child: ListView.separated(
-                                                    controller: addressViewModel
-                                                        .scrollController,
-                                                    shrinkWrap: true,
-                                                    itemBuilder:
-                                                        (context, index) {
-                                                      return ListTile(
-                                                          leading: Image.asset(
-                                                            ConstantImages
-                                                                .googleMapsIcon,
-                                                            width: 30,
-                                                            height: 30,
-                                                            fit: BoxFit.contain,
-                                                          ),
-                                                          title: Text("data"),
-                                                          trailing: IconButton(
-                                                            icon: Icon(
-                                                                color:
-                                                                    ConstantColors
-                                                                        .primary,
-                                                                FontAwesomeIcons
-                                                                    .circleRight),
-                                                            onPressed: () {},
-                                                          ));
-                                                    },
-                                                    separatorBuilder:
-                                                        (context, index) {
-                                                      return const Divider(
-                                                        height: 0,
-                                                      );
-                                                    },
-                                                    itemCount: state
-                                                        .predictions.length),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    }
-                                    return Container();
-                                  }),
-                                ),
-                              ],
+                              ),
+                            ),
+                            const Center(
+                              child: Icon(
+                                FontAwesomeIcons.mapPin,
+                                size: 32,
+                                color: ConstantColors.primary,
+                              ),
                             ),
                           ],
                         ),
-                      ],
-                    ),
-                  ))
-            ],
-          ),
-        ]),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

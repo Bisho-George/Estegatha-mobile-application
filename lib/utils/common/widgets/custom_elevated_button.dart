@@ -11,14 +11,15 @@ class CustomElevatedButton extends StatelessWidget {
     this.formKey,
     this.focusNode,
     this.isPrimary = true,
+    this.isLoading = false,
   });
+  final bool isLoading;
 
   final GlobalKey<FormState>? formKey;
   final void Function()? onPressed;
   final String labelText;
   FocusNode? focusNode;
   final bool isPrimary;
-
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -44,7 +45,11 @@ class CustomElevatedButton extends StatelessWidget {
                   getProportionateScreenHeight(ConstantSizes.buttonRadius))),
         ),
         onPressed: onPressed,
-        child: Text(labelText),
+        child: isLoading
+            ? const CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+        )
+            : Text(labelText),
       ),
     );
   }

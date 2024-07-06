@@ -143,6 +143,24 @@ class OrganizationCubit extends Cubit<OrganizationState> {
     return null;
   }
 
+  Future<List<OrganizationMember>> getCurrentOrganizationMembers() async {
+    try {
+      final CurrentOrganizationCubit currentOrganizationCubit = CurrentOrganizationCubit();
+      int? orgId = currentOrganizationCubit.state.organizationId;
+
+      if (orgId != null) {
+        return await getOrganizationMembers(orgId);
+      } else {
+        print('No current organization');
+        return [];
+      }
+    } catch (e) {
+      print('An error occurred: $e');
+      return [];
+    }
+  }
+
+
   // ============= Get Organization Members =============
   Future<List<OrganizationMember>> getOrganizationMembers(int orgId) async {
     emit(const OrganizationMembersLoading());
@@ -155,8 +173,8 @@ class OrganizationCubit extends Cubit<OrganizationState> {
         final members = (responseBody as List)
             .map((member) => OrganizationMember.fromJson(member))
             .toList();
-
         // emit(OrganizationSuccess(members: members, []));
+        print(members[0].username);
         emit(OrganizationMembersSuccess(members));
         return members;
       } else {
@@ -217,7 +235,6 @@ class OrganizationCubit extends Cubit<OrganizationState> {
           for (var org in responseBody) {
             organizations.add(Organization.fromJson(org));
           }
-
           emit(UserOrganizationsSuccess(organizations));
           return organizations;
         } else {

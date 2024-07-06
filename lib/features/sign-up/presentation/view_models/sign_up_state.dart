@@ -6,7 +6,7 @@ sealed class SignUpState {}
 final class SignUpInitial extends SignUpState {}
 
 class SignUpPersonalInfoState extends SignUpState {
-  final PersonalInfoModel personalInfo;
+  final PersonalInfoEntity personalInfo;
 
   SignUpPersonalInfoState(this.personalInfo);
 }
@@ -35,8 +35,29 @@ class SignUpAddressState extends SignUpState {
   SignUpAddressState(this.address);
 }
 
+class SignUpLatLngState extends SignUpState {
+  final double latitude;
+  final double longitude;
+
+  SignUpLatLngState({required this.latitude, required this.longitude});
+}
+
 class SignUpSubmitState extends SignUpState {
-  final UserModel userModel;
+  final UserEntity userModel;
 
   SignUpSubmitState(this.userModel);
+}
+
+class SignupLoadingState extends SignUpState {}
+
+class SignupFailureState extends SignUpState {
+  final String message;
+
+  SignupFailureState(this.message);
+}
+
+class SignupSuccessState extends SignUpState {
+  final SignupResponse statusCode;
+
+  SignupSuccessState(this.statusCode);
 }

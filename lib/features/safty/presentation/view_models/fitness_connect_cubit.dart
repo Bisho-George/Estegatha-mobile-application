@@ -3,15 +3,17 @@ import 'package:estegatha/features/safty/presentation/view_models/fitness_connec
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../landing/domain/models/permissions.dart';
 import '../../domain/repositories/fitness_connect_repo.dart';
 class FitnessConnectCubit extends Cubit<FitnessConnectState> {
   bool loading = false;
   FitnessConnectCubit() : super(FitnessConnectInitial());
-  final FitnessConnectRepository repository = FitnessConnectApi();
+  final FitnessConnectRepository _repository = FitnessConnectApi();
   void connect() async {
     loading = true;
     try {
-      await repository.connect();
+      await Permissions().grantPermissions();
+      await _repository.connect();
       emit(FitnessConnectSuccess('Connected'));
     } catch (e) {
       emit(FitnessConnectFailure(e.toString()));

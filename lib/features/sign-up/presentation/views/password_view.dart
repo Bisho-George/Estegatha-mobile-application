@@ -1,6 +1,6 @@
 import 'package:estegatha/features/sign-up/presentation/view_models/sign_up_cubit.dart';
 import 'package:estegatha/features/sign-up/presentation/view_models/sign_up_view_model.dart';
-import 'package:estegatha/features/sign-up/presentation/views/address_view.dart';
+import 'package:estegatha/features/sign-up/presentation/views/otp_view.dart';
 import 'package:estegatha/features/sign-up/presentation/views/widgets/progress_indicator.dart';
 import 'package:estegatha/features/sign-up/presentation/views/widgets/sign_up_header.dart';
 import 'package:flutter/material.dart';
@@ -65,8 +65,8 @@ class _PasswordViewState extends State<PasswordView> {
                         height: ConstantSizes.spaceBtwSections,
                       ),
                       ProgressIndicatorBar(
-                        percentage: .75,
-                        step: "3",
+                        percentage: 1,
+                        step: "4",
                       ),
                       const SizedBox(
                         height: ConstantSizes.defaultSpace,
@@ -78,10 +78,11 @@ class _PasswordViewState extends State<PasswordView> {
                               String? password =
                                   signUpViewModel.passwordController.text;
                               BlocProvider.of<SignUpCubit>(context).updatePassword(password);
-                              Navigator.pushNamed(context, AddressView.routeName);
+                              BlocProvider.of<SignUpCubit>(context).signUp();
+                              Navigator.pushNamed(context, OtpView.routeName);
                             }
                           },
-                          labelText: "Next")
+                          labelText: "Sign Up"),
                     ],
                   ),
                 ),
