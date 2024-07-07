@@ -89,7 +89,6 @@ class _AnimatedOrganizationsWidgetState
                     padding: const EdgeInsets.only(
                         right: ConstantSizes.defaultSpace),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         AnimatedOrganizationHeader(
                           isExpanded: state.organizationsVisible,
@@ -113,12 +112,12 @@ class _AnimatedOrganizationsWidgetState
                       children: [
                         Expanded(
                           child: CustomElevatedButton(
-                              onPressed: () {}, labelText: "Join Organization"),
+                              onPressed: () {}, labelText: "Join Organization", textSize: 16.0,),
                         ),
                          SizedBox(width: responsiveWidth(ConstantSizes.spaceBtwItems)),
                         Expanded(
                           child: CustomElevatedButton(
-                              onPressed: () {}, labelText: "Create Organization"),
+                              onPressed: () {}, labelText: "Create Organization", textSize: 16.0),
                         ),
                       ],
                     ),
