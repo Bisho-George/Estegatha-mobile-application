@@ -7,6 +7,7 @@ import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/image_strings.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
 import 'package:estegatha/utils/helpers/responsive.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,6 +21,7 @@ class CustomHomeAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     final Organization? currentOrganization =
         context.read<CurrentOrganizationCubit>().currentOrganization;
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -46,6 +48,7 @@ class CustomHomeAppBar extends StatelessWidget {
           isExpanded: false,
         ),
       ),
+
       // Container(
       //   decoration: BoxDecoration(
       //     color: ConstantColors.white,

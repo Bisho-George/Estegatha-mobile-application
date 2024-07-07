@@ -22,7 +22,7 @@ import '../view_models/home_view_model.dart';
 
 class HomeView extends StatefulWidget {
   static const String routeName = '/home';
-  BuildContext ?parentContext;
+  BuildContext? parentContext;
   HomeView({super.key, this.parentContext});
   @override
   _HomeViewState createState() => _HomeViewState();
@@ -37,10 +37,21 @@ class _HomeViewState extends State<HomeView>
   @override
   void initState() {
     super.initState();
+    BlocProvider.of<CurrentOrganizationCubit>(context)
+        .checkCurrentOrganization();
+
     BlocProvider.of<UserOrganizationsCubit>(context)
         .getUserOrganizationsWithoutId();
-    BlocProvider.of<CurrentOrganizationCubit>(context).loadCurrentOrganization();
-    BlocProvider.of<OrganizationMemberHomeCubit>(context).getCurrentOrganizationMembers();
+
+    print(
+        "User organizations: ${BlocProvider.of<UserOrganizationsCubit>(context).getUserOrganizationsWithoutId().toString().length}");
+    BlocProvider.of<CurrentOrganizationCubit>(context)
+        .loadCurrentOrganization();
+    print(
+        "Currenr organization id: ${BlocProvider.of<CurrentOrganizationCubit>(context).currentOrganization?.id}");
+
+    BlocProvider.of<OrganizationMemberHomeCubit>(context)
+        .getCurrentOrganizationMembers();
 
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 300),
@@ -132,7 +143,7 @@ class _HomeViewState extends State<HomeView>
                               vertical: 10,
                             ),
                             child: GestureDetector(
-                              onTap: (){
+                              onTap: () {
                                 Navigator.push(
                                   widget.parentContext ?? context,
                                   MaterialPageRoute(
@@ -155,7 +166,7 @@ class _HomeViewState extends State<HomeView>
                                       color: ConstantColors.primary,
                                       fontSize: ConstantSizes.fontSizeMd,
                                       fontWeight:
-                                      ConstantSizes.fontWeightSemiBold,
+                                          ConstantSizes.fontWeightSemiBold,
                                     ),
                                   ),
                                 ],
@@ -178,7 +189,7 @@ class _HomeViewState extends State<HomeView>
                     right: 0,
                     bottom: 0,
                     child:
-                    NotificationListener<DraggableScrollableNotification>(
+                        NotificationListener<DraggableScrollableNotification>(
                       onNotification: (notification) {
                         _onScroll(notification.extent);
                         return true;

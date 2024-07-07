@@ -25,9 +25,19 @@ class _MainNavMenuState extends State<MainNavMenu> {
     return [
       HomeView(parentContext: context),
       SafetyScreen(parentContext: context),
-      OrganizationDetailPage(
-        organizationId: 1, // TODO: change this to organizationId
-      ),
+      context.read<CurrentOrganizationCubit>().currentOrganization != null
+          ? OrganizationDetailPage(
+              organizationId: context
+                  .read<CurrentOrganizationCubit>()
+                  .currentOrganization!
+                  .id!,
+            )
+          : const Loader(),
+      // OrganizationDetailPage(
+      //   organizationId:
+      //       context.read<CurrentOrganizationCubit>().currentOrganization!.id!,
+      // ),
+
       const CatalogScreen(),
       const SettingsScreen()
     ];

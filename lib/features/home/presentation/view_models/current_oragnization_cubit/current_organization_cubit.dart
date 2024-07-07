@@ -12,11 +12,26 @@ class CurrentOrganizationCubit extends Cubit<CurrentOrganizationState> {
   CurrentOrganizationCubit() : super(CurrentOrganizationInitial());
   Organization? currentOrganization;
 
+  Future<void> checkCurrentOrganization() async {
+    final box = GetStorage();
+    final String? organizationJson = box.read('currentOrganization');
+
+    if (organizationJson != null) {
+      final Map<String, dynamic> organizationMap = jsonDecode(organizationJson);
+      currentOrganization = Organization.fromJson(organizationMap);
+      emit(CurrentOrganizationLoaded(Organization.fromJson(organizationMap)));
+    } else {
+      emit(CurrentOrganizationInitial());
+    }
+  }
+
   Future<Organization?> loadCurrentOrganization() async {
     final box = GetStorage();
     final String? organizationJson = box.read('currentOrganization');
+
     if (organizationJson != null) {
       final Map<String, dynamic> organizationMap = jsonDecode(organizationJson);
+      currentOrganization = Organization.fromJson(organizationMap);
       return Organization.fromJson(organizationMap);
     }
     return null;

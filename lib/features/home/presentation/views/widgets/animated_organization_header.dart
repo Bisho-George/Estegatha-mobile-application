@@ -11,8 +11,7 @@ import '../../view_models/home_view_model.dart';
 class AnimatedOrganizationHeader extends StatefulWidget {
   bool isExpanded;
 
-  AnimatedOrganizationHeader(
-      {super.key, required this.isExpanded});
+  AnimatedOrganizationHeader({super.key, required this.isExpanded});
 
   @override
   State<AnimatedOrganizationHeader> createState() =>
@@ -78,7 +77,7 @@ class _AnimatedOrganizationHeaderState extends State<AnimatedOrganizationHeader>
           decoration: BoxDecoration(
             color: ConstantColors.white,
             borderRadius: BorderRadius.circular(50),
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                 color: ConstantColors.grey,
                 offset: Offset(0, 2),
@@ -98,10 +97,10 @@ class _AnimatedOrganizationHeaderState extends State<AnimatedOrganizationHeader>
                     builder: (context, state) {
                       if (state is CurrentOrganizationLoaded) {
                         return Text(
-                          state.organization.name ?? '',
+                          state.organization.name!,
                           style: const TextStyle(
                             color: ConstantColors.primary,
-                            fontSize: ConstantSizes.fontSizeMd,
+                            fontSize: ConstantSizes.fontSizeLg,
                             fontWeight: ConstantSizes.fontWeightSemiBold,
                           ),
                         );

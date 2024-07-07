@@ -60,9 +60,9 @@ class UserCubit extends Cubit<UserState> {
   }
 
   Future<void> logout(BuildContext context) async {
-
     // get user organization
-    final userOrganizationResponse = await OrganizationsApi().fetchOrganizations();
+    final userOrganizationResponse =
+        await OrganizationsApi().fetchOrganizations();
     if (userOrganizationResponse.isNotEmpty) {
       print("======= enter user organizations ======");
       // Convert each item in the list to an Organization object
