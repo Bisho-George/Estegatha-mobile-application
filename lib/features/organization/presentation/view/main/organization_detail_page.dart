@@ -147,7 +147,6 @@ class _OrganizationDetailPageState extends State<OrganizationDetailPage> {
                 children: [
                   BlocBuilder<OrganizationCubit, OrganizationState>(
                     builder: (context, state) {
-                      print("=================> Posts state: $state");
                       if (state is OrganizationLoading) {
                         return const Center(child: CircularProgressIndicator());
                       } else if (state is OrganizationFailure) {
@@ -162,7 +161,7 @@ class _OrganizationDetailPageState extends State<OrganizationDetailPage> {
                                         element.role == 'OWNER'),
                               ) ??
                               false,
-                          organization: state.organization!,
+                          organization: state.organization,
                         );
                       } else {
                         return Padding(

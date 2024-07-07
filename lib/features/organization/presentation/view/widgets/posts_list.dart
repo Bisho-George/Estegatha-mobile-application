@@ -57,25 +57,26 @@ class _PostsListState extends State<PostsList> {
                     fontSize: ConstantSizes.fontSizeSm,
                   )),
               SizedBox(height: getProportionateScreenHeight(ConstantSizes.md)),
-              OutlinedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => CreatePostScreen(
-                                orgId: widget.organization.id!,
-                              )));
-                },
-                style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: ConstantColors.grey),
-                ),
-                child: Text(
-                  'Create Post',
-                  style: TextStyle(
-                      color: ConstantColors.primary,
-                      fontSize: SizeConfig.font14),
-                ),
-              )
+              if (widget.isAdmin!)
+                OutlinedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CreatePostScreen(
+                                  orgId: widget.organization.id!,
+                                )));
+                  },
+                  style: OutlinedButton.styleFrom(
+                    side: const BorderSide(color: ConstantColors.grey),
+                  ),
+                  child: Text(
+                    'Create Post',
+                    style: TextStyle(
+                        color: ConstantColors.primary,
+                        fontSize: SizeConfig.font14),
+                  ),
+                )
             ],
           ));
     }

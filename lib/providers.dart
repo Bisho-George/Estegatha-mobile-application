@@ -1,4 +1,5 @@
 import 'package:estegatha/features/catalog/persentation/view-model/catalog_cubit.dart';
+import 'package:estegatha/features/organization/presentation/view_model/leave_organization/leave_organization_cubit.dart';
 import 'package:estegatha/features/organization/presentation/view_model/user_organizations_cubit.dart';
 import 'package:estegatha/features/safety/presentation/view_model/user_health_cubit.dart';
 import 'package:estegatha/features/safty/presentation/view_models/add_contact_cubit.dart';
@@ -26,6 +27,7 @@ import 'package:estegatha/features/sign-up/data/repos/signup_repo_imp.dart';
 import 'package:estegatha/features/sign-up/domain/use_cases/sign_up_use_case.dart';
 import 'package:estegatha/features/sign-up/presentation/view_models/sign_up_cubit.dart';
 import 'package:estegatha/utils/services/api_service.dart';
+
 List<SingleChildWidget> providers = [
   BlocProvider<UserCubit>(
     create: (context) => UserCubit(),
@@ -76,7 +78,8 @@ List<SingleChildWidget> providers = [
     create: (context) => CatalogCubit(),
   ),
   BlocProvider<SignUpCubit>(
-    create: (context) => SignUpCubit(SignupUseCase(SignupRepoImp(signupDataSource: SignupDataSourceImp(ApiService(Dio()))))),
+    create: (context) => SignUpCubit(SignupUseCase(SignupRepoImp(
+        signupDataSource: SignupDataSourceImp(ApiService(Dio()))))),
   ),
   BlocProvider<OrganizationMemberHomeCubit>(
     create: (context) => OrganizationMemberHomeCubit(),
@@ -92,5 +95,8 @@ List<SingleChildWidget> providers = [
   ),
   BlocProvider<FitnessDataCubit>(
     create: (context) => FitnessDataCubit(),
+  ),
+  BlocProvider<LeaveOrganizationCubit>(
+    create: (context) => LeaveOrganizationCubit(),
   ),
 ];

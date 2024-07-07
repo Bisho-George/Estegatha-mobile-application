@@ -37,18 +37,17 @@ class _HomeViewState extends State<HomeView>
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<CurrentOrganizationCubit>(context)
-        .checkCurrentOrganization();
-
     BlocProvider.of<UserOrganizationsCubit>(context)
         .getUserOrganizationsWithoutId();
 
     print(
-        "User organizations: ${BlocProvider.of<UserOrganizationsCubit>(context).getUserOrganizationsWithoutId().toString().length}");
+        "USer organizations ${BlocProvider.of<UserOrganizationsCubit>(context).organizations.length}");
+
+    BlocProvider.of<CurrentOrganizationCubit>(context)
+        .checkCurrentOrganization();
+
     BlocProvider.of<CurrentOrganizationCubit>(context)
         .loadCurrentOrganization();
-    print(
-        "Currenr organization id: ${BlocProvider.of<CurrentOrganizationCubit>(context).currentOrganization?.id}");
 
     BlocProvider.of<OrganizationMemberHomeCubit>(context)
         .getCurrentOrganizationMembers();

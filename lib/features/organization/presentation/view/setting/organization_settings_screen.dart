@@ -1,3 +1,5 @@
+import 'package:estegatha/features/organization/domain/models/organization.dart';
+import 'package:estegatha/features/organization/presentation/view/create/create_organization_page.dart';
 import 'package:estegatha/features/sign-in/presentation/veiw_models/user_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -105,10 +107,44 @@ class _OrganizationSettingsScreenState
               ),
             );
           } else if (state is OrganizationFailure) {
-            return const Center(
-                child: Text('Failed to load organization data'));
+            return Center(
+              child: Column(
+                children: [
+                  const Text(
+                    'No organization found!',
+                    style: TextStyle(color: ConstantColors.darkGrey),
+                  ),
+                  SizedBox(
+                    height: getProportionateScreenHeight(
+                        ConstantSizes.spaceBtwItems),
+                  ),
+                  OutlinedButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const CreateOrganizationPage()));
+                    },
+                    style: OutlinedButton.styleFrom(
+                      side: const BorderSide(color: ConstantColors.grey),
+                    ),
+                    child: Text(
+                      'Create Post',
+                      style: TextStyle(
+                          color: ConstantColors.primary,
+                          fontSize: SizeConfig.font14),
+                    ),
+                  )
+                ],
+              ),
+            );
           } else {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+                child: Padding(
+              padding: EdgeInsets.only(top: ConstantSizes.defaultSpace),
+              child: CircularProgressIndicator(),
+            ));
           }
         },
       ),

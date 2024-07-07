@@ -74,14 +74,17 @@ class OrganizationCubit extends Cubit<OrganizationState> {
       try {
         final response =
             await OrganizationHttpClient.joinOrganizationByCode(code);
-
+        print("Response status code: ${response.statusCode}");
+        print("Response body: ${response.body}");
         if (response.statusCode == 200) {
           final Organization organization =
               Organization.fromJson(jsonDecode(response.body));
 
-          final currentUser = await HelperFunctions.getUser();
+          context
+              .read<CurrentOrganizationCubit>()
+              .setCurrentOrganization(organization);
 
-          print("Organization: ${organization.id}");
+          final currentUser = await HelperFunctions.getUser();
 
           emit(OrganizationJoinSuccess(organization));
           await joinToOrganizationNotification(organization.id!);
@@ -99,6 +102,9 @@ class OrganizationCubit extends Cubit<OrganizationState> {
               parameters: {
                 'organizationId': organization.id.toString(),
               });
+        } else if (jsonDecode(response.body)['success'] == false) {
+          HelperFunctions.showSnackBar(
+              context, 'Invalid code, please try again!');
         } else {
           emit(const OrganizationFailure(
               errMessage: "Something went wrong, try again!"));
@@ -145,8 +151,10 @@ class OrganizationCubit extends Cubit<OrganizationState> {
 
   Future<List<OrganizationMember>> getCurrentOrganizationMembers() async {
     try {
-      final CurrentOrganizationCubit currentOrganizationCubit = CurrentOrganizationCubit();
-      Organization? currentOrganization = currentOrganizationCubit.currentOrganization;
+      final CurrentOrganizationCubit currentOrganizationCubit =
+          CurrentOrganizationCubit();
+      Organization? currentOrganization =
+          currentOrganizationCubit.currentOrganization;
 
       if (currentOrganization != null) {
         return await getOrganizationMembers(currentOrganization.id!);
@@ -160,7 +168,6 @@ class OrganizationCubit extends Cubit<OrganizationState> {
     }
   }
 
-
   // ============= Get Organization Members =============
   Future<List<OrganizationMember>> getOrganizationMembers(int orgId) async {
     emit(const OrganizationMembersLoading());
@@ -173,8 +180,7 @@ class OrganizationCubit extends Cubit<OrganizationState> {
         final members = (responseBody as List)
             .map((member) => OrganizationMember.fromJson(member))
             .toList();
-        // emit(OrganizationSuccess(members: members, []));
-        print(members[0].username);
+
         emit(OrganizationMembersSuccess(members));
         return members;
       } else {
@@ -256,43 +262,55 @@ class OrganizationCubit extends Cubit<OrganizationState> {
   // ============= Leave Organization =============
   Future<bool> leaveOrganization(BuildContext context, int orgId) async {
     final userCubit = context.read<UserCubit>();
-    final userId = userCubit.getCurrentUser()?.id;
+    final currentUser = await HelperFunctions.getUser();
     final Organization? organization = await getOrganizationById(orgId);
     if (userCubit.state is UserLoaded) {
       try {
-        final response =
-            await OrganizationHttpClient.leaveOrganization(orgId, userId!);
+        final response = await OrganizationHttpClient.leaveOrganization(
+            orgId, currentUser.id);
         print(
             "Leave organization response status code: ${response.statusCode}");
         print("Leave organization response: ${response.body}");
 
         if (response.statusCode == 200) {
           emit(const LeaveOrganizationSuccess());
-          await getOrganizationById(orgId);
-          final currentUser = await HelperFunctions.getUser();
+          // updateOrganizationsList(context);
+
+          final userOrganizationsResponse =
+              await UserHttpClient.getUserOrganizations(currentUser.id);
+
+          if (userOrganizationsResponse.statusCode == 200) {
+            context.read<CurrentOrganizationCubit>().setCurrentOrganization(
+                Organization.fromJson(
+                    jsonDecode(userOrganizationsResponse.body)[0]));
+          } else {
+            print(
+                "Wrong status code from get uuser organization in leave: ${userOrganizationsResponse.statusCode}");
+          }
+
           await sendNotification(
               userId: currentUser.id,
               subject: "Member Left",
               content:
-                  "${currentUser.username} has left the ${organization?.name} organization. Tab to get more details.",
+                  "${currentUser.username} has left the ${organization?.name} organization. Tap to get more details.",
               type: "LEAVE_ORG",
               customData: {
-                "userId": userId.toString(),
+                "userId": currentUser.id.toString(),
                 "organizationId": orgId.toString(),
               },
               parameters: {
                 "organizationId": orgId.toString()
               });
 
-              // leave the organization notification system
-              await exitOrganizationNotification(orgId);
+          // Leave the organization notification system
+          await exitOrganizationNotification(orgId);
 
           return true;
         } else if (jsonDecode(response.body)['success'] == false) {
           print("Enter the else if statement");
           final responseData = jsonDecode(response.body);
           emit(LeaveOrganizationFailure(errMessage: responseData['message']));
-          await getOrganizationById(orgId);
+
           return false;
         } else {
           emit(const LeaveOrganizationFailure(
@@ -515,7 +533,7 @@ class OrganizationCubit extends Cubit<OrganizationState> {
     emit(const CreatePostLoading());
     final userCubit = context.read<UserCubit>();
     final Organization? organization = await getOrganizationById(orgId);
-    List<OrganizationMember> members = await getOrganizationMembers(orgId);
+
     if (userCubit.state is UserLoaded) {
       emit(const CreatePostLoading());
 

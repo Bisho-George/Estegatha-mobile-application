@@ -70,6 +70,7 @@ class _MyAppState extends State<MyApp> {
           builder: (_, child) => MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'Estegatha',
+            // home: SignInPage(),
             home: home.value,
             routes: routes,
           ),
