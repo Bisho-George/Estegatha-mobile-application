@@ -27,3 +27,4 @@ String refreshTokenKey = 'refreshToken';
 String oldPasswordKey = 'oldPassword';
 String newPasswordKey = 'newPassword';
 int durationTimeout = 10;
+const kSosZones = 'sos_zones';

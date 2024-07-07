@@ -1,4 +1,11 @@
 import 'package:estegatha/features/catalog/persentation/view-model/catalog_cubit.dart';
+import 'package:estegatha/features/home/data/data_sources/sos_zone_data_source.dart';
+import 'package:estegatha/features/home/data/data_sources/sos_zone_remote_data_source.dart';
+import 'package:estegatha/features/home/data/data_sources/sos_zones_local_data_source.dart';
+import 'package:estegatha/features/home/data/repos/sos_zone_repo_imp.dart';
+import 'package:estegatha/features/home/domain/repos/sos_zone_repo.dart';
+import 'package:estegatha/features/home/domain/use_cases/sos_zone_use_case.dart';
+import 'package:estegatha/features/home/presentation/view_models/sos_zones_view_model/sos_zones_cubit.dart';
 import 'package:estegatha/features/organization/presentation/view_model/user_organizations_cubit.dart';
 import 'package:estegatha/features/safety/presentation/view_model/user_health_cubit.dart';
 import 'package:estegatha/features/safty/presentation/view_models/add_contact_cubit.dart';
@@ -92,5 +99,8 @@ List<SingleChildWidget> providers = [
   ),
   BlocProvider<FitnessDataCubit>(
     create: (context) => FitnessDataCubit(),
+  ),
+  BlocProvider<SosZonesCubit>(
+    create: (context) => SosZonesCubit(SosZoneUseCase(SosZoneRepoImp(SosZoneRemoteDataSource(ApiService(Dio())), SosZoneLocalDataSourceImp())))
   ),
 ];

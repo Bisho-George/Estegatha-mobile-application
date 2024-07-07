@@ -37,7 +37,7 @@ class BlogDetailScreen extends StatelessWidget {
                     if (blog.title != null)
                       Text(
                         blog.title!,
-                        style: Theme.of(context).textTheme.headline5,
+                        style: Theme.of(context).textTheme.headlineMedium,
                         textDirection: TextDirection.rtl,
                       ),
                     SizedBox(height: getProportionateScreenHeight(10)),
@@ -45,7 +45,7 @@ class BlogDetailScreen extends StatelessWidget {
                       Text(
                         textDirection: TextDirection.rtl,
                         blog.content!,
-                        style: Theme.of(context).textTheme.bodyText2,
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                   ],
                 ),

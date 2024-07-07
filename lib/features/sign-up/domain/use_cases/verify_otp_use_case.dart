@@ -3,7 +3,7 @@ import 'package:estegatha/features/sign-up/data/models/verify_otp_request.dart';
 import 'package:estegatha/features/sign-up/data/models/verify_otp_response.dart';
 import 'package:estegatha/features/sign-up/domain/repos/verify_otp_repo.dart';
 
-import '../../data/failure/failure.dart';
+import '../../../../utils/helpers/failure.dart';
 
 class VerifyOtpUseCase {
   final VerifyOtpRepo _repository;

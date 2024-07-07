@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 
 import '../../domain/repos/resend_otp_repo.dart';
 import '../data_source/resend_otp_data_source.dart';
-import '../failure/failure.dart';
+import '../../../../utils/helpers/failure.dart';
 import '../models/resend_otp_request.dart';
 import '../models/resend_otp_response.dart';
 

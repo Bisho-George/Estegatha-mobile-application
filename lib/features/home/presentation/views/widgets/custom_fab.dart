@@ -1,9 +1,11 @@
 
+import 'package:estegatha/features/home/presentation/view_models/sos_zones_view_model/sos_zones_cubit.dart';
 import 'package:estegatha/features/home/presentation/views/widgets/dangerous_dialog.dart';
 import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/image_strings.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
 class CustomFAB extends StatelessWidget {
@@ -32,10 +34,11 @@ class CustomFAB extends StatelessWidget {
               ),
               child: IconButton(
                 onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => const DangerousDialog(),
-                  );
+                  BlocProvider.of<SosZonesCubit>(context).getSosZones();
+                  // showDialog(
+                  //   context: context,
+                  //   builder: (context) => const DangerousDialog(),
+                  // );
                 },
                 icon: SvgPicture.asset(
                   fit: BoxFit.cover,

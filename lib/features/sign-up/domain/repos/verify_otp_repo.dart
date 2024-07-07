@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 
-import '../../data/failure/failure.dart';
+import '../../../../utils/helpers/failure.dart';
 import '../../data/models/verify_otp_request.dart';
 import '../../data/models/verify_otp_response.dart';
 
