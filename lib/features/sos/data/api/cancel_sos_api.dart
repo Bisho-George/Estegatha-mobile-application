@@ -15,7 +15,7 @@ class CancelSosApi extends CancelSosRepo {
     Dio dio = await DioAuth.getDio();
     OrganizationsRepo organizationsRepo = OrganizationsApi();
     Member member = await HelperFunctions.getUser();
-    await dio.post(baseUrl + notifyMembersEndPoint, data: {
+    await dio.post(baseUrl + sosEndPoint, data: {
       subjectKey: 'Safe Now',
       contentKey:
           'your friend ${member.username} is fine now',

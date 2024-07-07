@@ -6,6 +6,7 @@ String getOrganizationMembersEndPoint = 'api/v1/organizations/members';
 String joinNotificationEndPoint = 'api/v1/notification/join';
 String exitNotificationEndPoint = 'api/v1/notification/exit';
 String notifyMembersEndPoint = 'api/v1/notification';
+String sosEndPoint = 'api/v1/notification/notifyAll';
 String addContactEndPoint = 'api/v1/users/contact';
 String fetchContactsEndPoint = 'api/v1/users/contact';
 String editPhoneEndPoint = 'api/v1/users/account/phone-number';

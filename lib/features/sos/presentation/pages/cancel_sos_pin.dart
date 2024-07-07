@@ -67,7 +67,7 @@ class CancelSosPin extends StatelessWidget {
         listener: (context, state) {
           if (state is CancelSosFailure) {
             HelperFunctions.showSnackBar(context, state.message!);
-            Navigator.popUntil(context, (route) => route is MainNavMenu);
+            Navigator.pop(context);
           }
           else if(state is CancelSosSuccess){
             HelperFunctions.showSnackBar(context, 'SOS request has been canceled');

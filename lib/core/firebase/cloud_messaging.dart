@@ -98,7 +98,7 @@ Future<void> sendNotification({
   required String content,
   required String type,
   required Map<String, dynamic> customData,
-  Map<String, dynamic>? parameters,
+  required Map<String, dynamic>? parameters,
   required int userId,
 }) async {
   try {

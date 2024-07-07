@@ -95,6 +95,9 @@ class OrganizationCubit extends Cubit<OrganizationState> {
               customData: {
                 'userId': member.id.toString(),
                 'organizationId': organization.id.toString(),
+              },
+              parameters: {
+                'organizationId': organization.id.toString(),
               });
         } else {
           emit(const OrganizationFailure(
@@ -143,6 +146,7 @@ class OrganizationCubit extends Cubit<OrganizationState> {
   Future<List<OrganizationMember>> getCurrentOrganizationMembers() async {
     try {
       final CurrentOrganizationCubit currentOrganizationCubit = CurrentOrganizationCubit();
+      await currentOrganizationCubit.loadCurrentOrganization();
       int? orgId = currentOrganizationCubit.state.organizationId;
 
       if (orgId != null) {
@@ -232,6 +236,7 @@ class OrganizationCubit extends Cubit<OrganizationState> {
           for (var org in responseBody) {
             organizations.add(Organization.fromJson(org));
           }
+
           emit(UserOrganizationsSuccess(organizations));
           return organizations;
         } else {
@@ -276,6 +281,9 @@ class OrganizationCubit extends Cubit<OrganizationState> {
               customData: {
                 "userId": userId.toString(),
                 "organizationId": orgId.toString(),
+              },
+              parameters: {
+                "organizationId": orgId.toString()
               });
 
           return true;
@@ -335,6 +343,9 @@ class OrganizationCubit extends Cubit<OrganizationState> {
                 customData: {
                   "userId": userId.toString(),
                   "organizationId": orgId.toString(),
+                },
+                parameters: {
+                  "organizationId": orgId.toString()
                 });
 
             // exit that removed member from the organization notification system
@@ -429,6 +440,9 @@ class OrganizationCubit extends Cubit<OrganizationState> {
               customData: {
                 "userId": userId.toString(),
                 "organizationId": orgId.toString(),
+              },
+              parameters: {
+                "organizationId": orgId.toString()
               });
 
           return true;
@@ -524,6 +538,9 @@ class OrganizationCubit extends Cubit<OrganizationState> {
               type: "CREATE_POST",
               customData: {
                 "organizationId": orgId.toString(),
+              },
+              parameters: {
+                "organizationId": orgId.toString()
               });
         } else {
           emit(const CreatePostFailure(

@@ -29,7 +29,7 @@ class SosApi extends SosRepo {
     Member member = await HelperFunctions.getUser();
     int success = 0;
     Dio dio = await DioAuth.getDio();
-    Response response = await dio.post(baseUrl + notifyMembersEndPoint, data: {
+    Response response = await dio.post(baseUrl + sosEndPoint, data: {
       subjectKey: 'Emergency',
       contentKey:
           'your friend ${member.username} needs help',
