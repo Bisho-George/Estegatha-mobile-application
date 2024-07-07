@@ -150,7 +150,7 @@ class _HomeViewState extends State<HomeView>
                                     width: ConstantSizes.spaceBtwItems,
                                   ),
                                   const Text(
-                                    "Safety",
+                                    "SOS",
                                     style: TextStyle(
                                       color: ConstantColors.primary,
                                       fontSize: ConstantSizes.fontSizeMd,

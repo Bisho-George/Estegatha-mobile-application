@@ -2,7 +2,7 @@ import 'package:estegatha/features/organization/domain/models/organization.dart'
 import 'package:estegatha/features/sos/data/api/organizations_api.dart';
 import 'package:estegatha/features/sos/presentation/pages/cancel_sos.dart';
 import 'package:estegatha/features/sos/presentation/view_models/cubit/send_sos_cubit.dart';
-import 'package:estegatha/features/sos/presentation/view_models/cubit/send_sos_status.dart';
+import 'package:estegatha/features/sos/presentation/view_models/cubit/send_sos_state.dart';
 import 'package:estegatha/responsive/size_config.dart';
 import 'package:estegatha/utils/common/widgets/custom_app_bar.dart';
 import 'package:estegatha/utils/constant/colors.dart';
@@ -41,7 +41,7 @@ class SendSos extends StatelessWidget {
             SizedBox(
               height: responsiveHeight(200),
             ),
-            BlocConsumer<SendSosCubit, SendSosStatus>(
+            BlocConsumer<SendSosCubit, SendSosState>(
               builder: (context, state) {
                 if(state is SendSosLoading){
                   return const CircularProgressIndicator();

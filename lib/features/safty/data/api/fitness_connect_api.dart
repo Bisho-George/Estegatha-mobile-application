@@ -9,10 +9,9 @@ class FitnessConnectApi extends FitnessConnectRepository {
   final List<HealthDataType> healthTypes = [
     HealthDataType.STEPS,
     HealthDataType.HEART_RATE,
-    HealthDataType.BLOOD_GLUCOSE,
     HealthDataType.BLOOD_PRESSURE_DIASTOLIC,
     HealthDataType.BLOOD_OXYGEN,
-    HealthDataType.BODY_TEMPERATURE
+    HealthDataType.BODY_TEMPERATURE,
   ];
   final health = HealthFactory();
 
@@ -40,9 +39,15 @@ class FitnessConnectApi extends FitnessConnectRepository {
       DateTime.now(),
       healthTypes,
     );
-    Map<HealthDataType, HealthDataPoint> healthMap = {};
+    Map<HealthDataType, List<HealthDataPoint>> healthMap = {};
     for(var healthPoint in healthData){
-      healthMap[healthPoint.type] = healthPoint;
+      if(healthMap[healthPoint.type] == null) {
+        healthMap[healthPoint.type] = [];
+      }
+      healthMap[healthPoint.type]!.add(healthPoint);
+    }
+    for(var record in healthMap.entries){
+      record.value.sort((a, b) => a.dateFrom.compareTo(b.dateTo));
     }
     return [];
   }

@@ -38,6 +38,7 @@ handleMessages(RemoteMessage message, String appState) {
     case MessageTypes.REMOVE_BOUNDARY:
       break;
     case MessageTypes.REMOVE_MEMBER:
+      exitOrganizationNotification(message.data['organizationId']);
       break;
   }
 
@@ -45,11 +46,11 @@ handleMessages(RemoteMessage message, String appState) {
     print(
         " ===========> The app is already opened, no need to show notification... <===========");
   } else {
-    NotificationService notificationService = NotificationService();
-    notificationService.showNotification(
-        message.notification!.title!, message.notification!.body!);
     print("Message received in background: ${message.notification!.title}");
   }
+  NotificationService notificationService = NotificationService();
+  notificationService.showNotification(
+      message.notification!.title!, message.notification!.body!);
 }
 
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -97,7 +98,7 @@ Future<void> sendNotification({
   required String content,
   required String type,
   required Map<String, dynamic> customData,
-  required Map<String, dynamic>? parameters,
+  Map<String, dynamic>? parameters,
   required int userId,
 }) async {
   try {

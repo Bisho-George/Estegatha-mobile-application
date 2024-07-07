@@ -4,7 +4,6 @@ import 'package:estegatha/features/organization/presentation/view/widgets/organi
 import 'package:estegatha/features/organization/presentation/view/widgets/organization_tab_status.dart';
 import 'package:estegatha/features/organization/presentation/view/widgets/section_heading.dart';
 import 'package:estegatha/features/safety/presentation/view/add_health_record_screen.dart';
-import 'package:estegatha/features/safety/presentation/view/safety_screen.dart';
 import 'package:estegatha/features/safety/presentation/view/widgets/user_health_record_list.dart';
 import 'package:estegatha/utils/common/custom_app_bar.dart';
 import 'package:estegatha/utils/constant/colors.dart';

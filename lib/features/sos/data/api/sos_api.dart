@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:estegatha/constants.dart';
 import 'package:estegatha/core/data/api/dio_auth.dart';
 import 'package:estegatha/features/landing/domain/models/permissions.dart';
 import 'package:estegatha/features/organization/domain/models/member.dart';
@@ -6,7 +7,6 @@ import 'package:estegatha/features/organization/domain/models/organizationMember
 import 'package:estegatha/features/sos/data/api/organizations_api.dart';
 import 'package:estegatha/features/sos/domain/repositories/organizations_repo.dart';
 import 'package:estegatha/features/sos/domain/repositories/sos_repo.dart';
-import 'package:estegatha/constants.dart';
 import 'package:estegatha/utils/helpers/helper_functions.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -26,32 +26,22 @@ class SosApi extends SosRepo {
   Future<int> sendSos() async {
     await Permissions().grantPermissions();
     var location = await Geolocator.getCurrentPosition();
-    OrganizationsRepo organizationsRepo = OrganizationsApi();
     Member member = await HelperFunctions.getUser();
-    List<Organization> organizations =
-        await organizationsRepo.fetchOrganizations();
-    if (organizations.isEmpty) {
-      return 0;
-    }
     int success = 0;
     Dio dio = await DioAuth.getDio();
-    for (var organization in organizations) {
-      Response response =
-          await dio.post(baseUrl + notifyMembersEndPoint, data: {
-        subjectKey: 'Emergency',
-        contentKey:
-            'your friend ${member.username} in organization ${organization.name} needs help',
-        "type": "INIT_SOS",
-        'data': {
-          'userId': member.id.toString(),
-          'organizationId': organization.id.toString(),
-        }
-      }, queryParameters: {
-        'organizationId': organization.id.toString(),
-      });
-      if (response.statusCode == 201) {
-        success++;
+    Response response = await dio.post(baseUrl + notifyMembersEndPoint, data: {
+      subjectKey: 'Emergency',
+      contentKey:
+          'your friend ${member.username} needs help',
+      "type": "INIT_SOS",
+      'data': {
+        'userId': member.id.toString(),
+        'latitude': location.latitude.toString(),
+        'longitude': location.longitude.toString()
       }
+    });
+    if (response.statusCode == 201) {
+      success = 1;
     }
     return success;
   }

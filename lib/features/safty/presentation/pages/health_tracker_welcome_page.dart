@@ -36,27 +36,30 @@ class HealthTrackerWelcomePage extends StatelessWidget {
         pagesInfo: pagesInfo,
         height: responsiveHeight(500),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async{
-          if(pagesInfo.isLastPage){
-            if(await FitnessConnectApi().hasPermissions()){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const HealthTrackerDataPage()));
+      floatingActionButton: Padding(
+        padding: EdgeInsets.only(bottom: responsiveHeight(20)),
+        child: FloatingActionButton(
+          onPressed: () async{
+            if(pagesInfo.isLastPage){
+              if(await FitnessConnectApi().hasPermissions()){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const HealthTrackerDataPage()));
+              }
+              else{
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const HealthTrackerConnectPage()));
+              }
             }
             else{
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const HealthTrackerConnectPage()));
+              pageController.nextPage(
+                  duration: const Duration(milliseconds: 10),
+                  curve: Curves.easeInOut);
             }
-          }
-          else{
-            pageController.nextPage(
-                duration: const Duration(milliseconds: 10),
-                curve: Curves.easeInOut);
-          }
-        },
-        shape: const CircleBorder(),
-        backgroundColor: ConstantColors.primary,
-        child: const Icon(
-          Icons.arrow_forward,
-          color: ConstantColors.white,
+          },
+          shape: const CircleBorder(),
+          backgroundColor: ConstantColors.primary,
+          child: const Icon(
+            Icons.arrow_forward,
+            color: ConstantColors.white,
+          ),
         ),
       ),
     );

@@ -1,19 +1,19 @@
 import '../../../../organization/domain/models/member.dart';
 import '../../../../organization/domain/models/organizationMember.dart';
 
-class SendSosStatus{}
-class SendSosInitial extends SendSosStatus{}
-class SendSosLoading extends SendSosStatus{}
-class SendSosSuccess extends SendSosStatus{}
-class SendSosFailure extends SendSosStatus{
+class SendSosState{}
+class SendSosInitial extends SendSosState{}
+class SendSosLoading extends SendSosState{}
+class SendSosSuccess extends SendSosState{}
+class SendSosFailure extends SendSosState{
   final String ?message;
   SendSosFailure({this.message});
 }
-class MemberReceivedFailure extends SendSosStatus{
+class MemberReceivedFailure extends SendSosState{
   final String ?message;
   MemberReceivedFailure({this.message});
 }
-class MembersReceivedStatus extends SendSosStatus{
+class MembersReceivedStatus extends SendSosState{
   final List<OrganizationMember> members;
   MembersReceivedStatus({required this.members});
 }

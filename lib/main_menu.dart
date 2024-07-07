@@ -46,7 +46,7 @@ class _MainNavMenuState extends State<MainNavMenu> {
       ),
       // Safety
       PersistentBottomNavBarItem(
-        icon: const Icon(Icons.health_and_safety),
+        icon: const Icon(Icons.gpp_good),
         title: ("Safety"),
         activeColorPrimary: ConstantColors.primary,
         inactiveColorPrimary: ConstantColors.secondary,

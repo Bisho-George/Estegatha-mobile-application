@@ -5,13 +5,13 @@ import 'package:estegatha/features/sos/data/api/sos_api.dart';
 import 'package:estegatha/features/sos/domain/repositories/organizations_repo.dart';
 import 'package:estegatha/features/sos/domain/repositories/sos_repo.dart';
 import 'package:estegatha/features/sos/presentation/pages/send_sos.dart';
-import 'package:estegatha/features/sos/presentation/view_models/cubit/send_sos_status.dart';
+import 'package:estegatha/features/sos/presentation/view_models/cubit/send_sos_state.dart';
 import 'package:estegatha/utils/helpers/helper_functions.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../constants.dart';
 import '../../../../organization/domain/models/organizationMember.dart';
-class SendSosCubit extends Cubit<SendSosStatus>{
+class SendSosCubit extends Cubit<SendSosState>{
   SendSosCubit():super(SendSosInitial());
   Future<void> getMembers() async {
     emit(SendSosLoading());
