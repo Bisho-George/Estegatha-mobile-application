@@ -10,6 +10,7 @@ import 'package:estegatha/utils/common/widgets/custom_text_field.dart';
 import 'package:estegatha/utils/helpers/responsive.dart';
 import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
+import 'package:toastification/toastification.dart';
 
 class AddHealthRecordScreen extends StatefulWidget {
   const AddHealthRecordScreen({Key? key}) : super(key: key);
@@ -38,26 +39,87 @@ class _AddHealthRecordScreenState extends State<AddHealthRecordScreen> {
     if (selectedDisease != null || otherDiseaseController.text.isNotEmpty) {
       final disease = selectedDisease ?? otherDiseaseController.text;
       context.read<UserHealthCubit>().addUserDisease(disease);
-      HelperFunctions.showSnackBar(context, 'Disease information saved');
+      HelperFunctions.showCustomToast(
+        context: context,
+        title: const Text(
+          'Disease information saved',
+          style: const TextStyle(color: ConstantColors.primary),
+        ),
+        type: ToastificationType.success,
+        position: Alignment.bottomCenter,
+        duration: 3,
+        icon: const Icon(
+          Icons.error,
+          color: ConstantColors.primary,
+        ),
+        backgroundColor: ConstantColors.secondary,
+      );
+      // HelperFunctions.showSnackBar(context, 'Disease information saved');
 
       Navigator.pop(context);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter disease information')),
+      HelperFunctions.showCustomToast(
+        context: context,
+        title: const Text(
+          'Please enter disease information',
+          style: TextStyle(color: ConstantColors.primary),
+        ),
+        type: ToastificationType.error,
+        position: Alignment.bottomCenter,
+        duration: 3,
+        icon: const Icon(
+          Icons.error,
+          color: ConstantColors.primary,
+        ),
+        backgroundColor: ConstantColors.secondary,
       );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   const SnackBar(content: Text('Please enter disease information')),
+      // );
     }
   }
 
   void submitMedicine() {
     if (medicineController.text.isNotEmpty) {
       context.read<UserHealthCubit>().addUserMedicine(medicineController.text);
-      HelperFunctions.showSnackBar(context, 'Medicine information saved');
+
+      HelperFunctions.showCustomToast(
+        context: context,
+        title: const Text(
+          'Medicine information saved',
+          style: TextStyle(color: ConstantColors.primary),
+        ),
+        type: ToastificationType.success,
+        position: Alignment.bottomCenter,
+        duration: 3,
+        icon: const Icon(
+          Icons.check_circle_outline_rounded,
+          color: ConstantColors.primary,
+        ),
+        backgroundColor: ConstantColors.secondary,
+      );
+      // HelperFunctions.showSnackBar(context, 'Medicine information saved');
 
       Navigator.pop(context);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter medicine information')),
+      HelperFunctions.showCustomToast(
+        context: context,
+        title: const Text(
+          'Please enter medicine information',
+          style: TextStyle(color: ConstantColors.primary),
+        ),
+        type: ToastificationType.error,
+        position: Alignment.bottomCenter,
+        duration: 3,
+        icon: const Icon(
+          Icons.error,
+          color: ConstantColors.primary,
+        ),
+        backgroundColor: ConstantColors.secondary,
       );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   const SnackBar(content: Text('Please enter medicine information')),
+      // );
     }
   }
 

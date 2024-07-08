@@ -18,14 +18,14 @@ import 'package:get_storage/get_storage.dart';
 
 import '../../../../utils/constant/colors.dart';
 import '../../../../utils/constant/image_strings.dart';
-import '../../../organization/presentation/view_model/current_organization_cubit.dart';
 import '../../../sos/presentation/pages/send_sos.dart';
+import '../view_models/current_oragnization_cubit/current_organization_cubit.dart';
 import '../view_models/home_state.dart';
 import '../view_models/home_view_model.dart';
 
 class HomeView extends StatefulWidget {
   static const String routeName = '/home';
-  BuildContext ?parentContext;
+  BuildContext? parentContext;
   HomeView({super.key, this.parentContext});
   @override
   _HomeViewState createState() => _HomeViewState();
@@ -42,8 +42,18 @@ class _HomeViewState extends State<HomeView>
     super.initState();
     BlocProvider.of<UserOrganizationsCubit>(context)
         .getUserOrganizationsWithoutId();
-    BlocProvider.of<CurrentOrganizationCubit>(context).loadCurrentOrganization();
-    BlocProvider.of<OrganizationMemberHomeCubit>(context).getCurrentOrganizationMembers();
+
+    print(
+        "USer organizations ${BlocProvider.of<UserOrganizationsCubit>(context).organizations.length}");
+
+    BlocProvider.of<CurrentOrganizationCubit>(context)
+        .checkCurrentOrganization();
+
+    BlocProvider.of<CurrentOrganizationCubit>(context)
+        .loadCurrentOrganization();
+
+    BlocProvider.of<OrganizationMemberHomeCubit>(context)
+        .getCurrentOrganizationMembers();
 
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 300),

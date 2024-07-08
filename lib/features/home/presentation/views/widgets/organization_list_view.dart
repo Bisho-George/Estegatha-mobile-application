@@ -1,10 +1,10 @@
 import 'package:estegatha/features/home/presentation/view_models/home_view_model.dart';
-import 'package:estegatha/features/organization/presentation/view_model/current_organization_cubit.dart';
 import 'package:estegatha/features/organization/presentation/view_model/organization_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../organization/domain/models/organization.dart';
+import '../../view_models/current_oragnization_cubit/current_organization_cubit.dart';
 import 'organization_widget.dart';
 
 class OrganizationsListView extends StatelessWidget {
@@ -19,7 +19,7 @@ class OrganizationsListView extends StatelessWidget {
     return ListView.builder(
       itemBuilder: (context, index) => GestureDetector(
         onTap: () {
-          BlocProvider.of<CurrentOrganizationCubit>(context).setCurrentOrganization(organizations[index].id!);
+          BlocProvider.of<CurrentOrganizationCubit>(context).setCurrentOrganization(organizations[index]);
           BlocProvider.of<OrganizationCubit>(context).getOrganizationMembers(organizations[index].id!);
           BlocProvider.of<HomeCubit>(context).hideOrganizations();
         },

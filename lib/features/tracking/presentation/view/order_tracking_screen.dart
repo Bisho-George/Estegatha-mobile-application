@@ -1,12 +1,16 @@
 import 'dart:async';
+import 'package:estegatha/features/organization/presentation/view/main/track_cubit/track_cubit.dart';
+import 'package:estegatha/features/sign-in/presentation/veiw_models/user_cubit.dart';
 import 'package:estegatha/features/tracking/presentation/view/custom_marker.dart';
 import 'package:estegatha/utils/constant/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'dart:math' as math;
 
 class OrderTrackingScreen extends StatefulWidget {
-  const OrderTrackingScreen({Key? key}) : super(key: key);
+  const OrderTrackingScreen({super.key});
 
   @override
   State<OrderTrackingScreen> createState() => OrderTrackingScreenState();
@@ -23,9 +27,12 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
   BitmapDescriptor sourceIcon = BitmapDescriptor.defaultMarker;
   BitmapDescriptor destinationIcon = BitmapDescriptor.defaultMarker;
   BitmapDescriptor currentLocationIcon = BitmapDescriptor.defaultMarker;
+  String username = '';
+  double currentZoomLevel = 13.5;
 
   @override
   void initState() {
+    username = context.read<TrackCubit>().getTrackedMemberName();
     super.initState();
     setCustomMarkerIcon();
     markers.addAll({
@@ -47,17 +54,28 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
     LatLng currentPosition = sourceLocation;
     GoogleMapController googleMapController = await _controller.future;
 
-    Timer.periodic(Duration(seconds: 5), (timer) {
+    Timer.periodic(const Duration(seconds: 1), (timer) {
       // Stop the timer when the destination is reached
       if ((currentPosition.latitude - destination.latitude).abs() < 0.001 &&
           (currentPosition.longitude - destination.longitude).abs() < 0.001) {
         timer.cancel();
       } else {
-        // Calculate the new position (simulating movement)
+        // Calculate the general direction to the destination
+        double latDirection = destination.latitude - currentPosition.latitude;
+        double lngDirection = destination.longitude - currentPosition.longitude;
+
+        // Normalize the direction
+        double magnitude = math
+            .sqrt(latDirection * latDirection + lngDirection * lngDirection);
+        latDirection /= magnitude;
+        lngDirection /= magnitude;
+
+        // Apply a random factor around the general direction
         double newLat = currentPosition.latitude +
-            (destination.latitude - sourceLocation.latitude) / 20;
+            latDirection * 0.001 * math.Random().nextDouble();
         double newLng = currentPosition.longitude +
-            (destination.longitude - sourceLocation.longitude) / 20;
+            lngDirection * 0.001 * math.Random().nextDouble();
+
         currentPosition = LatLng(newLat, newLng);
 
         setState(() {
@@ -74,7 +92,7 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
         googleMapController.animateCamera(
           CameraUpdate.newCameraPosition(
             CameraPosition(
-              zoom: 13.5,
+              zoom: currentZoomLevel, // Use the current zoom level
               target: currentPosition,
             ),
           ),
@@ -84,17 +102,7 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
   }
 
   void setCustomMarkerIcon() {
-    // BitmapDescriptor.fromAssetImage(
-    //         ImageConfiguration.empty, "assets/Vector-1.png")
-    //     .then((icon) {
-    //   sourceIcon = icon;
-    // });
-    // BitmapDescriptor.fromAssetImage(
-    //         ImageConfiguration.empty, "assets/Vector-1.png")
-    //     .then((icon) {
-    //   destinationIcon = icon;
-    // });
-    createCustomMarkerBitmap().then((icon) {
+    createCustomMarkerBitmap(username).then((icon) {
       currentLocationIcon = icon;
     });
   }
@@ -107,6 +115,10 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
           target: sourceLocation,
           zoom: 13.5,
         ),
+        onCameraMove: (CameraPosition position) {
+          currentZoomLevel =
+              position.zoom; // Update the current zoom level on camera move
+        },
         markers: markers,
         onMapCreated: (mapController) {
           _controller.complete(mapController);

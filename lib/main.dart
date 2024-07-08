@@ -1,5 +1,6 @@
 import 'package:estegatha/core/firebase/cloud_messaging.dart';
 import 'package:estegatha/core/firebase/fcm_setup.dart';
+import 'package:estegatha/features/home/presentation/views/home_view.dart';
 
 import 'package:estegatha/features/sign-in/presentation/pages/sign_in_page.dart';
 import 'package:estegatha/providers.dart';
@@ -12,6 +13,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:estegatha/routes.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:toastification/toastification.dart';
 import 'core/domain/handle_first_route.dart';
 import 'core/firebase/notification.dart';
 import 'firebase_options.dart';
@@ -45,8 +47,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final ValueNotifier<Widget> home = ValueNotifier<Widget>(SignInPage());
-  final String initialRoute = SignInPage.routeName;
+  final ValueNotifier<Widget> home = ValueNotifier<Widget>(HomeView());
+  final String initialRoute = HomeView.routeName;
   @override
   void initState() {
     super.initState();
@@ -64,11 +66,14 @@ class _MyAppState extends State<MyApp> {
           designSize: const Size(360, 690),
           minTextAdapt: true,
           splitScreenMode: true,
-          builder: (_, child) => MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'Estegatha',
-            home: home.value,
-            routes: routes,
+          builder: (_, child) => ToastificationWrapper(
+            child: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Estegatha',
+              // home: SignInPage(),
+              home: home.value,
+              routes: routes,
+            ),
           ),
         );
       },

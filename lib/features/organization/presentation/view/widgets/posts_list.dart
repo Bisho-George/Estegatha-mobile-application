@@ -9,10 +9,12 @@ import 'package:estegatha/features/settings/presentation/view/widgets/setting_it
 import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/image_strings.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
+import 'package:estegatha/utils/helpers/helper_functions.dart';
 import 'package:estegatha/utils/helpers/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:toastification/toastification.dart';
 
 class PostsList extends StatefulWidget {
   final Organization organization;
@@ -40,6 +42,22 @@ class _PostsListState extends State<PostsList> {
     setState(() {
       widget.posts.removeAt(index);
     });
+
+    HelperFunctions.showCustomToast(
+      context: context,
+      title: const Text(
+        'Post deleted successfully!',
+        style: TextStyle(color: ConstantColors.primary),
+      ),
+      type: ToastificationType.success,
+      position: Alignment.bottomCenter,
+      duration: 3,
+      icon: const Icon(
+        Icons.check_circle_outline_rounded,
+        color: ConstantColors.primary,
+      ),
+      backgroundColor: ConstantColors.secondary,
+    );
   }
 
   @override
@@ -57,25 +75,26 @@ class _PostsListState extends State<PostsList> {
                     fontSize: ConstantSizes.fontSizeSm,
                   )),
               SizedBox(height: getProportionateScreenHeight(ConstantSizes.md)),
-              OutlinedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => CreatePostScreen(
-                                orgId: widget.organization.id!,
-                              )));
-                },
-                style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: ConstantColors.grey),
-                ),
-                child: Text(
-                  'Create Post',
-                  style: TextStyle(
-                      color: ConstantColors.primary,
-                      fontSize: SizeConfig.font14),
-                ),
-              )
+              if (widget.isAdmin!)
+                OutlinedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CreatePostScreen(
+                                  orgId: widget.organization.id!,
+                                )));
+                  },
+                  style: OutlinedButton.styleFrom(
+                    side: const BorderSide(color: ConstantColors.grey),
+                  ),
+                  child: Text(
+                    'Create Post',
+                    style: TextStyle(
+                        color: ConstantColors.primary,
+                        fontSize: SizeConfig.font14),
+                  ),
+                )
             ],
           ));
     }

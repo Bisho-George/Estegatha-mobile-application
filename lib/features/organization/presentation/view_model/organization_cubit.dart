@@ -5,7 +5,6 @@ import 'package:estegatha/features/organization/domain/api/organization_api.dart
 import 'package:estegatha/features/organization/domain/models/organization.dart';
 import 'package:estegatha/features/organization/domain/models/organizationMember.dart';
 import 'package:estegatha/features/organization/domain/models/post.dart';
-import 'package:estegatha/features/organization/presentation/view_model/current_organization_cubit.dart';
 import 'package:estegatha/features/organization/presentation/view_model/user_organizations_cubit.dart'
     as userOrgCubit;
 import 'package:estegatha/features/sign-in/data/api/user_http_client.dart';
@@ -17,6 +16,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../constants.dart';
 import '../../../../core/data/api/dio_auth.dart';
+import '../../../home/presentation/view_models/current_oragnization_cubit/current_organization_cubit.dart';
 import '../../domain/models/member.dart';
 import 'organization_state.dart';
 
@@ -74,14 +74,17 @@ class OrganizationCubit extends Cubit<OrganizationState> {
       try {
         final response =
             await OrganizationHttpClient.joinOrganizationByCode(code);
-
+        print("Response status code: ${response.statusCode}");
+        print("Response body: ${response.body}");
         if (response.statusCode == 200) {
           final Organization organization =
               Organization.fromJson(jsonDecode(response.body));
 
-          final currentUser = await HelperFunctions.getUser();
+          context
+              .read<CurrentOrganizationCubit>()
+              .setCurrentOrganization(organization);
 
-          print("Organization: ${organization.id}");
+          final currentUser = await HelperFunctions.getUser();
 
           emit(OrganizationJoinSuccess(organization));
           await joinToOrganizationNotification(organization.id!);
@@ -99,6 +102,9 @@ class OrganizationCubit extends Cubit<OrganizationState> {
               parameters: {
                 'organizationId': organization.id.toString(),
               });
+        } else if (jsonDecode(response.body)['success'] == false) {
+          HelperFunctions.showSnackBar(
+              context, 'Invalid code, please try again!');
         } else {
           emit(const OrganizationFailure(
               errMessage: "Something went wrong, try again!"));
@@ -145,12 +151,13 @@ class OrganizationCubit extends Cubit<OrganizationState> {
 
   Future<List<OrganizationMember>> getCurrentOrganizationMembers() async {
     try {
-      final CurrentOrganizationCubit currentOrganizationCubit = CurrentOrganizationCubit();
-      await currentOrganizationCubit.loadCurrentOrganization();
-      int? orgId = currentOrganizationCubit.state.organizationId;
+      final CurrentOrganizationCubit currentOrganizationCubit =
+          CurrentOrganizationCubit();
+      Organization? currentOrganization =
+          currentOrganizationCubit.currentOrganization;
 
-      if (orgId != null) {
-        return await getOrganizationMembers(orgId);
+      if (currentOrganization != null) {
+        return await getOrganizationMembers(currentOrganization.id!);
       } else {
         print('No current organization');
         return [];
@@ -160,7 +167,6 @@ class OrganizationCubit extends Cubit<OrganizationState> {
       return [];
     }
   }
-
 
   // ============= Get Organization Members =============
   Future<List<OrganizationMember>> getOrganizationMembers(int orgId) async {
@@ -174,8 +180,7 @@ class OrganizationCubit extends Cubit<OrganizationState> {
         final members = (responseBody as List)
             .map((member) => OrganizationMember.fromJson(member))
             .toList();
-        // emit(OrganizationSuccess(members: members, []));
-        print(members[0].username);
+
         emit(OrganizationMembersSuccess(members));
         return members;
       } else {
@@ -236,7 +241,6 @@ class OrganizationCubit extends Cubit<OrganizationState> {
           for (var org in responseBody) {
             organizations.add(Organization.fromJson(org));
           }
-
           emit(UserOrganizationsSuccess(organizations));
           return organizations;
         } else {
@@ -258,40 +262,55 @@ class OrganizationCubit extends Cubit<OrganizationState> {
   // ============= Leave Organization =============
   Future<bool> leaveOrganization(BuildContext context, int orgId) async {
     final userCubit = context.read<UserCubit>();
-    final userId = userCubit.getCurrentUser()?.id;
+    final currentUser = await HelperFunctions.getUser();
     final Organization? organization = await getOrganizationById(orgId);
     if (userCubit.state is UserLoaded) {
       try {
-        final response =
-            await OrganizationHttpClient.leaveOrganization(orgId, userId!);
+        final response = await OrganizationHttpClient.leaveOrganization(
+            orgId, currentUser.id);
         print(
             "Leave organization response status code: ${response.statusCode}");
         print("Leave organization response: ${response.body}");
 
         if (response.statusCode == 200) {
           emit(const LeaveOrganizationSuccess());
-          await getOrganizationById(orgId);
-          final currentUser = await HelperFunctions.getUser();
+          // updateOrganizationsList(context);
+
+          final userOrganizationsResponse =
+              await UserHttpClient.getUserOrganizations(currentUser.id);
+
+          if (userOrganizationsResponse.statusCode == 200) {
+            context.read<CurrentOrganizationCubit>().setCurrentOrganization(
+                Organization.fromJson(
+                    jsonDecode(userOrganizationsResponse.body)[0]));
+          } else {
+            print(
+                "Wrong status code from get uuser organization in leave: ${userOrganizationsResponse.statusCode}");
+          }
+
           await sendNotification(
               userId: currentUser.id,
               subject: "Member Left",
               content:
-                  "${currentUser.username} has left the ${organization?.name} organization. Tab to get more details.",
+                  "${currentUser.username} has left the ${organization?.name} organization. Tap to get more details.",
               type: "LEAVE_ORG",
               customData: {
-                "userId": userId.toString(),
+                "userId": currentUser.id.toString(),
                 "organizationId": orgId.toString(),
               },
               parameters: {
                 "organizationId": orgId.toString()
               });
 
+          // Leave the organization notification system
+          await exitOrganizationNotification(orgId);
+
           return true;
         } else if (jsonDecode(response.body)['success'] == false) {
           print("Enter the else if statement");
           final responseData = jsonDecode(response.body);
           emit(LeaveOrganizationFailure(errMessage: responseData['message']));
-          await getOrganizationById(orgId);
+
           return false;
         } else {
           emit(const LeaveOrganizationFailure(
@@ -392,74 +411,74 @@ class OrganizationCubit extends Cubit<OrganizationState> {
     }
   }
 
-  Future<bool> changeMemberRole(
-      BuildContext context, int orgId, int userId, String newRole) async {
-    final userCubit = context.read<UserCubit>();
-    final organization = await getOrganizationById(orgId);
+  // Future<bool> changeMemberRole(
+  //     BuildContext context, int orgId, int userId, String newRole) async {
+  //   final userCubit = context.read<UserCubit>();
+  //   final organization = await getOrganizationById(orgId);
 
-    final currentUser = await HelperFunctions.getUser();
-    if (userCubit.state is UserLoaded) {
-      emit(const ChangeMemberRoleLoading());
+  //   final currentUser = await HelperFunctions.getUser();
+  //   if (userCubit.state is UserLoaded) {
+  //     emit(const ChangeMemberRoleLoading());
 
-      try {
-        // Fetch current organization members
-        final members = await getOrganizationMembers(orgId);
+  //     try {
+  //       // Fetch current organization members
+  //       final members = await getOrganizationMembers(orgId);
 
-        // Check if there's at least one member with a role of 'owner' or 'admin'
-        bool hasRequiredRole = members.any((member) =>
-            (member.role == 'OWNER' || member.role == 'ADMIN') &&
-            member.userId != userId);
+  //       // Check if there's at least one member with a role of 'owner' or 'admin'
+  //       bool hasRequiredRole = members.any((member) =>
+  //           (member.role == 'OWNER' || member.role == 'ADMIN') &&
+  //           member.userId != userId);
 
-        print("hasRequiredRole: $hasRequiredRole");
+  //       print("hasRequiredRole: $hasRequiredRole");
 
-        // If trying to change the role of an 'owner' or 'admin', ensure another exists
-        if (!hasRequiredRole && (newRole != 'OWNER' && newRole != 'ADMIN')) {
-          HelperFunctions.showSnackBar(
-              context, "Must have at least one 'owner' or 'admin'");
-          await getOrganizationById(orgId);
-          return false;
-        }
+  //       // If trying to change the role of an 'owner' or 'admin', ensure another exists
+  //       if (!hasRequiredRole && (newRole != 'OWNER' && newRole != 'ADMIN')) {
+  //         HelperFunctions.showSnackBar(
+  //             context, "Must have at least one 'owner' or 'admin'");
+  //         await getOrganizationById(orgId);
+  //         return false;
+  //       }
 
-        // Proceed with role change if condition is met
-        final response = await OrganizationHttpClient.changeMemberRole(
-            orgId, userId, newRole);
+  //       // Proceed with role change if condition is met
+  //       final response = await OrganizationHttpClient.changeMemberRole(
+  //           orgId, userId, newRole);
 
-        if (response.statusCode == 200) {
-          emit(const ChangeMemberRoleSuccess());
+  //       if (response.statusCode == 200) {
+  //         emit(const ChangeMemberRoleSuccess());
 
-          await getOrganizationById(orgId);
+  //         await getOrganizationById(orgId);
 
-          // Send specific or general notification based on the user
-          await sendNotification(
-              userId: currentUser.id,
-              subject: "Role Change",
-              content: currentUser.id != userId
-                  ? "Your role has been changed in ${organization?.name} to $newRole"
-                  : "A member role has been changed in ${organization?.name}. Tab to see the changes.",
-              type: "CHANGE_ROLE",
-              customData: {
-                "userId": userId.toString(),
-                "organizationId": orgId.toString(),
-              },
-              parameters: {
-                "organizationId": orgId.toString()
-              });
+  //         // Send specific or general notification based on the user
+  //         await sendNotification(
+  //             userId: currentUser.id,
+  //             subject: "Role Change",
+  //             content: currentUser.id != userId
+  //                 ? "Your role has been changed in ${organization?.name} to $newRole"
+  //                 : "A member role has been changed in ${organization?.name}. Tab to see the changes.",
+  //             type: "CHANGE_ROLE",
+  //             customData: {
+  //               "userId": userId.toString(),
+  //               "organizationId": orgId.toString(),
+  //             },
+  //             parameters: {
+  //               "organizationId": orgId.toString()
+  //             });
 
-          return true;
-        } else {
-          emit(const OrganizationFailure(
-              errMessage: "Something went wrong, try again!"));
-        }
-      } catch (e) {
-        print(e);
-        emit(
-          const OrganizationFailure(
-              errMessage: "Failed to change member role!"),
-        );
-      }
-    }
-    return false;
-  }
+  //         return true;
+  //       } else {
+  //         emit(const OrganizationFailure(
+  //             errMessage: "Something went wrong, try again!"));
+  //       }
+  //     } catch (e) {
+  //       print(e);
+  //       emit(
+  //         const OrganizationFailure(
+  //             errMessage: "Failed to change member role!"),
+  //       );
+  //     }
+  //   }
+  //   return false;
+  // }
 
   Future<Organization> updateOrganization(BuildContext context, int orgId,
       Organization organization, String? name, String? type) async {
@@ -514,7 +533,7 @@ class OrganizationCubit extends Cubit<OrganizationState> {
     emit(const CreatePostLoading());
     final userCubit = context.read<UserCubit>();
     final Organization? organization = await getOrganizationById(orgId);
-    List<OrganizationMember> members = await getOrganizationMembers(orgId);
+
     if (userCubit.state is UserLoaded) {
       emit(const CreatePostLoading());
 

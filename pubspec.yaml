@@ -54,7 +54,7 @@ dependencies:
   intl: ^0.17.0
   wakelock: ^0.6.2
   health: ^6.0.0
-
+  toastification: ^2.0.0
   carousel_slider: ^4.2.1
   cupertino_icons: ^1.0.6
   dartz: ^0.10.1

@@ -26,7 +26,7 @@ class DraggableScrollSheetListItem extends StatelessWidget {
         )
       ),
       title: Text(member.username ?? ''),
-      subtitle: Text(member.role ?? ''),
+      subtitle: Text(member.status ?? ''),
     );
   }
 }

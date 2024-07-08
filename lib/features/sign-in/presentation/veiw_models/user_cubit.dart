@@ -2,17 +2,11 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 import 'package:estegatha/core/firebase/cloud_messaging.dart';
-import 'package:estegatha/core/firebase/notification.dart';
 import 'package:estegatha/features/organization/domain/models/member.dart';
 import 'package:estegatha/features/organization/domain/models/organization.dart';
-import 'package:estegatha/features/organization/presentation/view_model/current_organization_cubit.dart';
-import 'package:estegatha/features/organization/presentation/view_model/organization_cubit.dart';
-import 'package:estegatha/features/organization/presentation/view_model/organization_state.dart';
 import 'package:estegatha/features/sign-in/data/api/signin_http_client.dart';
-import 'package:estegatha/features/sign-in/data/api/user_http_client.dart';
 import 'package:estegatha/features/sign-in/presentation/pages/sign_in_page.dart';
 import 'package:estegatha/features/sos/data/api/organizations_api.dart';
-import 'package:estegatha/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
@@ -66,9 +60,9 @@ class UserCubit extends Cubit<UserState> {
   }
 
   Future<void> logout(BuildContext context) async {
-
     // get user organization
-    final userOrganizationResponse = await OrganizationsApi().fetchOrganizations();
+    final userOrganizationResponse =
+        await OrganizationsApi().fetchOrganizations();
     if (userOrganizationResponse.isNotEmpty) {
       print("======= enter user organizations ======");
       // Convert each item in the list to an Organization object

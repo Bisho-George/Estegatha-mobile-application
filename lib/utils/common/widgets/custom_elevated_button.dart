@@ -12,12 +12,14 @@ class CustomElevatedButton extends StatelessWidget {
     this.focusNode,
     this.isPrimary = true,
     this.isLoading = false,
+    this.textSize
   });
   final bool isLoading;
 
   final GlobalKey<FormState>? formKey;
   final void Function()? onPressed;
   final String labelText;
+  final double? textSize;
   FocusNode? focusNode;
   final bool isPrimary;
   @override
@@ -37,7 +39,7 @@ class CustomElevatedButton extends StatelessWidget {
               vertical:
                   getProportionateScreenHeight(ConstantSizes.buttonHeight)),
           textStyle: TextStyle(
-              fontSize: SizeConfig.font20,
+              fontSize: textSize ?? SizeConfig.font20,
               color: ConstantColors.textWhite,
               fontWeight: FontWeight.w600),
           shape: RoundedRectangleBorder(

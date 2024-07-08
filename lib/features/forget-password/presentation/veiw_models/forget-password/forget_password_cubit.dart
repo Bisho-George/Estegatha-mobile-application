@@ -2,9 +2,12 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:estegatha/features/sign-in/data/api/signin_http_client.dart';
+import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/helpers/helper_functions.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
+import 'package:toastification/toastification.dart';
 
 part 'forget_password_state.dart';
 
@@ -69,8 +72,23 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
 
       if (response.statusCode == 200) {
         emit(SendResetTokenSuccess());
+        HelperFunctions.showCustomToast(
+          context: context,
+          title: const Text(
+            "Reset link sent",
+            style: TextStyle(color: ConstantColors.primary),
+          ),
+          type: ToastificationType.success,
+          position: Alignment.bottomCenter,
+          duration: 3,
+          icon: const Icon(
+            Icons.check_circle_outline_rounded,
+            color: ConstantColors.primary,
+          ),
+          backgroundColor: ConstantColors.secondary,
+        );
 
-        HelperFunctions.showSnackBar(context, "Reset link sent");
+        // HelperFunctions.showSnackBar(context, "Reset link sent");
       } else {
         emit(SendResetTokenFailure(errMessage: "Failed to send email!"));
         print("response: ${response.body}");

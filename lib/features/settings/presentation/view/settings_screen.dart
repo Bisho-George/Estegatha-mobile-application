@@ -1,10 +1,9 @@
 import 'package:estegatha/features/edit_account/presentation/pages/edit_account_menu.dart';
+import 'package:estegatha/features/home/presentation/view_models/current_oragnization_cubit/current_organization_cubit.dart';
 import 'package:estegatha/features/organization/presentation/view/boarding_page.dart';
 import 'package:estegatha/features/organization/presentation/view/join/join_organization_page.dart';
 import 'package:estegatha/features/organization/presentation/view/setting/organization_settings_screen.dart';
 import 'package:estegatha/features/organization/presentation/view/widgets/section_heading.dart';
-import 'package:estegatha/features/organization/presentation/view_model/current_organization_cubit.dart';
-import 'package:estegatha/features/organization/presentation/view_model/current_organization_state.dart';
 import 'package:estegatha/features/settings/presentation/view/widgets/setting_item.dart';
 import 'package:estegatha/features/sign-in/presentation/veiw_models/user_cubit.dart';
 import 'package:estegatha/utils/common/custom_app_bar.dart';
@@ -69,7 +68,11 @@ class SettingsScreen extends StatelessWidget {
                   // Assuming you have a method to navigate to the organization-specific settings page
                   // You can pass the organization ID from the state to that method
                   navigateToOrganizationSettings(
-                      context, 1); //TODO: Replace 1 with the organization ID
+                      context,
+                      context
+                          .read<CurrentOrganizationCubit>()
+                          .currentOrganization!
+                          .id!);
                 },
               ),
               SettingItem(
