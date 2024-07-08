@@ -411,74 +411,74 @@ class OrganizationCubit extends Cubit<OrganizationState> {
     }
   }
 
-  Future<bool> changeMemberRole(
-      BuildContext context, int orgId, int userId, String newRole) async {
-    final userCubit = context.read<UserCubit>();
-    final organization = await getOrganizationById(orgId);
+  // Future<bool> changeMemberRole(
+  //     BuildContext context, int orgId, int userId, String newRole) async {
+  //   final userCubit = context.read<UserCubit>();
+  //   final organization = await getOrganizationById(orgId);
 
-    final currentUser = await HelperFunctions.getUser();
-    if (userCubit.state is UserLoaded) {
-      emit(const ChangeMemberRoleLoading());
+  //   final currentUser = await HelperFunctions.getUser();
+  //   if (userCubit.state is UserLoaded) {
+  //     emit(const ChangeMemberRoleLoading());
 
-      try {
-        // Fetch current organization members
-        final members = await getOrganizationMembers(orgId);
+  //     try {
+  //       // Fetch current organization members
+  //       final members = await getOrganizationMembers(orgId);
 
-        // Check if there's at least one member with a role of 'owner' or 'admin'
-        bool hasRequiredRole = members.any((member) =>
-            (member.role == 'OWNER' || member.role == 'ADMIN') &&
-            member.userId != userId);
+  //       // Check if there's at least one member with a role of 'owner' or 'admin'
+  //       bool hasRequiredRole = members.any((member) =>
+  //           (member.role == 'OWNER' || member.role == 'ADMIN') &&
+  //           member.userId != userId);
 
-        print("hasRequiredRole: $hasRequiredRole");
+  //       print("hasRequiredRole: $hasRequiredRole");
 
-        // If trying to change the role of an 'owner' or 'admin', ensure another exists
-        if (!hasRequiredRole && (newRole != 'OWNER' && newRole != 'ADMIN')) {
-          HelperFunctions.showSnackBar(
-              context, "Must have at least one 'owner' or 'admin'");
-          await getOrganizationById(orgId);
-          return false;
-        }
+  //       // If trying to change the role of an 'owner' or 'admin', ensure another exists
+  //       if (!hasRequiredRole && (newRole != 'OWNER' && newRole != 'ADMIN')) {
+  //         HelperFunctions.showSnackBar(
+  //             context, "Must have at least one 'owner' or 'admin'");
+  //         await getOrganizationById(orgId);
+  //         return false;
+  //       }
 
-        // Proceed with role change if condition is met
-        final response = await OrganizationHttpClient.changeMemberRole(
-            orgId, userId, newRole);
+  //       // Proceed with role change if condition is met
+  //       final response = await OrganizationHttpClient.changeMemberRole(
+  //           orgId, userId, newRole);
 
-        if (response.statusCode == 200) {
-          emit(const ChangeMemberRoleSuccess());
+  //       if (response.statusCode == 200) {
+  //         emit(const ChangeMemberRoleSuccess());
 
-          await getOrganizationById(orgId);
+  //         await getOrganizationById(orgId);
 
-          // Send specific or general notification based on the user
-          await sendNotification(
-              userId: currentUser.id,
-              subject: "Role Change",
-              content: currentUser.id != userId
-                  ? "Your role has been changed in ${organization?.name} to $newRole"
-                  : "A member role has been changed in ${organization?.name}. Tab to see the changes.",
-              type: "CHANGE_ROLE",
-              customData: {
-                "userId": userId.toString(),
-                "organizationId": orgId.toString(),
-              },
-              parameters: {
-                "organizationId": orgId.toString()
-              });
+  //         // Send specific or general notification based on the user
+  //         await sendNotification(
+  //             userId: currentUser.id,
+  //             subject: "Role Change",
+  //             content: currentUser.id != userId
+  //                 ? "Your role has been changed in ${organization?.name} to $newRole"
+  //                 : "A member role has been changed in ${organization?.name}. Tab to see the changes.",
+  //             type: "CHANGE_ROLE",
+  //             customData: {
+  //               "userId": userId.toString(),
+  //               "organizationId": orgId.toString(),
+  //             },
+  //             parameters: {
+  //               "organizationId": orgId.toString()
+  //             });
 
-          return true;
-        } else {
-          emit(const OrganizationFailure(
-              errMessage: "Something went wrong, try again!"));
-        }
-      } catch (e) {
-        print(e);
-        emit(
-          const OrganizationFailure(
-              errMessage: "Failed to change member role!"),
-        );
-      }
-    }
-    return false;
-  }
+  //         return true;
+  //       } else {
+  //         emit(const OrganizationFailure(
+  //             errMessage: "Something went wrong, try again!"));
+  //       }
+  //     } catch (e) {
+  //       print(e);
+  //       emit(
+  //         const OrganizationFailure(
+  //             errMessage: "Failed to change member role!"),
+  //       );
+  //     }
+  //   }
+  //   return false;
+  // }
 
   Future<Organization> updateOrganization(BuildContext context, int orgId,
       Organization organization, String? name, String? type) async {

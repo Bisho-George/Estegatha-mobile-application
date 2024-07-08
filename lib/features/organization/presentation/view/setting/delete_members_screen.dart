@@ -10,10 +10,12 @@ import 'package:estegatha/utils/common/custom_app_bar.dart';
 import 'package:estegatha/utils/common/widgets/custom_elevated_button.dart';
 import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
+import 'package:estegatha/utils/helpers/helper_functions.dart';
 import 'package:estegatha/utils/helpers/responsive.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter/material.dart';
+import 'package:toastification/toastification.dart';
 
 class DeleteMemberScreen extends StatefulWidget {
   final Organization organization;
@@ -82,23 +84,29 @@ class _DeleteMemberScreenState extends State<DeleteMemberScreen> {
                   SizedBox(
                     height: getProportionateScreenHeight(ConstantSizes.md),
                   ),
-                  SizedBox(
-                    width: getProportionateScreenWidth(250),
-                    child: CustomElevatedButton(
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => InviteToOrganizationPage(
-                                name: widget.organization.name!,
-                                organizationCode:
-                                    widget.organization.organizationCode!,
-                              ),
-                            ),
-                          );
-                        },
-                        labelText: "Invite Members"),
-                  )
+                  OutlinedButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => InviteToOrganizationPage(
+                            name: widget.organization.name!,
+                            organizationCode:
+                                widget.organization.organizationCode!,
+                          ),
+                        ),
+                      );
+                    },
+                    style: OutlinedButton.styleFrom(
+                      side: const BorderSide(color: ConstantColors.grey),
+                    ),
+                    child: Text(
+                      'Invite Members',
+                      style: TextStyle(
+                          color: ConstantColors.primary,
+                          fontSize: SizeConfig.font14),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -168,6 +176,23 @@ class _DeleteMemberScreenState extends State<DeleteMemberScreen> {
                               setState(() {
                                 _members.removeAt(index);
                               });
+
+                              HelperFunctions.showCustomToast(
+                                context: context,
+                                title: const Text(
+                                  'Member removed successfully!',
+                                  style:
+                                      TextStyle(color: ConstantColors.primary),
+                                ),
+                                type: ToastificationType.success,
+                                position: Alignment.bottomCenter,
+                                duration: 3,
+                                icon: const Icon(
+                                  Icons.check_circle_outline_rounded,
+                                  color: ConstantColors.primary,
+                                ),
+                                backgroundColor: ConstantColors.secondary,
+                              );
                             }
                           },
                         ),

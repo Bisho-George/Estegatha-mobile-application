@@ -5,10 +5,13 @@ import 'package:estegatha/features/sign-in/presentation/veiw_models/login_cubit/
 import 'package:estegatha/responsive/size_config.dart';
 import 'package:estegatha/utils/common/widgets/custom_elevated_button.dart';
 import 'package:estegatha/utils/common/widgets/custom_text_field.dart';
+import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
+import 'package:estegatha/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:toastification/toastification.dart';
 
 import '../../../../home/presentation/views/home_view.dart';
 
@@ -113,6 +116,21 @@ class _SignInFormState extends State<SignInForm> {
                     );
                   }
                 }
+                HelperFunctions.showCustomToast(
+                  context: context,
+                  title: const Text(
+                    'Login Success',
+                    style: TextStyle(color: ConstantColors.primary),
+                  ),
+                  type: ToastificationType.success,
+                  position: Alignment.bottomCenter,
+                  duration: 3,
+                  icon: const Icon(
+                    Icons.check_circle_outline_rounded,
+                    color: ConstantColors.primary,
+                  ),
+                  backgroundColor: ConstantColors.secondary,
+                );
                 Navigator.pushNamed(context, HomeView.routeName);
               },
               labelText: "Login",

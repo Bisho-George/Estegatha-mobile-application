@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:estegatha/features/organization/domain/models/member.dart';
+import 'package:estegatha/utils/constant/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:toastification/toastification.dart';
 
 class HelperFunctions {
   static bool isDarkMode(BuildContext context) {
@@ -65,8 +67,29 @@ class HelperFunctions {
     }
     return Member.fromJson(jsonDecode(user));
   }
+
   static void setUser(Member user) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString('user', jsonEncode(user));
+  }
+
+  static showCustomToast(
+      {required BuildContext? context,
+      required Text title,
+      required ToastificationType type,
+      required Alignment position,
+      required int duration,
+      required Widget? icon,
+      required Color backgroundColor}) {
+    toastification.show(
+      context: context,
+      alignment: position,
+      backgroundColor: backgroundColor,
+      icon: icon,
+      title: title,
+      autoCloseDuration: Duration(seconds: duration),
+      dragToClose: true,
+      type: type,
+    );
   }
 }

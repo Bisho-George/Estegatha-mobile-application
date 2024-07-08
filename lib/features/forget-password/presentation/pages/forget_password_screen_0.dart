@@ -19,6 +19,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:estegatha/utils/common/widgets/custom_text_field.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:toastification/toastification.dart';
 
 class ForgetPasswordScreen_0 extends StatelessWidget {
   ForgetPasswordScreen_0({super.key});
@@ -49,7 +50,21 @@ class ForgetPasswordScreen_0 extends StatelessWidget {
             ),
           );
         } else if (state is CreateResetTokenFailure) {
-          HelperFunctions.showSnackBar(context, state.errMessage);
+          HelperFunctions.showCustomToast(
+            context: context,
+            title: Text(
+              state.errMessage,
+              style: const TextStyle(color: ConstantColors.primary),
+            ),
+            type: ToastificationType.error,
+            position: Alignment.bottomCenter,
+            duration: 3,
+            icon: const Icon(
+              Icons.error,
+              color: ConstantColors.primary,
+            ),
+            backgroundColor: ConstantColors.secondary,
+          );
         }
       },
       child: ModalProgressHUD(

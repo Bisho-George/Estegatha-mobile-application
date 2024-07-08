@@ -13,6 +13,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:estegatha/routes.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:toastification/toastification.dart';
 import 'core/domain/handle_first_route.dart';
 import 'core/firebase/notification.dart';
 import 'firebase_options.dart';
@@ -67,12 +68,14 @@ class _MyAppState extends State<MyApp> {
           designSize: const Size(360, 690),
           minTextAdapt: true,
           splitScreenMode: true,
-          builder: (_, child) => MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'Estegatha',
-            // home: SignInPage(),
-            home: home.value,
-            routes: routes,
+          builder: (_, child) => ToastificationWrapper(
+            child: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Estegatha',
+              // home: SignInPage(),
+              home: home.value,
+              routes: routes,
+            ),
           ),
         );
       },

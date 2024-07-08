@@ -9,6 +9,7 @@ import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
 import 'package:estegatha/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:toastification/toastification.dart';
 
 import '../../../../utils/common/styles/text_styles.dart';
 import '../../../organization/domain/models/member.dart';
@@ -17,6 +18,7 @@ import '../widgets/member_bubble_widget.dart';
 import '../widgets/send_member_received_widget.dart';
 import '../widgets/sos_button_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 class SendSos extends StatelessWidget {
   static String routeName = '/sos/send-sos';
   const SendSos({super.key});
@@ -43,15 +45,14 @@ class SendSos extends StatelessWidget {
             ),
             BlocConsumer<SendSosCubit, SendSosStatus>(
               builder: (context, state) {
-                if(state is SendSosLoading){
+                if (state is SendSosLoading) {
                   return const CircularProgressIndicator();
-                }
-                else if(state is MembersReceivedStatus){
+                } else if (state is MembersReceivedStatus) {
                   List<OrganizationMember> members = state.members;
                   return SosReceivedMembersWidget(members: members);
                 }
                 return IconButton(
-                  onPressed: (){
+                  onPressed: () {
                     context.read<SendSosCubit>().getMembers();
                   },
                   icon: Column(
@@ -71,22 +72,68 @@ class SendSos extends StatelessWidget {
                 );
               },
               listener: (context, state) {
-                if(state is SendSosSuccess){
-                  HelperFunctions.showSnackBar(context, 'SOS sent successfully');
-                  Navigator.of(context).pushNamed(CancelSos.routeName);
-                }
-                else if(state is MemberReceivedFailure){
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(state.message ?? 'An error occurred during fetching members'),
+                if (state is SendSosSuccess) {
+                  HelperFunctions.showCustomToast(
+                    context: context,
+                    title: const Text(
+                      'SOS sent successfully',
+                      style: TextStyle(color: ConstantColors.primary),
                     ),
+                    type: ToastificationType.success,
+                    position: Alignment.bottomCenter,
+                    duration: 3,
+                    icon: const Icon(
+                      Icons.check_circle_outline_rounded,
+                      color: ConstantColors.primary,
+                    ),
+                    backgroundColor: ConstantColors.secondary,
                   );
-                }
-                else if(state is SendSosFailure){
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(state.message ?? 'An error occurred during sending sos'),
+                  // HelperFunctions.showSnackBar(
+                  //     context, 'SOS sent successfully');
+                  Navigator.of(context).pushNamed(CancelSos.routeName);
+                } else if (state is MemberReceivedFailure) {
+                  HelperFunctions.showCustomToast(
+                    context: context,
+                    title: const Text(
+                      'An error occurred during fetching members',
+                      style: TextStyle(color: ConstantColors.primary),
                     ),
+                    type: ToastificationType.error,
+                    position: Alignment.bottomCenter,
+                    duration: 3,
+                    icon: const Icon(
+                      Icons.error,
+                      color: ConstantColors.primary,
+                    ),
+                    backgroundColor: ConstantColors.secondary,
+                  );
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   SnackBar(
+                  //     content: Text(state.message ??
+                  //         'An error occurred during fetching members'),
+                  //   ),
+                  // );
+                } else if (state is SendSosFailure) {
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   SnackBar(
+                  //     content: Text(state.message ??
+                  //         'An error occurred during sending sos'),
+                  //   ),
+                  // );
+                  HelperFunctions.showCustomToast(
+                    context: context,
+                    title: const Text(
+                      'An error occurred during fetching members',
+                      style: TextStyle(color: ConstantColors.primary),
+                    ),
+                    type: ToastificationType.error,
+                    position: Alignment.bottomCenter,
+                    duration: 3,
+                    icon: const Icon(
+                      Icons.error,
+                      color: ConstantColors.primary,
+                    ),
+                    backgroundColor: ConstantColors.secondary,
                   );
                 }
               },

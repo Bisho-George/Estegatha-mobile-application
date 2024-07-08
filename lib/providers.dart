@@ -1,4 +1,6 @@
 import 'package:estegatha/features/catalog/persentation/view-model/catalog_cubit.dart';
+import 'package:estegatha/features/organization/presentation/view/main/track_cubit/track_cubit.dart';
+import 'package:estegatha/features/organization/presentation/view_model/change_role/change_rule_cubit.dart';
 import 'package:estegatha/features/organization/presentation/view_model/leave_organization/leave_organization_cubit.dart';
 import 'package:estegatha/features/organization/presentation/view_model/user_organizations_cubit.dart';
 import 'package:estegatha/features/safety/presentation/view_model/user_health_cubit.dart';
@@ -98,5 +100,11 @@ List<SingleChildWidget> providers = [
   ),
   BlocProvider<LeaveOrganizationCubit>(
     create: (context) => LeaveOrganizationCubit(),
+  ),
+  BlocProvider<ChangeRoleCubit>(
+    create: (context) => ChangeRoleCubit(),
+  ),
+  BlocProvider<TrackCubit>(
+    create: (context) => TrackCubit(),
   ),
 ];

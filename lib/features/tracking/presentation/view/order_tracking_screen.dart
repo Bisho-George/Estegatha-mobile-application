@@ -1,12 +1,15 @@
 import 'dart:async';
+import 'package:estegatha/features/organization/presentation/view/main/track_cubit/track_cubit.dart';
+import 'package:estegatha/features/sign-in/presentation/veiw_models/user_cubit.dart';
 import 'package:estegatha/features/tracking/presentation/view/custom_marker.dart';
 import 'package:estegatha/utils/constant/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
 class OrderTrackingScreen extends StatefulWidget {
-  const OrderTrackingScreen({Key? key}) : super(key: key);
+  const OrderTrackingScreen({super.key});
 
   @override
   State<OrderTrackingScreen> createState() => OrderTrackingScreenState();
@@ -23,9 +26,11 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
   BitmapDescriptor sourceIcon = BitmapDescriptor.defaultMarker;
   BitmapDescriptor destinationIcon = BitmapDescriptor.defaultMarker;
   BitmapDescriptor currentLocationIcon = BitmapDescriptor.defaultMarker;
+  String username = '';
 
   @override
   void initState() {
+    username = context.read<TrackCubit>().getTrackedMemberName();
     super.initState();
     setCustomMarkerIcon();
     markers.addAll({
@@ -47,7 +52,7 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
     LatLng currentPosition = sourceLocation;
     GoogleMapController googleMapController = await _controller.future;
 
-    Timer.periodic(Duration(seconds: 5), (timer) {
+    Timer.periodic(const Duration(seconds: 2), (timer) {
       // Stop the timer when the destination is reached
       if ((currentPosition.latitude - destination.latitude).abs() < 0.001 &&
           (currentPosition.longitude - destination.longitude).abs() < 0.001) {
@@ -94,7 +99,7 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
     //     .then((icon) {
     //   destinationIcon = icon;
     // });
-    createCustomMarkerBitmap().then((icon) {
+    createCustomMarkerBitmap(username).then((icon) {
       currentLocationIcon = icon;
     });
   }

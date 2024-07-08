@@ -16,6 +16,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:toastification/toastification.dart';
 
 class SignInPage extends StatelessWidget {
   SignInPage({super.key});
@@ -36,7 +37,22 @@ class SignInPage extends StatelessWidget {
             return const MainNavMenu();
           }));
         } else if (state is LoginFailure) {
-          HelperFunctions.showSnackBar(context, state.errMessage);
+          HelperFunctions.showCustomToast(
+            context: context,
+            title: Text(
+              state.errMessage,
+              style: const TextStyle(color: ConstantColors.primary),
+            ),
+            type: ToastificationType.error,
+            position: Alignment.bottomCenter,
+            duration: 3,
+            icon: const Icon(
+              Icons.error,
+              color: ConstantColors.primary,
+            ),
+            backgroundColor: ConstantColors.secondary,
+          );
+          // HelperFunctions.showSnackBar(context, state.errMessage);
         }
       },
       child: ModalProgressHUD(

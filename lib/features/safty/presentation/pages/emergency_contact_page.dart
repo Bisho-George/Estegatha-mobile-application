@@ -10,11 +10,13 @@ import 'package:estegatha/utils/common/widgets/custom_app_bar.dart';
 import 'package:estegatha/utils/common/widgets/loading_widget.dart';
 import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
+import 'package:estegatha/utils/helpers/helper_functions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toastification/toastification.dart';
 import '../widgets/add_contact_widget.dart';
 import '../widgets/add_widget.dart';
 
@@ -47,8 +49,8 @@ class EmergencyContactPage extends StatelessWidget {
               children: [
                 AddContactWidget(
                   onTap: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => AddContactPage()));
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => AddContactPage()));
                   },
                 ),
                 const CategoryHeaderWidget(name: 'Saved Contacts'),
@@ -63,7 +65,8 @@ class EmergencyContactPage extends StatelessWidget {
                   child: ListView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     scrollDirection: Axis.vertical,
-                    itemCount: BlocProvider.of<ContactCubit>(context).contacts.length,
+                    itemCount:
+                        BlocProvider.of<ContactCubit>(context).contacts.length,
                     itemBuilder: (context, index) {
                       return ContactWidget(
                         contact: ContactModel(
@@ -82,11 +85,26 @@ class EmergencyContactPage extends StatelessWidget {
               },
               listener: (context, state) {
                 if (state is ContactSuccessState) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(state.message),
+                  HelperFunctions.showCustomToast(
+                    context: context,
+                    title: const Text(
+                      'Fetch contact success',
+                      style: TextStyle(color: ConstantColors.primary),
                     ),
+                    type: ToastificationType.success,
+                    position: Alignment.bottomCenter,
+                    duration: 2,
+                    icon: const Icon(
+                      Icons.check_circle_outline_rounded,
+                      color: ConstantColors.primary,
+                    ),
+                    backgroundColor: ConstantColors.secondary,
                   );
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   SnackBar(
+                  //     content: Text(state.message),
+                  //   ),
+                  // );
                 } else if (state is ContactFailureState) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(

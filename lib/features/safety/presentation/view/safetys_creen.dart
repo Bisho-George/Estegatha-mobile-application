@@ -1,3 +1,4 @@
+import 'package:estegatha/features/catalog/persentation/view/catalog_screen.dart';
 import 'package:estegatha/features/organization/presentation/view/main/organization_detail_page.dart';
 import 'package:estegatha/features/organization/presentation/view/setting/widgets/organization_setting_item.dart';
 import 'package:estegatha/features/organization/presentation/view/setting/widgets/settings_card_carousel.dart';
@@ -72,7 +73,12 @@ class SafetyScreen extends StatelessWidget {
               ),
               SafetyItemWidget(
                 label: "Emergency Catalog",
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const CatalogScreen()));
+                },
                 icon: Icons.list_alt,
               ),
               SafetyItemWidget(
