@@ -55,8 +55,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final ValueNotifier<Widget> home = ValueNotifier<Widget>(HomeView());
-  final String initialRoute = HomeView.routeName;
+  final ValueNotifier<Widget> home = ValueNotifier<Widget>(AddHomeView());
+  final String initialRoute = AddHomeView.routeName;
   @override
   void initState() {
     super.initState();

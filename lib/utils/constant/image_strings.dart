@@ -68,5 +68,6 @@ class ConstantImages {
 
   // add place view
   static const String addPlaceHomeIcon = "assets/add_place_home_icon.svg";
+  static const String customAddPlaceMarker = "assets/custom_add_place_marker.png";
 
 }

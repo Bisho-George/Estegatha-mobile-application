@@ -1,4 +1,5 @@
 
+import 'package:estegatha/features/add_place/presentation/views/widgets/custom_google_maps.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -18,7 +19,7 @@ class AddHomeView extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('Add a new Place',
+        title: const Text('Add home',
             style: TextStyle(
               color: ConstantColors.primary,
               fontSize: ConstantSizes.fontSizeLg,
@@ -39,10 +40,7 @@ class AddHomeView extends StatelessWidget {
           Container(
             height: SizeConfig.screenHeight * 0.2,
             width: SizeConfig.screenWidth,
-            padding: EdgeInsets.fromLTRB(
-              ConstantSizes.defaultSpace,
-              ConstantSizes.defaultSpace,
-              ConstantSizes.defaultSpace,
+            padding: EdgeInsets.all(
               ConstantSizes.defaultSpace,
             ),
             child: Column(
@@ -68,7 +66,7 @@ class AddHomeView extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(height: ConstantSizes.defaultSpace),
+                const SizedBox(height: ConstantSizes.defaultSpace),
                 Expanded(
                   child: Row(
                     children: [
@@ -95,62 +93,4 @@ class AddHomeView extends StatelessWidget {
   }
 }
 
-class CustomGoogleMaps extends StatefulWidget {
-  const CustomGoogleMaps({super.key});
 
-  @override
-  State<CustomGoogleMaps> createState() => _CustomGoogleMapsState();
-}
-
-class _CustomGoogleMapsState extends State<CustomGoogleMaps> {
-  double _radius = 100;
-
-  @override
-  Widget build(BuildContext context) {
-    SizeConfig().init(context);
-    return Column(
-      children: [
-        const Expanded(
-          flex: 4,
-          child: GoogleMap(
-            zoomControlsEnabled: false,
-            initialCameraPosition: CameraPosition(
-              target: LatLng(0, 0),
-              zoom: 1,
-            ),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: responsiveWidth(ConstantSizes.defaultSpace)),
-          child: Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child:Slider(
-                  activeColor: ConstantColors.primary,
-                  value: _radius,
-                  onChanged: (value) {
-                    setState(() {
-                      _radius = value;
-                    });
-                  },
-                  onChangeEnd: (value) {
-                    setState(() {
-                      _radius = value.round().toDouble();
-                    });
-                  },
-                  min: 100,
-                  max: 1000,
-                  divisions: 900,
-                  label: 'Radius: ${_radius.round()}',
-                ),
-              ),
-              Text('Radius: $_radius')
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
