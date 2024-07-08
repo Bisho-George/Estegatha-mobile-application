@@ -1,4 +1,3 @@
-import 'package:estegatha/features/organization/presentation/view_model/current_organization_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -6,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import '../../../../../utils/constant/colors.dart';
 import '../../../../../utils/constant/image_strings.dart';
 import '../../../../../utils/constant/sizes.dart';
+import '../../view_models/current_oragnization_cubit/current_organization_cubit.dart';
 import '../../view_models/home_view_model.dart';
 
 class AnimatedOrganizationHeader extends StatefulWidget {
@@ -94,13 +94,21 @@ class _AnimatedOrganizationHeaderState extends State<AnimatedOrganizationHeader>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    "graduation project",
-                    style: TextStyle(
-                      color: ConstantColors.primary,
-                      fontSize: ConstantSizes.fontSizeMd,
-                      fontWeight: ConstantSizes.fontWeightSemiBold,
-                    ),
+                  BlocBuilder<CurrentOrganizationCubit,
+                      CurrentOrganizationState>(
+                    builder: (context, state) {
+                      if (state is CurrentOrganizationLoaded) {
+                        return Text(
+                          state.organization.name!,
+                          style: const TextStyle(
+                            color: ConstantColors.primary,
+                            fontSize: ConstantSizes.fontSizeLg,
+                            fontWeight: ConstantSizes.fontWeightSemiBold,
+                          ),
+                        );
+                      }
+                      return Text('');
+                    },
                   ),
                   SizedBox(
                     width: ConstantSizes.defaultSpace,

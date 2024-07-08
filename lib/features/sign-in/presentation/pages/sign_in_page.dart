@@ -5,6 +5,7 @@ import 'package:estegatha/features/sign-in/presentation/pages/widgets/sign_in_wi
 import 'package:estegatha/features/sign-in/presentation/veiw_models/login_cubit/login_cubit.dart';
 import 'package:estegatha/features/sign-up/presentation/views/personal_info_view.dart';
 import 'package:estegatha/main_menu.dart';
+import 'package:estegatha/responsive/size_config.dart';
 import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
 import 'package:estegatha/utils/helpers/helper_functions.dart';
@@ -15,6 +16,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:toastification/toastification.dart';
 
 class SignInPage extends StatelessWidget {
   SignInPage({super.key});
@@ -24,6 +26,7 @@ class SignInPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return BlocListener<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state is LoginLoading) {
@@ -34,7 +37,22 @@ class SignInPage extends StatelessWidget {
             return const MainNavMenu();
           }));
         } else if (state is LoginFailure) {
-          HelperFunctions.showSnackBar(context, state.errMessage);
+          HelperFunctions.showCustomToast(
+            context: context,
+            title: Text(
+              state.errMessage,
+              style: const TextStyle(color: ConstantColors.primary),
+            ),
+            type: ToastificationType.error,
+            position: Alignment.bottomCenter,
+            duration: 3,
+            icon: const Icon(
+              Icons.error,
+              color: ConstantColors.primary,
+            ),
+            backgroundColor: ConstantColors.secondary,
+          );
+          // HelperFunctions.showSnackBar(context, state.errMessage);
         }
       },
       child: ModalProgressHUD(

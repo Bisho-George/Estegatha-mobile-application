@@ -24,7 +24,10 @@ import 'package:estegatha/features/sos/presentation/pages/send_sos.dart';
 import 'package:estegatha/main_menu.dart';
 import 'package:flutter/material.dart';
 
+import 'features/add_place/presentation/views/add_boundary_view.dart';
 import 'features/home/presentation/views/home_view.dart';
+import 'features/safety/presentation/view/safetys_creen.dart';
+import 'features/safety/presentation/view/safetys_creen.dart';
 import 'features/sign-up/presentation/views/personal_info_view.dart';
 import 'features/sos/presentation/pages/sos_alert_intro.dart';
 
@@ -54,7 +57,8 @@ final Map<String, WidgetBuilder> routes = {
   MainNavMenu.routeName: (context) => const MainNavMenu(),
   AddBoundaryView.routeName: (context) => const AddBoundaryView(),
   AddNewBoundary.routeName: (context) => const AddNewBoundary(),
-  AddBoundaryView.routeName: (context) => const AddBoundaryView()
-
+  AddBoundaryView.routeName: (context) => const AddBoundaryView(),
+  SafetyScreen.routeName: (context) => SafetyScreen(),
+  HomeView.routeName: (context) => HomeView(),
 
 };

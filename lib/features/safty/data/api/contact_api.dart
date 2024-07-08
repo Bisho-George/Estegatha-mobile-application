@@ -25,4 +25,11 @@ class ContactApi extends ContactRepo{
     return contacts;
   }
 
+  deleteContact(ContactModel contactModel) async{
+    Dio dio = await DioAuth.getDio();
+    await dio.delete(baseUrl + addContactEndPoint, queryParameters: {
+      'contactId' : contactModel.id
+    });
+  }
+
 }

@@ -1,17 +1,19 @@
-import 'package:estegatha/features/organization/presentation/view_model/current_organization_cubit.dart';
+import 'package:estegatha/features/organization/presentation/view_model/user_organizations_cubit.dart';
 import 'package:estegatha/responsive/size_config.dart';
 import 'package:estegatha/utils/common/widgets/custom_elevated_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../../../../utils/constant/colors.dart';
 import '../../../../../utils/constant/image_strings.dart';
 import '../../../../../utils/constant/sizes.dart';
-import '../../../../organization/presentation/view_model/current_organization_state.dart';
 import '../../view_models/home_state.dart';
 import '../../view_models/home_view_model.dart';
 import 'animated_organization_header.dart';
+import 'organization_list_view.dart';
 import 'organizations_bloc_builder.dart';
 
 class AnimatedOrganizationsWidget extends StatefulWidget {
@@ -97,6 +99,11 @@ class _AnimatedOrganizationsWidgetState
                         IconButton(
                           icon: SvgPicture.asset(ConstantImages.addPersonIcon),
                           onPressed: () {},
+                        Expanded(
+                          flex: 2,
+                          child: AnimatedOrganizationHeader(
+                            isExpanded: state.organizationsVisible,
+                          ),
                         ),
                       ],
                     ),
@@ -116,13 +123,31 @@ class _AnimatedOrganizationsWidgetState
                           child: CustomElevatedButton(
                               onPressed: () {}, labelText: "Join Organization"),
                         ),
-                        SizedBox(
-                            width:
-                            responsiveWidth(ConstantSizes.spaceBtwItems)),
+                         SizedBox(width: responsiveWidth(ConstantSizes.spaceBtwItems)),
                         Expanded(
-                          child: CustomElevatedButton(
+                          // child: CustomElevatedButton(
+                          //   onPressed: () {},
+                          //   labelText: "Create",
+                          //   textSize: 16.0,
+                          // ),
+                          child: SizedBox(
+                            height: 45,
+                            child: ElevatedButton(
                               onPressed: () {},
-                              labelText: "Create Organization"),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: ConstantColors.primary,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      ConstantSizes.buttonRadius * 5),
+                                ),
+                              ),
+                              child:  Text(
+                                "Create",
+                                style: TextStyle(
+                                    color: ConstantColors.white, fontSize: 16),
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),

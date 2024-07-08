@@ -74,6 +74,13 @@ class OrganizationHttpClient {
         body: {'title': title, 'content': content});
   }
 
+  static Future<http.Response> deletePost(int orgId, int postId) async {
+    return customHttpRequest(
+      'DELETE',
+      Uri.parse('$organizationBaseUrl/posts/$orgId?postId=$postId'),
+    );
+  }
+
   static Future<http.Response> joinOrganizationByCode(
       String organizationCode) async {
     return customHttpRequest(

@@ -1,11 +1,12 @@
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
+import 'package:estegatha/features/organization/domain/models/organization.dart';
 import 'package:meta/meta.dart';
 
 import '../../../organization/domain/api/organization_api.dart';
 import '../../../organization/domain/models/organizationMember.dart';
-import '../../../organization/presentation/view_model/current_organization_cubit.dart';
+import 'current_oragnization_cubit/current_organization_cubit.dart';
 
 part 'organization_member_state.dart';
 
@@ -17,9 +18,9 @@ class OrganizationMemberHomeCubit extends Cubit<OrganizationMemberHomeState> {
       emit(OrganizationMemberHomeLoading());
       final CurrentOrganizationCubit currentOrganizationCubit = CurrentOrganizationCubit();
       await currentOrganizationCubit.loadCurrentOrganization();
-      int? orgId = currentOrganizationCubit.state.organizationId;
-      if (orgId != null) {
-         var result = await getOrganizationMembers(orgId);
+      Organization? organization = currentOrganizationCubit.currentOrganization;
+      if (organization != null) {
+         var result = await getOrganizationMembers(organization!.id!);
         emit(OrganizationMemberHomeSuccess(result));
       } else {
         emit(OrganizationMemberHomeFailure("Failed to get organization members!"));

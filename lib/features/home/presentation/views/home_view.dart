@@ -8,21 +8,26 @@ import 'package:estegatha/features/home/presentation/views/widgets/draggable_scr
 import 'package:estegatha/features/home/presentation/views/widgets/google_map.dart';
 import 'package:estegatha/features/organization/presentation/view_model/user_organizations_cubit.dart';
 import 'package:estegatha/features/sos/data/api/organizations_api.dart';
+import 'package:estegatha/features/sos/presentation/pages/cancel_sos.dart';
+import 'package:estegatha/features/sos/presentation/pages/cancel_sos_pin.dart';
 import 'package:estegatha/responsive/size_config.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../../../../utils/constant/colors.dart';
 import '../../../../utils/constant/image_strings.dart';
-import '../../../organization/presentation/view_model/current_organization_cubit.dart';
+import '../../../sos/presentation/pages/send_sos.dart';
+import '../view_models/current_oragnization_cubit/current_organization_cubit.dart';
 import '../view_models/home_state.dart';
 import '../view_models/home_view_model.dart';
 
 class HomeView extends StatefulWidget {
   static const String routeName = '/home';
-
+  BuildContext? parentContext;
+  HomeView({super.key, this.parentContext});
   @override
   _HomeViewState createState() => _HomeViewState();
 }
@@ -38,8 +43,18 @@ class _HomeViewState extends State<HomeView>
     super.initState();
     BlocProvider.of<UserOrganizationsCubit>(context)
         .getUserOrganizationsWithoutId();
-    BlocProvider.of<CurrentOrganizationCubit>(context).loadCurrentOrganization();
-    BlocProvider.of<OrganizationMemberHomeCubit>(context).getCurrentOrganizationMembers();
+
+    print(
+        "USer organizations ${BlocProvider.of<UserOrganizationsCubit>(context).organizations.length}");
+
+    BlocProvider.of<CurrentOrganizationCubit>(context)
+        .checkCurrentOrganization();
+
+    BlocProvider.of<CurrentOrganizationCubit>(context)
+        .loadCurrentOrganization();
+
+    BlocProvider.of<OrganizationMemberHomeCubit>(context)
+        .getCurrentOrganizationMembers();
 
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 300),
@@ -119,7 +134,18 @@ class _HomeViewState extends State<HomeView>
                         duration: const Duration(milliseconds: 300),
                         child: IconButton(
                           onPressed: () {
-                            //TODO: Implement Safety
+                            Widget page = SendSos();
+                            final box = GetStorage();
+                            var status = box.read('status') ?? 'safe';
+                            if(status != 'safe'){
+                              page = CancelSos();
+                            }
+                            Navigator.push(
+                              widget.parentContext ?? context,
+                              MaterialPageRoute(
+                                builder: (context) => page,
+                              ),
+                            );
                           },
                           icon: Container(
                             decoration: BoxDecoration(
@@ -140,12 +166,12 @@ class _HomeViewState extends State<HomeView>
                                   width: ConstantSizes.spaceBtwItems,
                                 ),
                                 const Text(
-                                  "Safety",
+                                  "SOS",
                                   style: TextStyle(
                                     color: ConstantColors.primary,
                                     fontSize: ConstantSizes.fontSizeMd,
                                     fontWeight:
-                                        ConstantSizes.fontWeightSemiBold,
+                                    ConstantSizes.fontWeightSemiBold,
                                   ),
                                 ),
                               ],
@@ -167,7 +193,7 @@ class _HomeViewState extends State<HomeView>
                     right: 0,
                     bottom: 0,
                     child:
-                        NotificationListener<DraggableScrollableNotification>(
+                    NotificationListener<DraggableScrollableNotification>(
                       onNotification: (notification) {
                         _onScroll(notification.extent);
                         return true;

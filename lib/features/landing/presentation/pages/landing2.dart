@@ -55,11 +55,14 @@ class Landing2 extends StatelessWidget {
                     );
                   },
                 )),
-            CustomElevatedButton(
-              onPressed: () {
-                BlocProvider.of<PermissionCubit>(context).grantPermissions();
-              },
-              labelText: "Continue",
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: responsiveWidth(20)),
+              child: CustomElevatedButton(
+                onPressed: () {
+                  BlocProvider.of<PermissionCubit>(context).grantPermissions();
+                },
+                labelText: "Continue",
+              ),
             ),
             TextButton(
               onPressed: () {

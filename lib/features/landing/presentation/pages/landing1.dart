@@ -30,10 +30,20 @@ class Landing1 extends StatelessWidget {
         ),
         Padding(
           padding: EdgeInsets.only(top: responsiveHeight(60.0)),
-          child: CustomPageView(),
+          child: CustomPageView(
+            itemCount: Features.length,
+            itemBuilder: (context, index) {
+              return Text(
+                Features.feature(index),
+                style: Styles.getPrimaryMedium(),
+                textAlign: TextAlign.center,
+              );
+            },
+            height: responsiveHeight(100.0),
+          ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: responsiveHeight(60.0)),
+          padding: EdgeInsets.only(top: responsiveHeight(60.0), right: responsiveWidth(20.0), left: responsiveWidth(20.0)),
           child: CustomElevatedButton(
             onPressed: () {
               Navigator.pushNamed(

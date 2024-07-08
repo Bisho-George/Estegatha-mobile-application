@@ -1,5 +1,6 @@
 import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
+import 'package:estegatha/utils/helpers/responsive.dart';
 import 'package:flutter/material.dart';
 
 class SuggestionItem extends StatelessWidget {
@@ -25,27 +26,28 @@ class SuggestionItem extends StatelessWidget {
           ],
         ),
         width: double.infinity,
-        height: 80,
+        height: getProportionateScreenWidth(80),
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-              horizontal: ConstantSizes.defaultSpace),
+          padding: EdgeInsets.symmetric(
+              horizontal:
+                  getProportionateScreenWidth(ConstantSizes.defaultSpace)),
           child: Row(
             children: [
               Container(
-                width: 50,
-                height: 50,
+                width: getProportionateScreenHeight(50),
+                height: getProportionateScreenWidth(50),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(color: ConstantColors.grey),
                 ),
                 child: const Icon(Icons.add, color: ConstantColors.primary),
               ),
-              const SizedBox(width: ConstantSizes.md),
+              SizedBox(width: getProportionateScreenWidth(ConstantSizes.md)),
               Text(
-                name,
-                style: const TextStyle(
+                name.length > 35 ? '${name.substring(0, 35)}...' : name,
+                style: TextStyle(
                   color: ConstantColors.primary,
-                  fontSize: ConstantSizes.fontSizeLg,
+                  fontSize: SizeConfig.font20,
                   fontWeight: ConstantSizes.fontWeightBold,
                 ),
               ),

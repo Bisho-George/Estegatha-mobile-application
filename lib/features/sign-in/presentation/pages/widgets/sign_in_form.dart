@@ -1,14 +1,18 @@
-import 'package:estegatha/features/add_place/presentation/views/add_place_view.dart';
-import 'package:estegatha/features/forget-password/presentation/pages/forget_password_page.dart';
+import 'package:estegatha/features/forget-password/presentation/pages/change_password_screen.dart';
+import 'package:estegatha/features/forget-password/presentation/pages/forget_password_screen_0.dart';
+import 'package:estegatha/features/forget-password/presentation/pages/forget_password_screen_1.dart';
 import 'package:estegatha/features/sign-in/presentation/veiw_models/login_cubit/login_cubit.dart';
+import 'package:estegatha/responsive/size_config.dart';
 import 'package:estegatha/utils/common/widgets/custom_elevated_button.dart';
 import 'package:estegatha/utils/common/widgets/custom_text_field.dart';
+import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
+import 'package:estegatha/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:toastification/toastification.dart';
 
-import '../../../../add_place/presentation/views/add_boundary_view.dart';
 import '../../../../home/presentation/views/home_view.dart';
 
 class SignInForm extends StatefulWidget {
@@ -112,7 +116,22 @@ class _SignInFormState extends State<SignInForm> {
                     );
                   }
                 }
-                Navigator.pushNamed(context, AddBoundaryView.routeName);
+                HelperFunctions.showCustomToast(
+                  context: context,
+                  title: const Text(
+                    'Login Success',
+                    style: TextStyle(color: ConstantColors.primary),
+                  ),
+                  type: ToastificationType.success,
+                  position: Alignment.bottomCenter,
+                  duration: 3,
+                  icon: const Icon(
+                    Icons.check_circle_outline_rounded,
+                    color: ConstantColors.primary,
+                  ),
+                  backgroundColor: ConstantColors.secondary,
+                );
+                Navigator.pushNamed(context, HomeView.routeName);
               },
               labelText: "Login",
             ),
@@ -122,7 +141,10 @@ class _SignInFormState extends State<SignInForm> {
                   onPressed: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return ForgetPasswordPage();
+                      return ForgetPasswordScreen_0();
+                      // return ChangePasswordPage(
+                      //   token: "",
+                      // );
                     }));
                   },
                   child: const Text('Forget your password?'),

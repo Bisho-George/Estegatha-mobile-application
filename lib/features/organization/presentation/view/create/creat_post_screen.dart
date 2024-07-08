@@ -38,9 +38,12 @@ import 'package:estegatha/utils/common/custom_app_bar.dart';
 import 'package:estegatha/utils/common/widgets/custom_elevated_button.dart';
 import 'package:estegatha/utils/common/widgets/custom_text_field.dart';
 import 'package:estegatha/utils/constant/colors.dart';
+import 'package:estegatha/utils/constant/sizes.dart';
+import 'package:estegatha/utils/helpers/helper_functions.dart';
 import 'package:estegatha/utils/helpers/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toastification/toastification.dart';
 
 class CreatePostScreen extends StatefulWidget {
   int orgId;
@@ -99,7 +102,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 16.0),
+              SizedBox(height: getProportionateScreenHeight(ConstantSizes.md)),
               CustomTextField(
                 controller: _contentController,
                 labelText: 'Content',
@@ -112,24 +115,54 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 16.0),
+              SizedBox(height: getProportionateScreenHeight(ConstantSizes.md)),
               BlocConsumer<OrganizationCubit, OrganizationState>(
                 listener: (context, state) {
-                  if (state is CreatePostSuccess) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Post created successfully!')),
+                  if (state is CreatePostLoading) {
+                    const Loader();
+                  } else if (state is CreatePostSuccess) {
+                    HelperFunctions.showCustomToast(
+                      context: context,
+                      title: const Text(
+                        'Post created successfully',
+                        style: TextStyle(color: ConstantColors.primary),
+                      ),
+                      type: ToastificationType.success,
+                      position: Alignment.bottomCenter,
+                      duration: 3,
+                      icon: const Icon(
+                        Icons.check_circle_outline_rounded,
+                        color: ConstantColors.primary,
+                      ),
+                      backgroundColor: ConstantColors.secondary,
                     );
+                    // ScaffoldMessenger.of(context).showSnackBar(
+                    //   const SnackBar(
+                    //       content: Text('Post created successfully!')),
+                    // );
+                    context
+                        .read<OrganizationCubit>()
+                        .getOrganizationPosts(widget.orgId);
                     Navigator.pop(context);
                   } else if (state is CreatePostFailure) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(state.errMessage)),
+                    HelperFunctions.showCustomToast(
+                      context: context,
+                      title: const Text(
+                        'Failed to create post!',
+                        style: TextStyle(color: ConstantColors.primary),
+                      ),
+                      type: ToastificationType.error,
+                      position: Alignment.bottomCenter,
+                      duration: 3,
+                      icon: const Icon(
+                        Icons.error_outline_rounded,
+                        color: ConstantColors.primary,
+                      ),
+                      backgroundColor: ConstantColors.secondary,
                     );
                   }
                 },
                 builder: (context, state) {
-                  if (state is CreatePostLoading) {
-                    return const Center(child: Loader());
-                  }
                   return CustomElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {

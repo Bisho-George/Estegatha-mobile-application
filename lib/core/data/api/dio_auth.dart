@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:estegatha/features/organization/domain/models/member.dart';
 import 'package:estegatha/constants.dart';
+import 'package:estegatha/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -47,6 +48,7 @@ class DioAuth {
         return handler.next(options); //continue
       },
       onError: (error, handler) async{
+
         return handler.next(error);//continue
       },
     ));

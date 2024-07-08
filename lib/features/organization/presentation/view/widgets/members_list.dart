@@ -1,7 +1,10 @@
 import 'package:estegatha/features/organization/domain/models/organizationMember.dart';
+import 'package:estegatha/features/organization/presentation/view/main/track_cubit/track_cubit.dart';
+import 'package:estegatha/features/tracking/presentation/view/order_tracking_screen.dart';
 import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MembersList extends StatelessWidget {
@@ -30,6 +33,7 @@ class MembersList extends StatelessWidget {
           ),
           child: ListTile(
             leading: CircleAvatar(
+              backgroundColor: ConstantColors.secondary,
               child: Text(
                 member.username![0],
                 style: const TextStyle(
@@ -59,7 +63,12 @@ class MembersList extends StatelessWidget {
                       color: ConstantColors.white, letterSpacing: 0.75),
                 ),
                 onPressed: () {
-                  print("Member ID: ${member.userId} is being tracked");
+                  if (badgeLabel == 'Track') {
+                    context.read<TrackCubit>().toggleLocationTracking();
+                    context
+                        .read<TrackCubit>()
+                        .setNameOfTheTrackedMember(member.username!);
+                  }
                   // Handle track button press
                 },
               ),

@@ -1,9 +1,7 @@
 import 'dart:convert';
 
-import 'package:estegatha/core/firebase/SosScreen.dart';
+import 'package:estegatha/core/firebase/cloud_messaging.dart';
 import 'package:estegatha/core/firebase/fcm_setup.dart';
-import 'package:estegatha/features/add_place/presentation/views/add_boundary_view.dart';
-import 'package:estegatha/features/add_place/presentation/views/add_place_view.dart';
 import 'package:estegatha/features/home/presentation/views/home_view.dart';
 import 'package:estegatha/features/organization/domain/models/member.dart';
 import 'package:estegatha/features/sign-in/presentation/pages/sign_in_page.dart';
@@ -11,9 +9,11 @@ import 'package:estegatha/features/sign-in/presentation/veiw_models/user_cubit.d
 import 'package:estegatha/features/sign-up/presentation/views/personal_info_view.dart';
 import 'package:estegatha/main_menu.dart';
 import 'package:estegatha/providers.dart';
+import 'package:estegatha/responsive/size_config.dart';
 import 'package:estegatha/utils/helpers/helper_functions.dart';
 import 'package:estegatha/utils/helpers/simple_bloc_observer.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,15 +23,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:estegatha/features/landing/presentation/pages/landing_intro.dart';
 import 'package:estegatha/routes.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:toastification/toastification.dart';
+import 'core/domain/handle_first_route.dart';
+import 'core/firebase/SosScreen.dart';
 import 'core/firebase/notification.dart';
 import 'features/add_place/presentation/views/add_new_boundary.dart';
 import 'firebase_options.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await FirebaseMessaging.instance.setAutoInitEnabled(true);
   WidgetsFlutterBinding.ensureInitialized();
   NotificationService notificationService = NotificationService();
   await notificationService.initialize();
@@ -94,7 +99,7 @@ class _MyAppState extends State<MyApp> {
       print("User object from shared preferences => $userJson");
       final user = Member.fromJson(jsonDecode(userJson));
       BlocProvider.of<UserCubit>(context).setUser(user);
-      home.value = const MainNavMenu();
+      home.value = MainNavMenu();
       // home.value = SendSos();
     } else {
       checkFirstTime();
@@ -111,6 +116,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return ValueListenableBuilder<Widget>(
       valueListenable: home,
       builder: (context, isLoggedIn, child) {
@@ -118,11 +124,14 @@ class _MyAppState extends State<MyApp> {
           designSize: const Size(360, 690),
           minTextAdapt: true,
           splitScreenMode: true,
-          builder: (_, child) => MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'Estegatha',
-            home: home.value,
-            routes: routes,
+          builder: (_, child) => ToastificationWrapper(
+            child: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Estegatha',
+              // home: SignInPage(),
+              home: home.value,
+              routes: routes,
+            ),
           ),
         );
       },
