@@ -1,4 +1,3 @@
-import 'package:estegatha/features/organization/presentation/view_model/current_organization_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -6,14 +5,16 @@ import 'package:flutter_svg/svg.dart';
 import '../../../../../utils/constant/colors.dart';
 import '../../../../../utils/constant/image_strings.dart';
 import '../../../../../utils/constant/sizes.dart';
+import '../../view_models/current_oragnization_cubit/current_organization_cubit.dart';
 import '../../view_models/home_view_model.dart';
 
 class AnimatedOrganizationHeader extends StatefulWidget {
   bool isExpanded;
 
+  final String organizationName;
 
   AnimatedOrganizationHeader(
-      {super.key, required this.isExpanded});
+      {super.key, required this.isExpanded, required this.organizationName});
 
   @override
   State<AnimatedOrganizationHeader> createState() =>
@@ -29,7 +30,7 @@ class _AnimatedOrganizationHeaderState extends State<AnimatedOrganizationHeader>
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<CurrentOrganizationCubit>(context).loadCurrentOrganization();
+
     _controller = AnimationController(
       duration: const Duration(milliseconds: 200),
       vsync: this,
@@ -94,13 +95,21 @@ class _AnimatedOrganizationHeaderState extends State<AnimatedOrganizationHeader>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    "graduation project",
-                    style: TextStyle(
-                      color: ConstantColors.primary,
-                      fontSize: ConstantSizes.fontSizeMd,
-                      fontWeight: ConstantSizes.fontWeightSemiBold,
-                    ),
+                  BlocBuilder<CurrentOrganizationCubit,
+                      CurrentOrganizationState>(
+                    builder: (context, state) {
+                      if (state is CurrentOrganizationLoaded) {
+                        return Text(
+                          state.organization.name ?? '',
+                          style: const TextStyle(
+                            color: ConstantColors.primary,
+                            fontSize: ConstantSizes.fontSizeMd,
+                            fontWeight: ConstantSizes.fontWeightSemiBold,
+                          ),
+                        );
+                      }
+                      return Text('');
+                    },
                   ),
                   SizedBox(
                     width: ConstantSizes.defaultSpace,

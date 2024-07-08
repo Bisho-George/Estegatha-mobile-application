@@ -1,26 +1,26 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class NotificationService {
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
   Future<void> initialize() async {
     const AndroidInitializationSettings initializationSettingsAndroid =
-    AndroidInitializationSettings('@mipmap/ic_launcher');
+        AndroidInitializationSettings('@mipmap/ic_launcher');
 
-    const InitializationSettings initializationSettings = InitializationSettings(
+    const InitializationSettings initializationSettings =
+        InitializationSettings(
       android: initializationSettingsAndroid,
     );
 
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
-      onDidReceiveNotificationResponse: (payload) async {
-
-      },
+      onDidReceiveNotificationResponse: (payload) async {},
     );
   }
 
   Future<void> showNotification(String title, String body) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
-    AndroidNotificationDetails(
+        AndroidNotificationDetails(
       'your_channel_id',
       'your_channel_name',
       channelDescription: 'your_channel_description',

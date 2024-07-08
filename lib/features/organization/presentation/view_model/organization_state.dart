@@ -81,6 +81,12 @@ class OrganizationJoinSuccess extends OrganizationState {
   ) : super(organization);
 }
 
+class OrganizationJoinFailure extends OrganizationState {
+  final String errMessage;
+
+  const OrganizationJoinFailure({required this.errMessage}) : super(null);
+}
+
 class OrganizationPostsLoading extends OrganizationState {
   const OrganizationPostsLoading() : super(null);
 }
@@ -153,6 +159,22 @@ class UpdateOrganizationSuccess extends OrganizationState {
   ) : super(organization);
 }
 
+class PostsLoading extends OrganizationState {
+  const PostsLoading() : super(null);
+}
+
+class PostsSuccess extends OrganizationState {
+  final List<Post> posts;
+
+  const PostsSuccess(this.posts) : super(null);
+}
+
+class PostsFailure extends OrganizationState {
+  final String errMessage;
+
+  const PostsFailure({required this.errMessage}) : super(null);
+}
+
 class CreatePostLoading extends OrganizationState {
   const CreatePostLoading() : super(null);
 }
@@ -165,4 +187,36 @@ class CreatePostFailure extends OrganizationState {
   final String errMessage;
 
   const CreatePostFailure({required this.errMessage}) : super(null);
+}
+
+class DeletePostLoading extends OrganizationState {
+  const DeletePostLoading() : super(null);
+}
+
+class DeletePostSuccess extends OrganizationState {
+  const DeletePostSuccess() : super(null);
+}
+
+class DeletePostFailure extends OrganizationState {
+  final String errMessage;
+
+  const DeletePostFailure({required this.errMessage}) : super(null);
+}
+
+class OrganizationSettingLoading extends OrganizationState {
+  const OrganizationSettingLoading() : super(null);
+}
+
+class OrganizationSettingSuccess extends OrganizationState {
+  final Organization organization;
+  final List<OrganizationMember> members;
+
+  const OrganizationSettingSuccess(this.organization, this.members)
+      : super(organization);
+}
+
+class OrganizationSettingFailure extends OrganizationState {
+  final String errMessage;
+
+  const OrganizationSettingFailure({required this.errMessage}) : super(null);
 }

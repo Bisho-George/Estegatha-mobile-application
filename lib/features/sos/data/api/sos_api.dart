@@ -11,9 +11,10 @@ import 'package:estegatha/utils/helpers/helper_functions.dart';
 import 'package:geolocator/geolocator.dart';
 
 import '../../../organization/domain/models/organization.dart';
+
 class SosApi extends SosRepo {
   @override
-  Future<int> createSosPin(String sos) async{
+  Future<int> createSosPin(String sos) async {
     Dio dio = await DioAuth.getDio();
     Response response = await dio.post(baseUrl + createSosEndPoint, data: {
       sosPinKey: sos,
@@ -22,29 +23,33 @@ class SosApi extends SosRepo {
   }
 
   @override
-  Future<int> sendSos() async{
+  Future<int> sendSos() async {
     await Permissions().grantPermissions();
     var location = await Geolocator.getCurrentPosition();
     OrganizationsRepo organizationsRepo = OrganizationsApi();
     Member member = await HelperFunctions.getUser();
-    List<Organization> organizations = await organizationsRepo.fetchOrganizations();
-    if(organizations.isEmpty){
+    List<Organization> organizations =
+        await organizationsRepo.fetchOrganizations();
+    if (organizations.isEmpty) {
       return 0;
     }
     int success = 0;
     Dio dio = await DioAuth.getDio();
-    for(var organization in organizations){
-      Response response = await dio.post(baseUrl + sendSosEndPoint, data: {
-        latKey: location.latitude,
-        langKey: location.longitude,
+    for (var organization in organizations) {
+      Response response =
+          await dio.post(baseUrl + notifyMembersEndPoint, data: {
         subjectKey: 'Emergency',
-        contentKey: 'your friend ${member.username} in organization ${organization.name} needs help',
-        'userId': member.id.toString(),
-        'organizationId': organization.id.toString(),
+        contentKey:
+            'your friend ${member.username} in organization ${organization.name} needs help',
+        "type": "INIT_SOS",
+        'data': {
+          'userId': member.id.toString(),
+          'organizationId': organization.id.toString(),
+        }
       }, queryParameters: {
-        'name': organization.id.toString(),
+        'organizationId': organization.id.toString(),
       });
-      if(response.statusCode == 200){
+      if (response.statusCode == 201) {
         success++;
       }
     }

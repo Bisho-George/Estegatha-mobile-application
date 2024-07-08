@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:estegatha/features/sign-up/data/data_source/signup_data_source.dart';
-import 'package:estegatha/features/sign-up/data/failure/failure.dart';
+import 'package:estegatha/utils/helpers/failure.dart';
 import 'package:estegatha/features/sign-up/data/models/signup_request_body.dart';
 import 'package:estegatha/features/sign-up/data/models/signup_response.dart';
 import 'package:estegatha/features/sign-up/domain/repos/signup_repo.dart';

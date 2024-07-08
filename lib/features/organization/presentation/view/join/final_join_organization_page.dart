@@ -1,12 +1,15 @@
 import 'package:estegatha/features/organization/domain/models/organization.dart';
 import 'package:estegatha/features/organization/domain/models/organizationMember.dart';
+import 'package:estegatha/features/organization/presentation/view/main/organization_detail_page.dart';
 import 'package:estegatha/features/organization/presentation/view_model/organization_cubit.dart';
 import 'package:estegatha/main_menu.dart';
 import 'package:estegatha/utils/common/widgets/custom_elevated_button.dart';
 import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
+import 'package:estegatha/utils/helpers/responsive.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
@@ -21,7 +24,16 @@ class FinalJoinOrganizationPage extends StatelessWidget {
         future: context.read<OrganizationCubit>().getOrganizationById(orgId),
         builder: (BuildContext context, AsyncSnapshot<Organization?> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
+            return const Scaffold(
+              body: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                      width: 200, height: 550, child: Center(child: Loader())),
+                ],
+              ),
+            );
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else {
@@ -36,9 +48,15 @@ class FinalJoinOrganizationPage extends StatelessWidget {
                 ),
               ),
               body: Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: ConstantSizes.spaceBtwSections,
-                    horizontal: ConstantSizes.defaultSpace),
+                padding: EdgeInsets.only(
+                  top: getProportionateScreenHeight(ConstantSizes.appBarHeight),
+                  bottom: getProportionateScreenHeight(
+                      ConstantSizes.bottomNavBarHeight),
+                  left: getProportionateScreenWidth(
+                      ConstantSizes.defaultSpace * 1.5),
+                  right: getProportionateScreenWidth(
+                      ConstantSizes.defaultSpace * 1.5),
+                ),
                 child: Column(
                   children: [
                     Text(
@@ -57,61 +75,74 @@ class FinalJoinOrganizationPage extends StatelessWidget {
                         fontSize: ConstantSizes.fontSizeLg,
                       ),
                     ),
-                    const SizedBox(
-                      height: ConstantSizes.spaceBtwSections * 4,
+                    SizedBox(
+                      height: getProportionateScreenHeight(
+                          ConstantSizes.spaceBtwSections),
                     ),
-                    FutureBuilder<List<OrganizationMember>>(
-                      future: context
-                          .read<OrganizationCubit>()
-                          .getOrganizationMembers(orgId),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const CircularProgressIndicator();
-                        } else if (snapshot.hasError) {
-                          return Text('Error: ${snapshot.error}');
-                        } else {
-                          final members = snapshot.data ?? [];
-                          return Expanded(
-                            child: GridView.builder(
-                              shrinkWrap: true,
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                childAspectRatio: 2,
-                                crossAxisSpacing: 0,
-                                mainAxisSpacing: 5,
-                              ),
-                              itemCount: members.length,
-                              itemBuilder: (context, index) {
-                                final member = members[index];
-                                return GridTile(
-                                  child: Container(
-                                    height: 50,
-                                    width: 50,
-                                    decoration: const BoxDecoration(
-                                      color: ConstantColors.primary,
-                                      shape: BoxShape.circle,
+                    Expanded(
+                      child: FutureBuilder<List<OrganizationMember>>(
+                        future: context
+                            .read<OrganizationCubit>()
+                            .getOrganizationMembers(orgId),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          } else if (snapshot.hasError) {
+                            return Text('Error: ${snapshot.error}');
+                          } else {
+                            final members = snapshot.data ?? [];
+                            final int additionalMembersCount =
+                                members.length > 2 ? members.length - 2 : 0;
+                            return Column(
+                              children: [
+                                Expanded(
+                                  child: GridView.builder(
+                                    shrinkWrap: true,
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      childAspectRatio: 2,
+                                      crossAxisSpacing: 0,
+                                      mainAxisSpacing: 5,
                                     ),
-                                    child: Center(
-                                      child: Text(
-                                        member.username![0].toUpperCase(),
-                                        style: const TextStyle(
-                                          color: ConstantColors.white,
-                                          fontSize: 20,
+                                    itemCount: members.length > 2
+                                        ? 2
+                                        : members.length, // Limit to 2 items
+                                    itemBuilder: (context, index) {
+                                      final member = members[index];
+                                      return GridTile(
+                                        child: Container(
+                                          height:
+                                              getProportionateScreenHeight(30),
+                                          width:
+                                              getProportionateScreenWidth(30),
+                                          decoration: const BoxDecoration(
+                                            color: ConstantColors.primary,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              member.username![0].toUpperCase(),
+                                              style: TextStyle(
+                                                color: ConstantColors.white,
+                                                fontSize: SizeConfig.font26,
+                                              ),
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ),
+                                      );
+                                    },
                                   ),
-                                );
-                              },
-                            ),
-                          );
-                        }
-                      },
-                    ),
-                    const SizedBox(
-                      height: ConstantSizes.spaceBtwSections * 2,
+                                ),
+                                if (additionalMembersCount >
+                                    0) // Conditionally display additional members text
+                                  Text('and $additionalMembersCount more'),
+                              ],
+                            );
+                          }
+                        },
+                      ),
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -119,22 +150,12 @@ class FinalJoinOrganizationPage extends StatelessWidget {
                         CustomElevatedButton(
                             onPressed: () {
                               Navigator.pop(context);
-                              // Navigator.pushReplacement(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //     builder: (context) => OrganizationDetailPage(
-                              //       organizationId: org.id,
-                              //     ),
-                              //   ),
-                              // );
+
                               PersistentNavBarNavigator.pushNewScreen(
                                 context,
                                 screen: const MainNavMenu(),
                                 withNavBar: false,
                               );
-                              // MaterialPageRoute(
-                              //   builder: (context) => MainNavMenu(),
-                              // ),
 
                               Navigator.pushReplacement(
                                 context,
@@ -144,8 +165,9 @@ class FinalJoinOrganizationPage extends StatelessWidget {
                               );
                             },
                             labelText: "Join"),
-                        const SizedBox(
-                          height: ConstantSizes.md,
+                        SizedBox(
+                          height: getProportionateScreenHeight(
+                              ConstantSizes.spaceBtwItems),
                         ),
                         CustomElevatedButton(
                           onPressed: () {

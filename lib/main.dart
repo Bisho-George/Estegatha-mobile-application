@@ -2,8 +2,6 @@ import 'dart:convert';
 
 import 'package:estegatha/core/firebase/SosScreen.dart';
 import 'package:estegatha/core/firebase/fcm_setup.dart';
-import 'package:estegatha/features/add_place/presentation/views/add_home_view.dart';
-import 'package:estegatha/features/add_place/presentation/views/add_place_view.dart';
 import 'package:estegatha/features/home/presentation/views/home_view.dart';
 import 'package:estegatha/features/organization/domain/models/member.dart';
 import 'package:estegatha/features/sign-in/presentation/pages/sign_in_page.dart';
@@ -23,8 +21,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:estegatha/features/landing/presentation/pages/landing_intro.dart';
 import 'package:estegatha/routes.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'core/domain/handle_first_route.dart';
 import 'core/firebase/notification.dart';
-import 'features/add_place/presentation/views/add_new_place.dart';
+import 'core/init/init.dart';
+import 'features/home/domain/entities/sos_zone_entity.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -33,11 +33,15 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   WidgetsFlutterBinding.ensureInitialized();
-  NotificationService notificationService = NotificationService();
-  await notificationService.initialize();
-  FCMSetup.setupFCM((String fcmToken) {
-    print('FCM Token: $fcmToken');
-  });
+  await Init.initGetStorage();
+  // await Init.initHive();
+  await Hive.initFlutter();
+  Hive.registerAdapter(SosZoneEntityAdapter());
+  await Hive.openBox(kSosZones);
+  await Init.initFirebase();
+  await Init.initNotifications();
+  Init.initWorkManager();
+
   runApp(
     MultiBlocProvider(
       providers: providers,
@@ -47,6 +51,8 @@ void main() async {
   Bloc.observer = SimpleBlocObserver();
 }
 
+
+
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
@@ -55,62 +61,20 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final ValueNotifier<Widget> home = ValueNotifier<Widget>(AddHomeView());
-  final String initialRoute = AddHomeView.routeName;
+  final ValueNotifier<Widget> home = ValueNotifier<Widget>(HomeView());
+  final String initialRoute = HomeView.routeName;
+
   @override
   void initState() {
     super.initState();
-    checkUserLoggedIn();
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      print('Got a message whilst in the foreground!');
-      print('Message data: ${message.data}');
-      var user = await HelperFunctions.getUser();
-      if (message.notification != null &&
-          message.data['userId'] != user.id.toString()) {
-        NotificationService notificationService = NotificationService();
-        notificationService.showNotification(
-            message.notification!.title!, message.notification!.body!);
-      }
-    });
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => SosScreen(message: message)));
-    });
-    // FirebaseMessaging.onBackgroundMessage((message) async {
-    //   var user = await HelperFunctions.getUser();
-    //   if (message.data['userId'] != user.id.toString()) {
-    //     NotificationService notificationService = NotificationService();
-    //     notificationService.showNotification(
-    //         message.notification!.title!, message.notification!.body!);
-    //   }
-    // });
-  }
-
-  Future<void> checkUserLoggedIn() async {
-    final prefs = await SharedPreferences.getInstance();
-    final userJson = prefs.getString('user');
-
-    if (userJson != null) {
-      print("User object from shared preferences => $userJson");
-      final user = Member.fromJson(jsonDecode(userJson));
-      BlocProvider.of<UserCubit>(context).setUser(user);
-      home.value = const MainNavMenu();
-      // home.value = SendSos();
-    } else {
-      checkFirstTime();
-    }
-  }
-
-  void checkFirstTime() {
-    final box = GetStorage();
-    if (box.read('isFirstTime') ?? true == true) {
-      home.value = const LandingIntro();
-      box.write('isFirstTime', false);
-    }
+    checkUserLoggedIn(home, context);
+    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+    FirebaseMessaging.onMessage.listen(firebaseMessagingForegroundHandler);
   }
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return ValueListenableBuilder<Widget>(
       valueListenable: home,
       builder: (context, isLoggedIn, child) {

@@ -1,11 +1,10 @@
+import 'package:estegatha/features/catalog/persentation/view/catalog_screen.dart';
 import 'package:estegatha/features/home/presentation/views/home_view.dart';
-import 'package:estegatha/features/organization/presentation/view_model/current_organization_cubit.dart';
-import 'package:estegatha/features/organization/presentation/view_model/current_organization_state.dart';
-import 'package:estegatha/features/safety/presentation/view/safetys_creen.dart';
 import 'package:estegatha/features/settings/presentation/view/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'home_page.dart';
+import 'features/home/presentation/view_models/current_oragnization_cubit/current_organization_cubit.dart';
+import 'features/safety/presentation/view/safetys_creen.dart';
 import 'features/organization/presentation/view/main/organization_detail_page.dart';
 import 'utils/constant/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -24,14 +23,12 @@ class _MainNavMenuState extends State<MainNavMenu> {
 
   List<Widget> buildScreens() {
     return [
-      HomeView(),
-      const SafetyScreen(),
+      HomeView(parentContext: context),
+      SafetyScreen(parentContext: context),
       OrganizationDetailPage(
         organizationId: 1, // TODO: change this to organizationId
       ),
-      const Center(
-        child: Text("Catalog screen"),
-      ),
+      const CatalogScreen(),
       const SettingsScreen()
     ];
   }

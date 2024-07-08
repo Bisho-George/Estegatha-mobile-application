@@ -1,4 +1,3 @@
-import 'package:estegatha/features/add_place/presentation/views/add_place_view.dart';
 import 'package:estegatha/features/forget-password/presentation/pages/forget_password_page.dart';
 import 'package:estegatha/features/sign-in/presentation/veiw_models/login_cubit/login_cubit.dart';
 import 'package:estegatha/utils/common/widgets/custom_elevated_button.dart';
@@ -111,7 +110,7 @@ class _SignInFormState extends State<SignInForm> {
                     );
                   }
                 }
-                Navigator.pushNamed(context, AddPlaceView.routeName);
+                Navigator.pushNamed(context, HomeView.routeName);
               },
               labelText: "Login",
             ),

@@ -1,11 +1,10 @@
-import 'package:estegatha/features/organization/presentation/view_model/current_organization_cubit.dart';
-import 'package:estegatha/features/organization/presentation/view_model/current_organization_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../utils/constant/colors.dart';
 import '../../../../../utils/constant/sizes.dart';
 import '../../../../organization/domain/models/organization.dart';
+import '../../view_models/current_oragnization_cubit/current_organization_cubit.dart';
 
 class OrganizationWidget extends StatelessWidget {
   const OrganizationWidget({super.key, required this.organization});
@@ -17,7 +16,7 @@ class OrganizationWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CurrentOrganizationCubit, CurrentOrganizationState>(
       builder: (context, state) {
-        final isSelected = state.organizationId == organization.id;
+        final isSelected = context.read<CurrentOrganizationCubit>().currentOrganization!.id == organization.id;
         return Container(
           decoration: BoxDecoration(
             border: Border(

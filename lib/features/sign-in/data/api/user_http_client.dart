@@ -25,6 +25,9 @@ class UserHttpClient {
       case 'POST':
         response = await http.post(url, headers: headers, body: body);
         break;
+
+      case "DELETE":
+        response = await http.delete(url, headers: headers);
       default:
         throw Exception('HTTP method $method not supported');
     }
@@ -51,8 +54,18 @@ class UserHttpClient {
         'POST', Uri.parse('$userBaseUrl/health-info/illness?illness=$disease'));
   }
 
+  static Future<http.Response> deleteUserDisease(String disease) async {
+    return customHttpRequest('DELETE',
+        Uri.parse('$userBaseUrl/health-info/illness?illness=$disease'));
+  }
+
   static Future<http.Response> addUserMedicine(String medicine) async {
     return customHttpRequest('POST',
+        Uri.parse('$userBaseUrl/health-info/medicine?medicine=$medicine'));
+  }
+
+  static Future<http.Response> deleteUserMedicine(String medicine) async {
+    return customHttpRequest('DELETE',
         Uri.parse('$userBaseUrl/health-info/medicine?medicine=$medicine'));
   }
 

@@ -1,28 +1,38 @@
-import 'package:dio/dio.dart';
-import 'package:estegatha/features/home/presentation/view_models/organization_member_cubit.dart';
-import 'package:estegatha/features/organization/presentation/view_model/current_organization_cubit.dart';
+import 'package:estegatha/features/catalog/persentation/view-model/catalog_cubit.dart';
+import 'package:estegatha/features/home/data/data_sources/sos_zone_data_source.dart';
+import 'package:estegatha/features/home/data/data_sources/sos_zone_remote_data_source.dart';
+import 'package:estegatha/features/home/data/data_sources/sos_zones_local_data_source.dart';
+import 'package:estegatha/features/home/data/repos/sos_zone_repo_imp.dart';
+import 'package:estegatha/features/home/domain/repos/sos_zone_repo.dart';
+import 'package:estegatha/features/home/domain/use_cases/sos_zone_use_case.dart';
+import 'package:estegatha/features/home/presentation/view_models/sos_zones_view_model/sos_zones_cubit.dart';
 import 'package:estegatha/features/organization/presentation/view_model/user_organizations_cubit.dart';
 import 'package:estegatha/features/safety/presentation/view_model/user_health_cubit.dart';
-import 'package:estegatha/features/sign-up/data/data_source/signup_data_source.dart';
-import 'package:estegatha/features/sign-up/data/repos/signup_repo_imp.dart';
-import 'package:estegatha/features/sign-up/domain/use_cases/sign_up_use_case.dart';
-import 'package:estegatha/features/sign-up/presentation/view_models/sign_up_cubit.dart';
-import 'package:estegatha/utils/services/api_service.dart';
+import 'package:estegatha/features/safty/presentation/view_models/add_contact_cubit.dart';
+import 'package:estegatha/features/safty/presentation/view_models/fitness_connect_cubit.dart';
 import 'package:flutter_bloc/src/bloc_provider.dart';
 import 'package:provider/single_child_widget.dart';
+import 'package:dio/dio.dart';
+import 'package:estegatha/features/home/presentation/view_models/organization_member_cubit.dart';
 
 import 'features/edit_account/presentation/view_models/edit_account_cubit.dart';
 import 'features/edit_account/presentation/view_models/edit_password_cubit.dart';
 import 'features/edit_account/presentation/view_models/edit_phone_cubit.dart';
 import 'features/forget-password/presentation/veiw_models/forget-password/forget_password_cubit.dart';
+import 'features/home/presentation/view_models/current_oragnization_cubit/current_organization_cubit.dart';
 import 'features/landing/presentation/view_model/permissions_cubit.dart';
 import 'features/organization/presentation/view_model/organization_cubit.dart';
-import 'features/safty/presentation/view_models/cotact_cubit.dart';
+import 'features/safty/presentation/view_models/contact_cubit.dart';
+import 'features/safty/presentation/view_models/fitness_data_cubit.dart';
 import 'features/sign-in/presentation/veiw_models/login_cubit/login_cubit.dart';
 import 'features/sign-in/presentation/veiw_models/user_cubit.dart';
 import 'features/sos/presentation/view_models/cubit/create_pin_cubit.dart';
 import 'features/sos/presentation/view_models/cubit/send_sos_cubit.dart';
-
+import 'package:estegatha/features/sign-up/data/data_source/signup_data_source.dart';
+import 'package:estegatha/features/sign-up/data/repos/signup_repo_imp.dart';
+import 'package:estegatha/features/sign-up/domain/use_cases/sign_up_use_case.dart';
+import 'package:estegatha/features/sign-up/presentation/view_models/sign_up_cubit.dart';
+import 'package:estegatha/utils/services/api_service.dart';
 List<SingleChildWidget> providers = [
   BlocProvider<UserCubit>(
     create: (context) => UserCubit(),
@@ -66,10 +76,31 @@ List<SingleChildWidget> providers = [
   BlocProvider<UserHealthCubit>(
     create: (context) => UserHealthCubit(),
   ),
+  BlocProvider<AddContactCubit>(
+    create: (context) => AddContactCubit(),
+  ),
+  BlocProvider<CatalogCubit>(
+    create: (context) => CatalogCubit(),
+  ),
   BlocProvider<SignUpCubit>(
     create: (context) => SignUpCubit(SignupUseCase(SignupRepoImp(signupDataSource: SignupDataSourceImp(ApiService(Dio()))))),
   ),
   BlocProvider<OrganizationMemberHomeCubit>(
     create: (context) => OrganizationMemberHomeCubit(),
+  ),
+  BlocProvider<AddContactCubit>(
+    create: (context) => AddContactCubit(),
+  ),
+  BlocProvider<CatalogCubit>(
+    create: (context) => CatalogCubit(),
+  ),
+  BlocProvider<FitnessConnectCubit>(
+    create: (context) => FitnessConnectCubit(),
+  ),
+  BlocProvider<FitnessDataCubit>(
+    create: (context) => FitnessDataCubit(),
+  ),
+  BlocProvider<SosZonesCubit>(
+    create: (context) => SosZonesCubit(SosZoneUseCase(SosZoneRepoImp(SosZoneRemoteDataSource(ApiService(Dio())), SosZoneLocalDataSourceImp())))
   ),
 ];

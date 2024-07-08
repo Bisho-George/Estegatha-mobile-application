@@ -18,6 +18,7 @@ class CustomTextField extends StatefulWidget {
   final List<TextInputFormatter>? inputFormatters;
   final String? initialValue;
   final int? maxLines;
+  final bool? readOnly;
 
   const CustomTextField({
     super.key,
@@ -35,6 +36,7 @@ class CustomTextField extends StatefulWidget {
     this.inputFormatters,
     this.initialValue,
     this.maxLines = 1,
+    this.readOnly = false,
   });
 
   @override
@@ -45,6 +47,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      readOnly: widget.readOnly!,
       initialValue: widget.initialValue,
       keyboardType: widget.keyboardType,
       obscureText: widget.obscureText!,

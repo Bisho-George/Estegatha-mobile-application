@@ -11,30 +11,28 @@ class CustomHomeAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: ConstantColors.white,
-              borderRadius: BorderRadius.circular(50),
-            ),
-            child: IconButton(
-              icon: SvgPicture.asset(
-                  ConstantImages.settingsAppbarIcon),
-              onPressed: () {},
-            ),
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+      Container(
+        decoration: BoxDecoration(
+          color: ConstantColors.white,
+          borderRadius: BorderRadius.circular(50),
+        ),
+        child: IconButton(
+          icon: SvgPicture.asset(ConstantImages.settingsAppbarIcon),
+          onPressed: () {},
+        ),
+      ),
+      AnimatedOrganizationHeader(
+        isExpanded: false,
+      ),
+      Container(
+          decoration: BoxDecoration(
+            color: ConstantColors.white,
+            borderRadius: BorderRadius.circular(50),
           ),
-          AnimatedOrganizationHeader(isExpanded: false),
-          Container(
-              decoration: BoxDecoration(
-                color: ConstantColors.white,
-                borderRadius: BorderRadius.circular(50),
-              ),
-              child: IconButton(
-                  onPressed: () {},
-                  icon: SvgPicture.asset(
-                      ConstantImages.messagesIcon)))
-        ]);
+          child: IconButton(
+              onPressed: () {},
+              icon: SvgPicture.asset(ConstantImages.messagesIcon)))
+    ]);
   }
 }

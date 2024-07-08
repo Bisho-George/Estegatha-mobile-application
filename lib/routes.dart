@@ -1,7 +1,4 @@
 
-import 'package:estegatha/features/add_place/presentation/views/add_home_view.dart';
-import 'package:estegatha/features/add_place/presentation/views/add_new_place.dart';
-import 'package:estegatha/features/add_place/presentation/views/add_place_view.dart';
 import 'package:estegatha/features/edit_account/presentation/pages/change_email.dart';
 import 'package:estegatha/features/edit_account/presentation/pages/change_password_page.dart';
 import 'package:estegatha/features/edit_account/presentation/pages/change_phone_number.dart';
@@ -10,6 +7,8 @@ import 'package:estegatha/features/landing/presentation/pages/landing1.dart';
 import 'package:estegatha/features/landing/presentation/pages/landing2.dart';
 import 'package:estegatha/features/landing/presentation/pages/landing_intro.dart';
 import 'package:estegatha/features/organization/presentation/view/create/create_organization_page.dart';
+import 'package:estegatha/features/organization/presentation/view/create/invite_to_organization_page.dart';
+import 'package:estegatha/features/organization/presentation/view/join/final_join_organization_page.dart';
 import 'package:estegatha/features/safty/presentation/pages/add_contact_page.dart';
 import 'package:estegatha/features/safty/presentation/pages/emergency_contact_page.dart';
 import 'package:estegatha/features/safty/presentation/pages/location_feedback_page.dart';
@@ -24,6 +23,9 @@ import 'package:estegatha/features/sos/presentation/pages/send_sos.dart';
 import 'package:estegatha/main_menu.dart';
 import 'package:flutter/material.dart';
 
+import 'features/add_place/presentation/views/add_home_view.dart';
+import 'features/add_place/presentation/views/add_new_place.dart';
+import 'features/add_place/presentation/views/add_place_view.dart';
 import 'features/home/presentation/views/home_view.dart';
 import 'features/sign-up/presentation/views/personal_info_view.dart';
 import 'features/sos/presentation/pages/sos_alert_intro.dart';

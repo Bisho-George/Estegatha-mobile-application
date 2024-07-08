@@ -16,13 +16,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../utils/constant/colors.dart';
 import '../../../../utils/constant/image_strings.dart';
-import '../../../organization/presentation/view_model/current_organization_cubit.dart';
+import '../../../sos/presentation/pages/send_sos.dart';
+import '../view_models/current_oragnization_cubit/current_organization_cubit.dart';
 import '../view_models/home_state.dart';
 import '../view_models/home_view_model.dart';
 
 class HomeView extends StatefulWidget {
   static const String routeName = '/home';
-
+  BuildContext ?parentContext;
+  HomeView({super.key, this.parentContext});
   @override
   _HomeViewState createState() => _HomeViewState();
 }
@@ -130,25 +132,35 @@ class _HomeViewState extends State<HomeView>
                               horizontal: ConstantSizes.defaultSpace,
                               vertical: 10,
                             ),
-                            child: Row(
-                              children: [
-                                SvgPicture.asset(
-                                  fit: BoxFit.cover,
-                                  ConstantImages.safetySolidIcon,
-                                ),
-                                const SizedBox(
-                                  width: ConstantSizes.spaceBtwItems,
-                                ),
-                                const Text(
-                                  "Safety",
-                                  style: TextStyle(
-                                    color: ConstantColors.primary,
-                                    fontSize: ConstantSizes.fontSizeMd,
-                                    fontWeight:
-                                        ConstantSizes.fontWeightSemiBold,
+                            child: GestureDetector(
+                              onTap: (){
+                                Navigator.push(
+                                  widget.parentContext ?? context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SendSos(),
                                   ),
-                                ),
-                              ],
+                                );
+                              },
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset(
+                                    fit: BoxFit.cover,
+                                    ConstantImages.safetySolidIcon,
+                                  ),
+                                  const SizedBox(
+                                    width: ConstantSizes.spaceBtwItems,
+                                  ),
+                                  const Text(
+                                    "Safety",
+                                    style: TextStyle(
+                                      color: ConstantColors.primary,
+                                      fontSize: ConstantSizes.fontSizeMd,
+                                      fontWeight:
+                                      ConstantSizes.fontWeightSemiBold,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -167,7 +179,7 @@ class _HomeViewState extends State<HomeView>
                     right: 0,
                     bottom: 0,
                     child:
-                        NotificationListener<DraggableScrollableNotification>(
+                    NotificationListener<DraggableScrollableNotification>(
                       onNotification: (notification) {
                         _onScroll(notification.extent);
                         return true;
