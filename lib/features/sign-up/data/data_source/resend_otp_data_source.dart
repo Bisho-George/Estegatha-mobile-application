@@ -18,6 +18,7 @@ class ResendOtpDataSourceImp extends ResendOtpDataSource {
       queryParams: {
         'email': resendOtpRequest.email,
       },
+      isSignup: false,
     );
     return ResendOtpResponse(
         message: result.data['message'] ?? result.data,

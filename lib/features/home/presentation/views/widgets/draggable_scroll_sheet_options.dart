@@ -1,3 +1,4 @@
+import 'package:estegatha/features/add_place/presentation/views/add_new_boundary.dart';
 import 'package:estegatha/features/home/presentation/views/widgets/organization_option.dart';
 import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/image_strings.dart';
@@ -41,7 +42,7 @@ class DraggableScrollSheetOptions extends StatelessWidget {
         const SizedBox(height: ConstantSizes.spaceBtwItems),
         Text(
           key: _keySection3,
-          "Places",
+          "Boundaries",
           style: const TextStyle(
             color: ConstantColors.black,
             fontSize: ConstantSizes.fontSizeMd,
@@ -49,9 +50,14 @@ class DraggableScrollSheetOptions extends StatelessWidget {
           ),
         ),
         const SizedBox(height: ConstantSizes.spaceBtwItems),
-        const OrganizationOption(
-          optionName: 'Manage places',
-          iconPath: ConstantImages.buildingIcon,
+        GestureDetector(
+          onTap: (){
+            Navigator.pushNamed(context, AddNewBoundary.routeName);
+          },
+          child: const OrganizationOption(
+            optionName: 'Manage boundaries',
+            iconPath: ConstantImages.buildingIcon,
+          ),
         ),
       ],
     );

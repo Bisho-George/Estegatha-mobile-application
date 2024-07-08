@@ -17,7 +17,9 @@ class VerifyOtpDataSourceImp extends VerifyOtpDataSource {
     var result = await apiService.post(endpoint: 'api/v1/auth/verify', data: {
       'email': verifyOtpRequest.email,
       'otp': verifyOtpRequest.otp,
-    });
+    },
+      isSignup: false
+    );
     return VerifyOtpResponse(
       success: result.data['status'] ?? true,
       message: result.data['message'] ?? result.data,

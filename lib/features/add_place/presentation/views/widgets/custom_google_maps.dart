@@ -1,4 +1,6 @@
+import 'package:estegatha/features/add_place/presentation/view_models/boundary_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../../../responsive/size_config.dart';
 import '../../../../../utils/constant/colors.dart';
@@ -19,7 +21,7 @@ class _CustomGoogleMapsState extends State<CustomGoogleMaps> {
   void initState() {
     mapViewModel = MapViewModel();
     mapViewModel.initializeLocation().then((_) {
-      setState(() {}); // Refresh the UI after location is initialized
+      setState(() {});
     });
     super.initState();
   }
@@ -47,6 +49,9 @@ class _CustomGoogleMapsState extends State<CustomGoogleMaps> {
         onMapCreated: (controller) {
           mapViewModel.mapController = controller;
           if (mapViewModel.isLocationInitialized) {
+            BlocProvider.of<BoundaryCubit>(context).updateLatLng(
+                mapViewModel.currentLocation.latitude,
+                mapViewModel.currentLocation.longitude);
             mapViewModel.updateMap();
           }
         },
@@ -93,6 +98,8 @@ class _CustomGoogleMapsState extends State<CustomGoogleMaps> {
               onChangeEnd: (value) {
                 setState(() {
                   mapViewModel.radius = value.round().toDouble();
+                  BlocProvider.of<BoundaryCubit>(context).updateRadius(
+                      mapViewModel.radius);
                   mapViewModel.updateMap();
                 });
               },

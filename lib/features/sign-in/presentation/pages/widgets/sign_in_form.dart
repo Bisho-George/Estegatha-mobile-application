@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../add_place/presentation/views/add_boundary_view.dart';
 import '../../../../home/presentation/views/home_view.dart';
 
 class SignInForm extends StatefulWidget {
@@ -111,7 +112,7 @@ class _SignInFormState extends State<SignInForm> {
                     );
                   }
                 }
-                Navigator.pushNamed(context, AddPlaceView.routeName);
+                Navigator.pushNamed(context, AddBoundaryView.routeName);
               },
               labelText: "Login",
             ),

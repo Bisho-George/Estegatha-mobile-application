@@ -1,6 +1,6 @@
 
-import 'package:estegatha/features/add_place/presentation/views/add_home_view.dart';
-import 'package:estegatha/features/add_place/presentation/views/add_new_place.dart';
+import 'package:estegatha/features/add_place/presentation/views/add_boundary_view.dart';
+import 'package:estegatha/features/add_place/presentation/views/add_new_boundary.dart';
 import 'package:estegatha/features/add_place/presentation/views/add_place_view.dart';
 import 'package:estegatha/features/edit_account/presentation/pages/change_email.dart';
 import 'package:estegatha/features/edit_account/presentation/pages/change_password_page.dart';
@@ -52,9 +52,9 @@ final Map<String, WidgetBuilder> routes = {
   CancelSos.routeName: (context) => const CancelSos(),
   HomeView.routeName: (context) => HomeView(),
   MainNavMenu.routeName: (context) => const MainNavMenu(),
-  AddPlaceView.routeName: (context) => const AddPlaceView(),
-  AddNewPlaceView.routeName: (context) => const AddNewPlaceView(),
-  AddHomeView.routeName: (context) => const AddHomeView()
+  AddBoundaryView.routeName: (context) => const AddBoundaryView(),
+  AddNewBoundary.routeName: (context) => const AddNewBoundary(),
+  AddBoundaryView.routeName: (context) => const AddBoundaryView()
 
 
 };

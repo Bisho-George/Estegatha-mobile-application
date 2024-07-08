@@ -5,5 +5,6 @@ import 'package:estegatha/features/sign-up/data/failure/failure.dart';
 import '../../data/models/organization_boundary_response.dart';
 
 abstract class BoundaryRepo {
-  Future<Either<Failure, OrganizationBoundaryResponse>> addPlace(OrganizationBoundaryEntity organizationBoundaryEntity);
+  Future<Either<Failure, OrganizationBoundaryResponse>> addPlace(num id, OrganizationBoundaryEntity organizationBoundaryEntity);
+  Future<Either<Failure, List<OrganizationBoundaryEntity>>> getBoundaries(num id);
 }

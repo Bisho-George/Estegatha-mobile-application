@@ -1,8 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:estegatha/utils/constant/variables.dart';
 
+import '../../core/data/api/dio_auth.dart';
+
 class ApiService {
-  final Dio _dio;
+  late final Dio _dio;
 
   ApiService(this._dio);
 
@@ -11,13 +13,14 @@ class ApiService {
     return response.data;
   }
 
-
   Future<dynamic> post({
     required String endpoint,
     Map<String, dynamic>? data,
     Map<String, dynamic>? headers,
     Map<String, dynamic>? queryParams,
+    isSignup = true,
   }) async {
+    isSignup ? _dio = await DioAuth.getDio() : null;
     var response = await _dio.post(
       '${ConstantVariables.uri}/$endpoint',
       data: data,
@@ -26,5 +29,4 @@ class ApiService {
     );
     return response;
   }
-
 }
