@@ -33,6 +33,7 @@ class MembersList extends StatelessWidget {
           ),
           child: ListTile(
             leading: CircleAvatar(
+              backgroundColor: ConstantColors.secondary,
               child: Text(
                 member.username![0],
                 style: const TextStyle(
@@ -67,12 +68,6 @@ class MembersList extends StatelessWidget {
                     context
                         .read<TrackCubit>()
                         .setNameOfTheTrackedMember(member.username!);
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => const OrderTrackingScreen(),
-                    //   ),
-                    // );
                   }
                   // Handle track button press
                 },
