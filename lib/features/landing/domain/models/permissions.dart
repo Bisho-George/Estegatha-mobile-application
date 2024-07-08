@@ -24,6 +24,7 @@ class Permissions{
     Permission.activityRecognition,
     Permission.sensors,
     Permission.sensorsAlways,
+    Permission.locationAlways,
   ];
   Future<void> grantPermissions() async{
     List<Permission> deniedPermissions = [];

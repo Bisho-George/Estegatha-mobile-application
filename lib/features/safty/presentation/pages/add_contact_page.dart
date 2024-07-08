@@ -19,14 +19,11 @@ class AddContactPage extends StatelessWidget {
 
   static const String routeName = '/add-contact';
 
-  TextEditingController controller = TextEditingController();
-
-  TextEditingController phoneController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     SizeConfig sizeConfig = SizeConfig();
     sizeConfig.init(context);
+    var controller = TextEditingController();
     return BlocConsumer<AddContactCubit, AddContactState>(
       builder: (context, state) {
         return LoadingWidget(
@@ -37,8 +34,7 @@ class AddContactPage extends StatelessWidget {
                 icon: const Icon(Icons.check),
                 color: ConstantColors.primary,
                 onPressed: () {
-                  BlocProvider.of<AddContactCubit>(context).addContact(ContactModel(
-                      name: controller.text, phoneNumber: phoneController.text));
+                  BlocProvider.of<AddContactCubit>(context).addContact();
                 },
               ),
             ]),
@@ -55,8 +51,10 @@ class AddContactPage extends StatelessWidget {
                   child: TextField(
                     style: Styles.getDefaultPrimary(
                         weight: ConstantSizes.fontWeightBold),
-                    controller: controller,
+                    controller: BlocProvider.of<AddContactCubit>(context).controller,
                     textAlignVertical: TextAlignVertical.center,
+                    showCursor: true,
+                    cursorColor: ConstantColors.primary,
                   ),
                 ),
                 const CategoryHeaderWidget(name: 'Phone Number'),
@@ -66,9 +64,11 @@ class AddContactPage extends StatelessWidget {
                     vertical: responsiveHeight(ConstantSizes.md),
                   ),
                   child: IntlPhoneField(
-                    showCursor: false,
-                    controller: phoneController,
+                    showCursor: true,
                     initialCountryCode: 'EG',
+                    onChanged: (phone) {
+                      BlocProvider.of<AddContactCubit>(context).phone = phone.completeNumber;
+                    },
                   ),
                 ),
               ],

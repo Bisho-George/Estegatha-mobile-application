@@ -1,3 +1,4 @@
+import 'package:estegatha/features/safty/domain/model/health_metrices_model.dart';
 import 'package:estegatha/features/safty/presentation/view_models/fitness_data_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +10,7 @@ class FitnessDataCubit extends Cubit<FitnessDataState>{
   FitnessDataCubit():super(FitnessDataInitial());
   final _repository = FitnessConnectApi();
   bool loading = false;
+  List<HealthMetricesModel> healthMetrices = [];
   void changeAccount() async{
     try{
       await _repository.changeAccount();
@@ -20,7 +22,7 @@ class FitnessDataCubit extends Cubit<FitnessDataState>{
   void fetchData() async{
     loading = true;
     try{
-      await _repository.fetchData();
+      healthMetrices = await _repository.fetchData();
       emit(FitnessDataSuccess('Data fetched'));
     }catch(e){
       emit(FitnessDataFailure('Failed to fetch data'));

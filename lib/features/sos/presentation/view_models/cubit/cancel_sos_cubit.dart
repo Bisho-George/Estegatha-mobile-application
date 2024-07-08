@@ -19,4 +19,14 @@ class CancelSosCubit extends Cubit<CancelSosState>{
     }
     isLoading = false;
   }
+
+  void sendFeedback(String text) {
+    try {
+      CancelSosRepo repo = CancelSosApi();
+      repo.sendFeedback(text);
+    }catch(e){
+      print(e);
+    }
+  }
+
 }

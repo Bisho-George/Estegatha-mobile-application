@@ -41,12 +41,7 @@ class HealthTrackerWelcomePage extends StatelessWidget {
         child: FloatingActionButton(
           onPressed: () async{
             if(pagesInfo.isLastPage){
-              if(await FitnessConnectApi().hasPermissions()){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const HealthTrackerDataPage()));
-              }
-              else{
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const HealthTrackerConnectPage()));
-              }
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const HealthTrackerConnectPage()));
             }
             else{
               pageController.nextPage(

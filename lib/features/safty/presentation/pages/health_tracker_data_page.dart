@@ -1,6 +1,7 @@
 import 'package:estegatha/features/safety/presentation/view_model/user_health_cubit.dart';
 import 'package:estegatha/features/safty/data/api/fitness_connect_api.dart';
 import 'package:estegatha/features/safty/domain/model/health_metrices_model.dart';
+import 'package:estegatha/features/safty/presentation/view_models/fitness_connect_cubit.dart';
 import 'package:estegatha/features/safty/presentation/view_models/fitness_data_state.dart';
 import 'package:estegatha/responsive/size_config.dart';
 import 'package:estegatha/utils/common/widgets/loading_widget.dart';
@@ -14,37 +15,21 @@ import '../../../../utils/constant/colors.dart';
 import '../../../../utils/constant/image_strings.dart';
 import '../../../../utils/helpers/helper_functions.dart';
 import '../view_models/fitness_data_cubit.dart';
+import '../widgets/health_data_widget.dart';
 import '../widgets/health_metrices_widget.dart';
 import '../widgets/heart_rate_widget.dart';
 
-class HealthTrackerDataPage extends StatelessWidget {
+class HealthTrackerDataPage extends StatefulWidget {
   const HealthTrackerDataPage({super.key});
 
   @override
+  State<HealthTrackerDataPage> createState() => _HealthTrackerDataPageState();
+}
+
+class _HealthTrackerDataPageState extends State<HealthTrackerDataPage> {
+  @override
   Widget build(BuildContext context) {
     BlocProvider.of<FitnessDataCubit>(context).fetchData();
-    List<HealthMetricesModel> healthData = [
-      HealthMetricesModel(
-        type: HealthDataType.BLOOD_PRESSURE_DIASTOLIC,
-        value: '80',
-        unit: 'mm Hg',
-      ),
-      HealthMetricesModel(
-        type: HealthDataType.BLOOD_OXYGEN,
-        value: '98',
-        unit: '%',
-      ),
-      HealthMetricesModel(
-        type: HealthDataType.BODY_TEMPERATURE,
-        value: '36.5',
-        unit: '°C',
-      ),
-      HealthMetricesModel(
-        type: HealthDataType.STEPS,
-        value: '500',
-        unit: 'the last hours',
-      ),
-    ];
     SizeConfig().init(context);
     return Scaffold(
       appBar: CustomAppBar.buildAppBar(
@@ -76,36 +61,8 @@ class HealthTrackerDataPage extends StatelessWidget {
                     loading: BlocProvider
                         .of<FitnessDataCubit>(context)
                         .loading,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        HeartRateWidget(
-                          heartRate: '82',
-                          quality: 80,
-                        ),
-                        HealthMetricesWidget(
-                          type: 'Blood Pressure',
-                          value: '120/80',
-                          unit: 'mm Hg',
-                        ),
-                        HealthMetricesWidget(
-                          type: 'Blood Oxygen',
-                          value: '98',
-                          unit: '%',
-                        ),
-                        HealthMetricesWidget(
-                          type: 'Temperature',
-                          value: '36.5',
-                          unit: '°C',
-                        ),
-                        HealthMetricesWidget(
-                          type: 'Steps',
-                          value: '500',
-                          unit: 'the last hours',
-                        ),
-                      ],
+                    child: HealthDataWidget(
+                      healthMetrices: BlocProvider.of<FitnessDataCubit>(context).healthMetrices,
                     ),
                   );
                 },

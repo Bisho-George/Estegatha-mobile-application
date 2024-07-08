@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:estegatha/features/organization/domain/models/member.dart';
 import 'package:estegatha/features/organization/domain/models/organization.dart';
 import 'package:estegatha/features/sos/data/api/organizations_api.dart';
@@ -15,7 +17,7 @@ class SendSosCubit extends Cubit<SendSosState>{
   SendSosCubit():super(SendSosInitial());
   Future<void> getMembers() async {
     emit(SendSosLoading());
-    List<OrganizationMember> members = [];
+    Set<OrganizationMember> members = HashSet(equals: (a, b) => a.userId == b.userId, hashCode: (a) => a.userId.hashCode);
     OrganizationsRepo repo = OrganizationsApi();
     try{
       Member ?user = await HelperFunctions.getUser();
@@ -24,11 +26,11 @@ class SendSosCubit extends Cubit<SendSosState>{
         if(organization.organizationSize != null && organization.organizationSize! > 0){
           List<OrganizationMember> organizationMembers =
           await repo.fetchOrganizationMembers(organization.id!).timeout(Duration(seconds: durationTimeout));
-          organizationMembers.removeWhere((element) => element.userId == user!.id);
-          members.addAll(organizationMembers);
+          members.addAll(organizationMembers.toSet());
+          members.removeWhere((element) => element.userId == user!.id);
         }
       }
-      emit(MembersReceivedStatus(members: members));
+      emit(MembersReceivedStatus(members: members.toList()));
     }catch(e){
       emit(MemberReceivedFailure(message: 'Can\'t get organizations members'));
     }

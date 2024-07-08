@@ -3,14 +3,12 @@ import 'package:estegatha/constants.dart';
 import 'package:estegatha/core/data/api/dio_auth.dart';
 import 'package:estegatha/features/landing/domain/models/permissions.dart';
 import 'package:estegatha/features/organization/domain/models/member.dart';
-import 'package:estegatha/features/organization/domain/models/organizationMember.dart';
-import 'package:estegatha/features/sos/data/api/organizations_api.dart';
-import 'package:estegatha/features/sos/domain/repositories/organizations_repo.dart';
+import 'package:estegatha/features/safty/data/api/contact_api.dart';
+import 'package:estegatha/features/sos/data/api/message_api.dart';
+import 'package:estegatha/features/sos/domain/message_repo.dart';
 import 'package:estegatha/features/sos/domain/repositories/sos_repo.dart';
 import 'package:estegatha/utils/helpers/helper_functions.dart';
 import 'package:geolocator/geolocator.dart';
-
-import '../../../organization/domain/models/organization.dart';
 
 class SosApi extends SosRepo {
   @override
@@ -31,8 +29,7 @@ class SosApi extends SosRepo {
     Dio dio = await DioAuth.getDio();
     Response response = await dio.post(baseUrl + sosEndPoint, data: {
       subjectKey: 'Emergency',
-      contentKey:
-          'your friend ${member.username} needs help',
+      contentKey: 'your friend ${member.username} needs help',
       "type": "INIT_SOS",
       'data': {
         'userId': member.id.toString(),
@@ -40,6 +37,19 @@ class SosApi extends SosRepo {
         'longitude': location.longitude.toString()
       }
     });
+    try {
+      var contacts = await ContactApi().fetchContacts();
+      SmsMessageRepo messageApi = SmsMessageApi();
+      String message = 'your friend ${member.username} needs help';
+      if (member.phone != null && member.phone!.isNotEmpty) {
+        message += ' has phone ${member.phone}';
+      }
+      for (var contact in contacts) {
+        await messageApi.sendMessage(message, contact.phoneNumber);
+      }
+    } catch (e) {
+      print(e);
+    }
     if (response.statusCode == 201) {
       success = 1;
     }

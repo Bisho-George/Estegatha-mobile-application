@@ -45,7 +45,7 @@ class HeartRateWidget extends StatelessWidget {
                     height: responsiveHeight(120),
                     width: responsiveWidth(120),
                     child: CircularProgressIndicator(
-                      value: quality / 100,
+                      value: quality != -1 ? quality / 100 : 0,
                       color: ConstantColors.primary,
                       backgroundColor: ConstantColors.white,
                       strokeWidth: 10,
@@ -62,7 +62,7 @@ class HeartRateWidget extends StatelessWidget {
                   Positioned(
                     bottom: responsiveHeight(30),
                     child: Text(
-                      '$quality',
+                      quality != -1 ? '$quality' : 'N/A',
                       style: Styles.getPrimaryMedium(),
                     ),
                   ),

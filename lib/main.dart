@@ -51,9 +51,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     checkUserLoggedIn(home, context);
-    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-    FirebaseMessaging.onMessage.listen(firebaseMessagingForegroundHandler);
-    // subscribeToMessages();
+    subscribeToMessages();
   }
 
   @override

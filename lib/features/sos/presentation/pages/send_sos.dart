@@ -9,6 +9,7 @@ import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
 import 'package:estegatha/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../../../../utils/common/styles/text_styles.dart';
 import '../../../organization/domain/models/member.dart';
@@ -73,6 +74,7 @@ class SendSos extends StatelessWidget {
               listener: (context, state) {
                 if(state is SendSosSuccess){
                   HelperFunctions.showSnackBar(context, 'SOS sent successfully');
+                  GetStorage().write('status', 'unsafe');
                   Navigator.of(context).pushNamed(CancelSos.routeName);
                 }
                 else if(state is MemberReceivedFailure){

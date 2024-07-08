@@ -7,11 +7,14 @@ import 'package:estegatha/features/home/presentation/views/widgets/draggable_scr
 import 'package:estegatha/features/home/presentation/views/widgets/google_map.dart';
 import 'package:estegatha/features/organization/presentation/view_model/user_organizations_cubit.dart';
 import 'package:estegatha/features/sos/data/api/organizations_api.dart';
+import 'package:estegatha/features/sos/presentation/pages/cancel_sos.dart';
+import 'package:estegatha/features/sos/presentation/pages/cancel_sos_pin.dart';
 import 'package:estegatha/responsive/size_config.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../../../../utils/constant/colors.dart';
 import '../../../../utils/constant/image_strings.dart';
@@ -120,7 +123,18 @@ class _HomeViewState extends State<HomeView>
                         duration: const Duration(milliseconds: 300),
                         child: IconButton(
                           onPressed: () {
-                            //TODO: Implement Safety
+                            Widget page = SendSos();
+                            final box = GetStorage();
+                            var status = box.read('status') ?? 'safe';
+                            if(status != 'safe'){
+                              page = CancelSos();
+                            }
+                            Navigator.push(
+                              widget.parentContext ?? context,
+                              MaterialPageRoute(
+                                builder: (context) => page,
+                              ),
+                            );
                           },
                           icon: Container(
                             decoration: BoxDecoration(
@@ -131,35 +145,25 @@ class _HomeViewState extends State<HomeView>
                               horizontal: ConstantSizes.defaultSpace,
                               vertical: 10,
                             ),
-                            child: GestureDetector(
-                              onTap: (){
-                                Navigator.push(
-                                  widget.parentContext ?? context,
-                                  MaterialPageRoute(
-                                    builder: (context) => SendSos(),
+                            child: Row(
+                              children: [
+                                SvgPicture.asset(
+                                  fit: BoxFit.cover,
+                                  ConstantImages.safetySolidIcon,
+                                ),
+                                const SizedBox(
+                                  width: ConstantSizes.spaceBtwItems,
+                                ),
+                                const Text(
+                                  "SOS",
+                                  style: TextStyle(
+                                    color: ConstantColors.primary,
+                                    fontSize: ConstantSizes.fontSizeMd,
+                                    fontWeight:
+                                    ConstantSizes.fontWeightSemiBold,
                                   ),
-                                );
-                              },
-                              child: Row(
-                                children: [
-                                  SvgPicture.asset(
-                                    fit: BoxFit.cover,
-                                    ConstantImages.safetySolidIcon,
-                                  ),
-                                  const SizedBox(
-                                    width: ConstantSizes.spaceBtwItems,
-                                  ),
-                                  const Text(
-                                    "SOS",
-                                    style: TextStyle(
-                                      color: ConstantColors.primary,
-                                      fontSize: ConstantSizes.fontSizeMd,
-                                      fontWeight:
-                                      ConstantSizes.fontWeightSemiBold,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
                         ),

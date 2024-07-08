@@ -5,15 +5,28 @@ import 'package:estegatha/constants.dart';
 import 'package:estegatha/core/data/api/dio_auth.dart';
 import 'package:estegatha/core/domain/model/messages_types.dart';
 import 'package:estegatha/core/firebase/notification.dart';
+import 'package:estegatha/features/organization/domain/models/member.dart';
 import 'package:estegatha/features/organization/domain/models/organization.dart';
 import 'package:estegatha/features/sign-in/presentation/veiw_models/user_cubit.dart';
+import 'package:estegatha/utils/helpers/helper_functions.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:get_storage/get_storage.dart';
 
-handleMessages(RemoteMessage message, String appState) {
+handleMessages(RemoteMessage message, String appState) async{
   switch (message.data['type']) {
     case MessageTypes.INIT_SOS:
+      String userId = message.data['userId'];
+       Member user = await HelperFunctions.getUser();
+      if (user.id.toString() == userId) {
+        GetStorage().write('status', 'unsafe');
+      }
       break;
     case MessageTypes.CANCEL_SOS:
+      String userId = message.data['userId'];
+      Member user = await HelperFunctions.getUser();
+      if (user.id.toString() == userId) {
+        GetStorage().write('status', 'safe');
+      }
       break;
     case MessageTypes.CANCEL_HEALTH_ISSUE:
       break;
@@ -48,9 +61,12 @@ handleMessages(RemoteMessage message, String appState) {
   } else {
     print("Message received in background: ${message.notification!.title}");
   }
-  NotificationService notificationService = NotificationService();
-  notificationService.showNotification(
-      message.notification!.title!, message.notification!.body!);
+  Member member = await HelperFunctions.getUser();
+  if(message.data['userId'] != member.id.toString()){
+    NotificationService notificationService = NotificationService();
+    notificationService.showNotification(
+        message.notification!.title!, message.notification!.body!);
+  }
 }
 
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -64,9 +80,8 @@ Future<void> firebaseMessagingForegroundHandler(RemoteMessage message) async {
 }
 
 subscribeToMessages() {
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-    handleMessages(message, 'foreground');
-  });
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.onMessage.listen(firebaseMessagingForegroundHandler);
 }
 
 Future<void> joinToOrganizationNotification(int orgId) async {

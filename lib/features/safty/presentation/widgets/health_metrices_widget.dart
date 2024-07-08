@@ -44,7 +44,7 @@ class HealthMetricesWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                value,
+                value != '-1' ? value : 'N/A',
                 style: Styles.getPrimaryLarge(),
               ),
               SizedBox(

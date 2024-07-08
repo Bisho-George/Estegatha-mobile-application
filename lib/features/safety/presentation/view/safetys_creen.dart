@@ -18,6 +18,9 @@ import 'package:estegatha/utils/helpers/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../safty/data/api/fitness_connect_api.dart';
+import '../../../safty/presentation/pages/health_tracker_data_page.dart';
+import '../../../safty/presentation/view_models/contact_cubit.dart';
 import '../widgets/safty_item_widget.dart';
 
 class SafetyScreen extends StatelessWidget {
@@ -57,6 +60,7 @@ class SafetyScreen extends StatelessWidget {
               SafetyItemWidget(
                 label: "Emergency Contact",
                 onTap: () {
+                  BlocProvider.of<ContactCubit>(context).fetchContact();
                   Navigator.of(parentContext ?? context).push(MaterialPageRoute(
                       builder: (context) => EmergencyContactPage()));
                 },
@@ -64,9 +68,13 @@ class SafetyScreen extends StatelessWidget {
               ),
               SafetyItemWidget(
                 label: "Health Track",
-                onTap: () {
-                  Navigator.of(parentContext ?? context).push(MaterialPageRoute(
-                      builder: (context) => HealthTrackerWelcomePage()));
+                onTap: () async{
+                  if(await FitnessConnectApi().hasPermissions()){
+                  Navigator.push(parentContext ?? context, MaterialPageRoute(builder: (context) => const HealthTrackerDataPage()));
+                  }
+                  else{
+                  Navigator.push(parentContext ?? context, MaterialPageRoute(builder: (context) => HealthTrackerWelcomePage()));
+                  }
                 },
                 icon: Icons.watch,
               ),

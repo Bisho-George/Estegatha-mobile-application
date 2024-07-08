@@ -64,6 +64,8 @@ dependencies:
   geocoding: ^3.0.0
 
   permission_handler: ^10.2.0
+  flutter_foreground_task: ^6.5.0
+  libphonenumber: ^2.0.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

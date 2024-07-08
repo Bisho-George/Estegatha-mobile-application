@@ -23,4 +23,16 @@ class ContactCubit extends Cubit<ContactState>{
     }
     isLoading = false;
   }
+  Future<void> deleteContact(ContactModel contactModel) async {
+    isLoading = true;
+    ContactApi contactApi = ContactApi();
+    try{
+      await contactApi.deleteContact(contactModel).timeout(Duration(seconds: durationTimeout));
+      contacts.removeWhere((element) => element.id == contactModel.id);
+      emit(ContactSuccessState('delete contact success'));
+    }catch(e){
+      emit(ContactFailureState('delete contact failed'));
+    }
+    isLoading = false;
+  }
 }
