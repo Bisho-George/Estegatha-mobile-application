@@ -1,4 +1,6 @@
+import 'package:estegatha/core/work_manager/work_manager.dart';
 import 'package:estegatha/features/landing/domain/models/permissions.dart';
+import 'package:estegatha/features/safty/data/api/send_fitness_api.dart';
 import 'package:health/health.dart';
 
 import '../../domain/model/health_metrices_model.dart';
@@ -17,7 +19,8 @@ class FitnessConnectApi extends FitnessConnectRepository {
 
   @override
   Future<bool> connect() async {
-    return await health.requestAuthorization(healthTypes);
+    bool res = await health.requestAuthorization(healthTypes);
+    return res;
   }
 
   @override
@@ -36,7 +39,7 @@ class FitnessConnectApi extends FitnessConnectRepository {
   @override
   Future<List<HealthMetricesModel>> fetchData() async {
     List<HealthDataPoint> healthData = await health.getHealthDataFromTypes(
-      DateTime.now().subtract(const Duration(days: 1)),
+      DateTime.now().subtract(const Duration(days: 8)),
       DateTime.now(),
       healthTypes,
     );
@@ -60,7 +63,7 @@ class FitnessConnectApi extends FitnessConnectRepository {
           if(healthPoint.dateFrom.isBefore(DateTime.now().subtract(const Duration(hours: 1)))){
             continue;
           }
-          sum += healthPoint.value as double;
+          sum += double.parse(healthPoint.value.toString());
         }
         healthMetrices.add(
           HealthMetricesModel(

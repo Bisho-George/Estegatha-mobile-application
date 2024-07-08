@@ -20,7 +20,4 @@ class FitnessConnectCubit extends Cubit<FitnessConnectState> {
     }
     loading = false;
   }
-  void startForgroundService() async {
-
-  }
 }
