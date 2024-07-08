@@ -16,7 +16,7 @@ class MapViewModel {
       isLocationInitialized = true; // Set the flag to true after location is initialized
       updateMap();
     } catch (e) {
-      // Handle location service or permission exceptions
+      print(e);
     }
   }
 

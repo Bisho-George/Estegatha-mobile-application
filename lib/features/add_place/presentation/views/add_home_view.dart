@@ -1,4 +1,5 @@
 
+import 'package:estegatha/features/add_place/presentation/views/add_place_view.dart';
 import 'package:estegatha/features/add_place/presentation/views/widgets/custom_google_maps.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -32,7 +33,10 @@ class AddHomeView extends StatelessWidget {
           },
         ),
         actions: [
-          TextButton(onPressed: () {}, child: const Text('Save')),
+          TextButton(onPressed: () {
+
+            Navigator.pushNamed(context, AddPlaceView.routeName);
+          }, child: const Text('Save')),
         ],
       ),
       body: Column(
