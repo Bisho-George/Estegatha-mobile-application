@@ -1,7 +1,9 @@
 
 import 'dart:async';
 
+import 'package:estegatha/features/organization/domain/models/member.dart';
 import 'package:estegatha/features/sos/domain/repositories/organizations_repo.dart';
+import 'package:estegatha/utils/helpers/helper_functions.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -15,12 +17,14 @@ class HomeCubit extends Cubit<HomeState> {
     _determinePosition();
   }
   final OrganizationsRepo organizationsRepo;
-
+  String name = 'Bishoy';
   GoogleMapController? googleMapController;
 
   Future<void> _loadCustomMarkers() async {
-    BitmapDescriptor? customMarker = await createCustomMarker('B', size: 150.0);
-    BitmapDescriptor? scaledMarker = await createCustomMarker('B', size: 180.0);
+    Member user = await HelperFunctions.getUser();
+    name = user.username;
+    BitmapDescriptor? customMarker = await createCustomMarker(name[0].toUpperCase(), size: 150.0);
+    BitmapDescriptor? scaledMarker = await createCustomMarker(name[0].toUpperCase(), size: 180.0);
     emit(state.copyWith(customMarker: customMarker, scaledMarker: scaledMarker));
   }
 

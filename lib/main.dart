@@ -82,7 +82,7 @@ class _MyAppState extends State<MyApp> {
               debugShowCheckedModeBanner: false,
               title: 'Estegatha',
               // home: SignInPage(),
-              home: PersonalInfoView(),
+              home: home.value,
               routes: routes,
             ),
           ),
