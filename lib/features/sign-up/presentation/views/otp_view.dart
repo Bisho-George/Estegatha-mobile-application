@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:estegatha/features/sign-in/presentation/pages/sign_in_page.dart';
+import 'package:estegatha/features/sign-in/presentation/veiw_models/login_cubit/login_cubit.dart';
 import 'package:estegatha/features/sign-up/data/data_source/resend_otp_data_source.dart';
 import 'package:estegatha/features/sign-up/data/repos/resend_otp_repo_imp.dart';
 import 'package:estegatha/features/sign-up/data/repos/verify_otp_repo_imp.dart';
@@ -8,6 +10,7 @@ import 'package:estegatha/features/sign-up/presentation/view_models/verify_email
 import 'package:estegatha/features/sign-up/presentation/views/widgets/otp_fields.dart';
 import 'package:estegatha/features/sign-up/presentation/views/widgets/progress_indicator.dart';
 import 'package:estegatha/features/sign-up/presentation/views/widgets/sign_up_header.dart';
+import 'package:estegatha/main_menu.dart';
 import 'package:estegatha/responsive/size_config.dart';
 import 'package:estegatha/utils/common/widgets/custom_elevated_button.dart';
 import 'package:estegatha/utils/constant/colors.dart';
@@ -28,8 +31,6 @@ class OtpView extends StatefulWidget {
 
   static const String routeName = 'sign-up/otp';
 
-  final SignUpViewModel signUpViewModel = SignUpViewModel();
-
   @override
   _OtpViewState createState() => _OtpViewState();
 }
@@ -37,13 +38,12 @@ class OtpView extends StatefulWidget {
 class _OtpViewState extends State<OtpView> {
   int _timeRemaining = 0;
   TimerManager _timerManager = TimerManager();
-  late OtpViewModel _otpViewModel;
   bool _isResendButtonDisabled = false;
+  OtpViewModel _otpViewModel = OtpViewModel(SignUpViewModel());
 
   @override
   void initState() {
     super.initState();
-    _otpViewModel = OtpViewModel(widget.signUpViewModel);
     _startTimer(120);
   }
 
@@ -51,7 +51,7 @@ class _OtpViewState extends State<OtpView> {
     setState(() {
       _isResendButtonDisabled = true;
     });
-    _timerManager.startTimer(3, (remainingTime) {
+    _timerManager.startTimer(120, (remainingTime) {
       setState(() {
         _timeRemaining = remainingTime;
       });
@@ -64,7 +64,7 @@ class _OtpViewState extends State<OtpView> {
   }
 
   void _resetTimer() {
-    _timerManager.resetTimer(3, (remainingTime) {
+    _timerManager.resetTimer(120, (remainingTime) {
       setState(() {
         _timeRemaining = remainingTime;
       });
@@ -117,14 +117,14 @@ class _OtpViewState extends State<OtpView> {
                 ),
                 const SizedBox(height: ConstantSizes.spaceBtwItems),
                 Form(
-                  key: widget.signUpViewModel.otpFormKey,
+                  key: _otpViewModel.signUpViewModel.otpFormKey,
                   child: Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: responsiveWidth(ConstantSizes.defaultSpace),
                     ),
                     child: Column(
                       children: [
-                        OtpFields(signUpViewModel: widget.signUpViewModel),
+                        OtpFields(signUpViewModel: _otpViewModel.signUpViewModel),
                         const SizedBox(height: ConstantSizes.spaceBtwItems),
                         Text(
                           _timeRemaining > 0
@@ -169,8 +169,7 @@ class _OtpViewState extends State<OtpView> {
                           builder: (context) {
                             return CustomElevatedButton(
                               onPressed: () {
-                                if (widget
-                                    .signUpViewModel.otpFormKey.currentState!
+                                if (_otpViewModel.signUpViewModel.otpFormKey.currentState!
                                     .validate()) {
                                   String otp = _otpViewModel.getOtp();
                                   BlocProvider.of<VerifyEmailCubit>(context)
@@ -178,8 +177,7 @@ class _OtpViewState extends State<OtpView> {
                                   BlocProvider.of<VerifyEmailCubit>(context)
                                       .verifyEmail();
                                   // Handle OTP submission
-                                  Navigator.pushNamed(
-                                      context, LandingIntro.routeName);
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => SignInPage()));
                                 }
                               },
                               labelText: "Next",

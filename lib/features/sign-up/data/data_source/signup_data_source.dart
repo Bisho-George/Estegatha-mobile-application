@@ -21,7 +21,8 @@ class SignupDataSourceImp extends SignupDataSource {
       'address': signupRequestBody.address,
       'lat': signupRequestBody.lat,
       'lng': signupRequestBody.lng,
-    }, isSignup: false);
+    }
+    , isSignup: false);
     return SignupResponse(status: result.statusCode);
   }
 }

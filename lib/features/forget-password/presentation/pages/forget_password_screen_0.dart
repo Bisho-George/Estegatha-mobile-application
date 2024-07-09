@@ -106,7 +106,6 @@ class ForgetPasswordScreen_0 extends StatelessWidget {
                               ConstantSizes.defaultSpace),
                         ),
                         ProgressIndicatorBar(
-                          stepTitle: "Enter your email address",
                           percentage: 0.25,
                           step: "Step 1",
                         ),

@@ -94,7 +94,6 @@ class ForgetPasswordScreen_1 extends StatelessWidget {
                               ConstantSizes.defaultSpace),
                         ),
                         ProgressIndicatorBar(
-                          stepTitle: "Enter your New Password",
                           percentage: 0.5,
                           step: "Step 2",
                         ),

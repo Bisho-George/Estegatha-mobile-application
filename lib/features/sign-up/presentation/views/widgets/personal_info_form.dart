@@ -16,9 +16,14 @@ import '../../../../../utils/helpers/validation.dart';
 import '../../view_models/date_picker_view_model.dart';
 import '../../view_models/sign_up_view_model.dart';
 
-class PersonalInfoForm extends StatelessWidget {
+class PersonalInfoForm extends StatefulWidget {
   PersonalInfoForm({super.key});
 
+  @override
+  State<PersonalInfoForm> createState() => _PersonalInfoFormState();
+}
+
+class _PersonalInfoFormState extends State<PersonalInfoForm> {
   SignUpViewModel signUpViewModel = SignUpViewModel();
 
   DatePickerViewModel datepickerVM = DatePickerViewModel();

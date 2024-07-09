@@ -4,7 +4,7 @@ import 'package:estegatha/utils/common/widgets/custom_text_field.dart';
 import 'package:estegatha/utils/helpers/validation.dart';
 import 'package:flutter/material.dart';
 
-class BirthdayField extends StatelessWidget {
+class BirthdayField extends StatefulWidget {
   const BirthdayField({
     super.key,
     required this.data,
@@ -13,6 +13,11 @@ class BirthdayField extends StatelessWidget {
   final SignUpViewModel data;
 
   @override
+  State<BirthdayField> createState() => _BirthdayFieldState();
+}
+
+class _BirthdayFieldState extends State<BirthdayField> {
+  @override
   Widget build(BuildContext context) {
     return CustomTextField(
       labelText: "Birthday",
@@ -20,17 +25,17 @@ class BirthdayField extends StatelessWidget {
       validator: (value) => Validation.validateBirthdate(value),
       hintText: "DD/MM/YYYY",
       onPressed: () {
-        data.selectDate(context);
+        widget.data.selectDate(context);
       },
       suffixIcon: IconButton(
         icon: const Icon(Icons.date_range),
         onPressed: () {
           // Show date picker
-          data.selectDate(context);
+          widget.data.selectDate(context);
         },
       ),
       // Use the initialized birthday controller
-      controller: data.birthdayController,
+      controller: widget.data.birthdayController,
     );
   }
 }

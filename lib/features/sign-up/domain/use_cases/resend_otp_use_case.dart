@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:estegatha/utils/helpers/use_case.dart';
+import 'package:estegatha/features/sign-up/domain/use_cases/use_case.dart';
 
 import '../../data/failure/failure.dart';
 import '../../data/models/resend_otp_request.dart';

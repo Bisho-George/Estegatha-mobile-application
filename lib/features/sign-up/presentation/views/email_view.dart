@@ -11,12 +11,17 @@ import '../../../../utils/constant/sizes.dart';
 import '../../../../utils/helpers/validation.dart';
 import '../view_models/sign_up_cubit.dart';
 
-class EmailView extends StatelessWidget {
+class EmailView extends StatefulWidget {
   EmailView({super.key});
 
-  SignUpViewModel signUpViewModel = SignUpViewModel();
-
   static const String routeName = 'sign-up/email';
+
+  @override
+  State<EmailView> createState() => _EmailViewState();
+}
+
+class _EmailViewState extends State<EmailView> {
+  SignUpViewModel signUpViewModel = SignUpViewModel();
 
   @override
   Widget build(BuildContext context) {

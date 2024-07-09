@@ -4,6 +4,7 @@ import 'package:estegatha/core/work_manager/work_manager.dart';
 import 'package:estegatha/features/home/presentation/views/home_view.dart';
 import 'package:estegatha/features/organization/domain/models/member.dart';
 import 'package:estegatha/features/sign-in/presentation/pages/sign_in_page.dart';
+import 'package:estegatha/features/sign-up/presentation/views/personal_info_view.dart';
 import 'package:estegatha/providers.dart';
 import 'package:estegatha/responsive/size_config.dart';
 import 'package:estegatha/utils/helpers/helper_functions.dart';
@@ -81,7 +82,7 @@ class _MyAppState extends State<MyApp> {
               debugShowCheckedModeBanner: false,
               title: 'Estegatha',
               // home: SignInPage(),
-              home: home.value,
+              home: PersonalInfoView(),
               routes: routes,
             ),
           ),

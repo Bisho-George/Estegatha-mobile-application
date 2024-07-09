@@ -1,7 +1,7 @@
 import 'package:estegatha/features/sign-up/presentation/view_models/sign_up_view_model.dart';
 
 class OtpViewModel {
-  final SignUpViewModel signUpViewModel;
+  SignUpViewModel signUpViewModel;
 
   OtpViewModel(this.signUpViewModel);
 
