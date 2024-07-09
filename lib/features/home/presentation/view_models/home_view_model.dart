@@ -1,4 +1,6 @@
 
+import 'dart:async';
+
 import 'package:estegatha/features/sos/domain/repositories/organizations_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
@@ -22,6 +24,10 @@ class HomeCubit extends Cubit<HomeState> {
     emit(state.copyWith(customMarker: customMarker, scaledMarker: scaledMarker));
   }
 
+  // StreamSubscription<ServiceStatus> serviceStatusStream = Geolocator.getServiceStatusStream().listen(
+  //         (ServiceStatus status) {
+  //       print(status);
+  //     });
   Future<void> _determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
