@@ -24,7 +24,6 @@ callbackDispatcher() {
           var data = await repository.fetchData();
           await sendFitnessDataApi.sendFitnessData(data);
           if(!isFineHealth(data)){
-            NotificationService().showNotification('track health', 'track your health');
             SosApi().sendSos(type: 'INIT_HEALTH_ISSUE');
             CancelSosApi().sendFeedback('medical');
           }

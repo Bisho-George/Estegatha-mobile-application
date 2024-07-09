@@ -40,7 +40,6 @@ class _HealthTrackerDataPageState extends State<HealthTrackerDataPage> {
             icon: const Icon(Icons.switch_account),
             onPressed: () async {
               BlocProvider.of<FitnessDataCubit>(context).changeAccount();
-              SchedualWork().schedualFitnessWork();
             },
             color: ConstantColors.primary,
           ),
