@@ -1,15 +1,20 @@
+import 'package:estegatha/features/add_place/presentation/views/add_new_boundary.dart';
+import 'package:estegatha/features/home/api/role_api.dart';
+import 'package:estegatha/features/home/presentation/view_models/current_oragnization_cubit/current_organization_cubit.dart';
 import 'package:estegatha/features/home/presentation/views/widgets/organization_option.dart';
 import 'package:estegatha/utils/constant/colors.dart';
 import 'package:estegatha/utils/constant/image_strings.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DraggableScrollSheetOptions extends StatelessWidget {
   const DraggableScrollSheetOptions({
     super.key,
     required GlobalKey<State<StatefulWidget>> keySection2,
     required GlobalKey<State<StatefulWidget>> keySection3,
-  }) : _keySection2 = keySection2, _keySection3 = keySection3;
+  })  : _keySection2 = keySection2,
+        _keySection3 = keySection3;
 
   final GlobalKey<State<StatefulWidget>> _keySection2;
   final GlobalKey<State<StatefulWidget>> _keySection3;
@@ -41,7 +46,7 @@ class DraggableScrollSheetOptions extends StatelessWidget {
         const SizedBox(height: ConstantSizes.spaceBtwItems),
         Text(
           key: _keySection3,
-          "Places",
+          "Boundaries",
           style: const TextStyle(
             color: ConstantColors.black,
             fontSize: ConstantSizes.fontSizeMd,
@@ -49,13 +54,30 @@ class DraggableScrollSheetOptions extends StatelessWidget {
           ),
         ),
         const SizedBox(height: ConstantSizes.spaceBtwItems),
-        const OrganizationOption(
-          optionName: 'Manage places',
-          iconPath: ConstantImages.buildingIcon,
+        GestureDetector(
+          onTap: () async {
+            int? orgId = BlocProvider.of<CurrentOrganizationCubit>(context)
+                .currentOrganization!
+                .id;
+            String? role = await RoleApi().getRole(orgId!);
+            if (role == "admin") {
+              Navigator.pushNamed(context, AddNewBoundary.routeName);
+            }
+            else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('You are not allowed to add boundaries'),
+                ),
+              );
+
+            }
+          },
+          child: const OrganizationOption(
+            optionName: 'Manage boundaries',
+            iconPath: ConstantImages.buildingIcon,
+          ),
         ),
       ],
     );
   }
 }
-
-

@@ -73,4 +73,8 @@ class ConstantImages {
   static const String healthTrackerImage3 = "assets/health_tracker_image3.jpg";
   static const String healthTrackerCharacter = 'assets/character_track.svg';
 
+  // add place view
+  static const String addPlaceHomeIcon = "assets/add_place_home_icon.svg";
+  static const String customAddPlaceMarker = "assets/custom_add_place_marker.png";
+
 }

@@ -1,19 +1,14 @@
-import 'package:estegatha/features/organization/presentation/view_model/user_organizations_cubit.dart';
+import 'package:estegatha/features/organization/presentation/view/create/create_organization_page.dart';
+import 'package:estegatha/features/organization/presentation/view/join/join_organization_page.dart';
 import 'package:estegatha/responsive/size_config.dart';
-import 'package:estegatha/utils/common/widgets/custom_elevated_button.dart';
 import 'package:estegatha/utils/constant/colors.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
-
-import '../../../../../utils/constant/image_strings.dart';
 import '../../../../../utils/constant/sizes.dart';
 import '../../view_models/home_state.dart';
 import '../../view_models/home_view_model.dart';
 import 'animated_organization_header.dart';
-import 'organization_list_view.dart';
 import 'organizations_bloc_builder.dart';
 
 class AnimatedOrganizationsWidget extends StatefulWidget {
@@ -122,7 +117,9 @@ class _AnimatedOrganizationsWidgetState
                           child: SizedBox(
                             height: 45,
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.pushNamed(context, CreateOrganizationPage.id);
+                              },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: ConstantColors.primary,
                                 shape: RoundedRectangleBorder(
@@ -150,7 +147,9 @@ class _AnimatedOrganizationsWidgetState
                           child: SizedBox(
                             height: 45,
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                // Navigator.pushNamed(context, JoinOrganizationPage.);
+                              },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: ConstantColors.primary,
                                 shape: RoundedRectangleBorder(
@@ -159,7 +158,7 @@ class _AnimatedOrganizationsWidgetState
                                 ),
                               ),
                               child: const Text(
-                                "Create",
+                                "join",
                                 style: TextStyle(
                                     color: ConstantColors.white, fontSize: 16),
                               ),
