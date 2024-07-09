@@ -7,6 +7,9 @@ import 'package:estegatha/utils/constant/image_strings.dart';
 import 'package:estegatha/utils/constant/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toastification/toastification.dart';
+
+import '../../../../../utils/helpers/helper_functions.dart';
 
 class DraggableScrollSheetOptions extends StatelessWidget {
   const DraggableScrollSheetOptions({
@@ -56,18 +59,28 @@ class DraggableScrollSheetOptions extends StatelessWidget {
         const SizedBox(height: ConstantSizes.spaceBtwItems),
         GestureDetector(
           onTap: () async {
-            int? orgId = BlocProvider.of<CurrentOrganizationCubit>(context)
+/*            int? orgId = BlocProvider.of<CurrentOrganizationCubit>(context)
                 .currentOrganization!
                 .id;
-            String? role = await RoleApi().getRole(orgId!);
-            if (role == "admin") {
+            String? role = await RoleApi().getRole(orgId!);*/
+            if (true) {
               Navigator.pushNamed(context, AddNewBoundary.routeName);
             }
             else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('You are not allowed to add boundaries'),
+              HelperFunctions.showCustomToast(
+                context: context,
+                title: const Text(
+                  'Post created successfully',
+                  style: TextStyle(color: ConstantColors.primary),
                 ),
+                type: ToastificationType.success,
+                position: Alignment.bottomCenter,
+                duration: 3,
+                icon: const Icon(
+                  Icons.check_circle_outline_rounded,
+                  color: ConstantColors.primary,
+                ),
+                backgroundColor: ConstantColors.secondary,
               );
 
             }

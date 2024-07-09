@@ -1,6 +1,8 @@
+import 'package:estegatha/features/home/presentation/views/home_view.dart';
 import 'package:estegatha/features/sos/presentation/view_models/cubit/cancel_sos_cubit.dart';
 import 'package:estegatha/features/sos/presentation/view_models/cubit/cancel_sos_state.dart';
 import 'package:estegatha/features/sos/presentation/widgets/pin_input.dart';
+import 'package:estegatha/main_menu.dart';
 import 'package:estegatha/utils/common/widgets/custom_app_bar.dart';
 import 'package:estegatha/utils/common/widgets/custom_elevated_button.dart';
 import 'package:estegatha/utils/common/widgets/loading_widget.dart';
@@ -90,7 +92,7 @@ class CancelSosPin extends StatelessWidget {
                           }
                           BlocProvider.of<CancelSosCubit>(context)
                               .sendFeedback(controller.text);
-                          Navigator.popUntil(context, (route) => route.isFirst);
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainNavMenu()));
                         },
                         labelText: 'Send',
                       ),
