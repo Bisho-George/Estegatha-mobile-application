@@ -62,7 +62,7 @@ class HeartRateWidget extends StatelessWidget {
                   Positioned(
                     bottom: responsiveHeight(30),
                     child: Text(
-                      quality != -1 ? '$quality' : 'N/A',
+                      quality != -1 ? '${quality.toStringAsFixed(2)}' : 'N/A',
                       style: Styles.getPrimaryMedium(),
                     ),
                   ),

@@ -21,8 +21,7 @@ class SosApi extends SosRepo {
   }
 
   @override
-  Future<int> sendSos() async {
-    await Permissions().grantPermissions();
+  Future<int> sendSos({String type = 'INIT_SOS'}) async {
     var location = await Geolocator.getCurrentPosition();
     Member member = await HelperFunctions.getUser();
     int success = 0;
@@ -30,7 +29,7 @@ class SosApi extends SosRepo {
     Response response = await dio.post(baseUrl + sosEndPoint, data: {
       subjectKey: 'Emergency',
       contentKey: 'your friend ${member.username} needs help',
-      "type": "INIT_SOS",
+      "type": type,
       'data': {
         'userId': member.id.toString(),
         'latitude': location.latitude.toString(),

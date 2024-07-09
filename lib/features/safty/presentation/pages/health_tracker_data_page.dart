@@ -1,3 +1,4 @@
+import 'package:estegatha/core/work_manager/work_manager.dart';
 import 'package:estegatha/features/safety/presentation/view_model/user_health_cubit.dart';
 import 'package:estegatha/features/safty/data/api/fitness_connect_api.dart';
 import 'package:estegatha/features/safty/domain/model/health_metrices_model.dart';
@@ -39,6 +40,7 @@ class _HealthTrackerDataPageState extends State<HealthTrackerDataPage> {
             icon: const Icon(Icons.switch_account),
             onPressed: () async {
               BlocProvider.of<FitnessDataCubit>(context).changeAccount();
+              SchedualWork().schedualFitnessWork();
             },
             color: ConstantColors.primary,
           ),
@@ -46,6 +48,7 @@ class _HealthTrackerDataPageState extends State<HealthTrackerDataPage> {
             icon: const Icon(Icons.sync),
             onPressed: () {
               BlocProvider.of<FitnessDataCubit>(context).fetchData();
+              SchedualWork().schedualFitnessWork();
             },
             color: ConstantColors.primary,
           ),

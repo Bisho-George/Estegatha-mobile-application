@@ -29,6 +29,11 @@ handleMessages(RemoteMessage message, String appState) async{
       }
       break;
     case MessageTypes.CANCEL_HEALTH_ISSUE:
+      String userId = message.data['userId'];
+      Member user = await HelperFunctions.getUser();
+      if (user.id.toString() == userId) {
+        GetStorage().write('status', 'safe');
+      }
       break;
     case MessageTypes.CHANGE_ROLE:
       break;
@@ -37,6 +42,11 @@ handleMessages(RemoteMessage message, String appState) async{
     case MessageTypes.CREATE_POST:
       break;
     case MessageTypes.INIT_HEALTH_ISSUE:
+      String userId = message.data['userId'];
+      Member user = await HelperFunctions.getUser();
+      if (user.id.toString() == userId) {
+        GetStorage().write('status', 'unsafe');
+      }
       break;
     case MessageTypes.JOIN_BOUNDARY:
       break;

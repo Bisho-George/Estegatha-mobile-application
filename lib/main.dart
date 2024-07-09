@@ -1,5 +1,6 @@
 import 'package:estegatha/core/firebase/cloud_messaging.dart';
 import 'package:estegatha/core/firebase/fcm_setup.dart';
+import 'package:estegatha/core/work_manager/work_manager.dart';
 import 'package:estegatha/features/home/presentation/views/home_view.dart';
 
 import 'package:estegatha/features/sign-in/presentation/pages/sign_in_page.dart';
@@ -54,6 +55,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     checkUserLoggedIn(home, context);
     subscribeToMessages();
+    initWorkManager();
   }
 
   @override

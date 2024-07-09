@@ -8,7 +8,7 @@ import '../../domain/model/health_metrices_model.dart';
 
 class SendFitnessDataApi extends SendFitnessRepo{
   @override
-  void sendFitnessData(List<HealthMetricesModel> healthMetrices) async{
+  Future<void> sendFitnessData(List<HealthMetricesModel> healthMetrices) async{
     Dio dio = await DioAuth.getDio();
     dio.post('$baseUrl$sendFitnessEndPoint', data: {
       'bodyTemperature': getHealthMetricesValue(HealthDataType.BODY_TEMPERATURE, healthMetrices)!,

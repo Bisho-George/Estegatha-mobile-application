@@ -1,6 +1,4 @@
-import 'package:estegatha/core/work_manager/work_manager.dart';
 import 'package:estegatha/features/landing/domain/models/permissions.dart';
-import 'package:estegatha/features/safty/data/api/send_fitness_api.dart';
 import 'package:health/health.dart';
 
 import '../../domain/model/health_metrices_model.dart';
@@ -19,8 +17,7 @@ class FitnessConnectApi extends FitnessConnectRepository {
 
   @override
   Future<bool> connect() async {
-    bool res = await health.requestAuthorization(healthTypes);
-    return res;
+    return await health.requestAuthorization(healthTypes);
   }
 
   @override
