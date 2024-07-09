@@ -1,19 +1,14 @@
-import 'package:estegatha/features/organization/presentation/view_model/user_organizations_cubit.dart';
+import 'package:estegatha/features/organization/presentation/view/create/create_organization_page.dart';
+import 'package:estegatha/features/organization/presentation/view/join/join_organization_page.dart';
 import 'package:estegatha/responsive/size_config.dart';
-import 'package:estegatha/utils/common/widgets/custom_elevated_button.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:estegatha/utils/constant/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
-
-import '../../../../../utils/constant/colors.dart';
-import '../../../../../utils/constant/image_strings.dart';
 import '../../../../../utils/constant/sizes.dart';
 import '../../view_models/home_state.dart';
 import '../../view_models/home_view_model.dart';
 import 'animated_organization_header.dart';
-import 'organization_list_view.dart';
 import 'organizations_bloc_builder.dart';
 
 class AnimatedOrganizationsWidget extends StatefulWidget {
@@ -59,6 +54,11 @@ class _AnimatedOrganizationsWidgetState
     _animationController.dispose();
   }
 
+  Future<bool> _onWillPop() async {
+    await _animationController.reverse();
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -67,10 +67,7 @@ class _AnimatedOrganizationsWidgetState
         return SlideTransition(
           position: _animation,
           child: Container(
-              height: MediaQuery
-                  .of(context)
-                  .size
-                  .height / 3.2,
+              height: MediaQuery.of(context).size.height / 2.5,
               decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
@@ -85,26 +82,23 @@ class _AnimatedOrganizationsWidgetState
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(
-                        right: ConstantSizes.defaultSpace),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: ConstantSizes.defaultSpace),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
                       children: [
-                        BlocBuilder<HomeCubit, HomeState>(
-                          builder: (context, state) {
-                            return AnimatedOrganizationHeader(isExpanded: state.organizationsVisible);
-                          },
-                        ),
-                        const SizedBox(width: ConstantSizes.defaultSpace + 10),
-                        IconButton(
-                          icon: SvgPicture.asset(ConstantImages.addPersonIcon),
-                          onPressed: () {},
                         Expanded(
                           flex: 2,
                           child: AnimatedOrganizationHeader(
                             isExpanded: state.organizationsVisible,
                           ),
                         ),
+                        // const SizedBox(width: ConstantSizes.defaultSpace + 10),
+                        // IconButton(
+                        //   icon: SvgPicture.asset(ConstantImages.addPersonIcon),
+                        //   onPressed: () {},
+                        // ),
                       ],
                     ),
                   ),
@@ -115,15 +109,35 @@ class _AnimatedOrganizationsWidgetState
                   Padding(
                     padding: EdgeInsets.symmetric(
                         horizontal:
-                        responsiveWidth(ConstantSizes.spaceBtwItems)),
+                            responsiveWidth(ConstantSizes.spaceBtwItems)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Expanded(
-                          child: CustomElevatedButton(
-                              onPressed: () {}, labelText: "Join Organization"),
+                          child: SizedBox(
+                            height: 45,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.pushNamed(context, CreateOrganizationPage.id);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: ConstantColors.primary,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      ConstantSizes.buttonRadius * 5),
+                                ),
+                              ),
+                              child: const Text(
+                                "Create",
+                                style: TextStyle(
+                                    color: ConstantColors.white, fontSize: 16),
+                              ),
+                            ),
+                          ),
                         ),
-                         SizedBox(width: responsiveWidth(ConstantSizes.spaceBtwItems)),
+                        SizedBox(
+                            width:
+                                responsiveWidth(ConstantSizes.spaceBtwItems)),
                         Expanded(
                           // child: CustomElevatedButton(
                           //   onPressed: () {},
@@ -133,7 +147,9 @@ class _AnimatedOrganizationsWidgetState
                           child: SizedBox(
                             height: 45,
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                // Navigator.pushNamed(context, JoinOrganizationPage.);
+                              },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: ConstantColors.primary,
                                 shape: RoundedRectangleBorder(
@@ -141,8 +157,8 @@ class _AnimatedOrganizationsWidgetState
                                       ConstantSizes.buttonRadius * 5),
                                 ),
                               ),
-                              child:  Text(
-                                "Create",
+                              child: const Text(
+                                "join",
                                 style: TextStyle(
                                     color: ConstantColors.white, fontSize: 16),
                               ),
@@ -159,4 +175,3 @@ class _AnimatedOrganizationsWidgetState
     );
   }
 }
-

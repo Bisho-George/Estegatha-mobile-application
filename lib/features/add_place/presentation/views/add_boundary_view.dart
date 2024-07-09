@@ -1,15 +1,14 @@
-
 import 'package:estegatha/features/add_place/domain/entities/organization_boundary_entity.dart';
 import 'package:estegatha/features/add_place/presentation/view_models/boundary_cubit.dart';
 import 'package:estegatha/features/add_place/presentation/views/widgets/custom_google_maps.dart';
 import 'package:estegatha/features/home/presentation/views/home_view.dart';
-import 'package:estegatha/features/organization/presentation/view_model/current_organization_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../../responsive/size_config.dart';
 import '../../../../utils/constant/colors.dart';
 import '../../../../utils/constant/sizes.dart';
+import '../../../home/presentation/view_models/current_oragnization_cubit/current_organization_cubit.dart';
 
 class AddBoundaryView extends StatelessWidget {
   static const String routeName = '/add_boundary';
@@ -36,12 +35,12 @@ class AddBoundaryView extends StatelessWidget {
         ),
         actions: [
           TextButton(onPressed: () {
-            num organizationId = BlocProvider.of<CurrentOrganizationCubit>(context).currentOrganization.id;
+            int? organizationId = BlocProvider.of<CurrentOrganizationCubit>(context).currentOrganization!.id;
             String name = BlocProvider.of<BoundaryCubit>(context).name;
             double lat = BlocProvider.of<BoundaryCubit>(context).lat;
             double lang = BlocProvider.of<BoundaryCubit>(context).lang;
             double radius = BlocProvider.of<BoundaryCubit>(context).radius;
-            BlocProvider.of<BoundaryCubit>(context).addBoundary(organizationId, OrganizationBoundaryEntity(name: name, lat: lat, lang: lang, radius: radius));
+            BlocProvider.of<BoundaryCubit>(context).addBoundary(organizationId as num, OrganizationBoundaryEntity(name: name, lat: lat, lang: lang, radius: radius));
             Navigator.pushNamed(context, HomeView.routeName);
           }, child: const Text('Save')),
         ],

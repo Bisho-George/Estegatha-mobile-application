@@ -25,23 +25,23 @@ class CustomHomeAppBar extends StatelessWidget {
     final Organization? currentOrganization =
         context.read<CurrentOrganizationCubit>().currentOrganization;
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      Container(
-        decoration: BoxDecoration(
-          color: ConstantColors.white,
-          borderRadius: BorderRadius.circular(50),
-        ),
-        child: IconButton(
-          icon: SvgPicture.asset(ConstantImages.settingsAppbarIcon),
-          onPressed: () {
-            PersistentNavBarNavigator.pushNewScreen(context,
-                screen: OrganizationSettingsScreen(
-                    organizationId: currentOrganization!.id!),
-                withNavBar: true,
-                pageTransitionAnimation: PageTransitionAnimation.scale);
-          },
-        ),
-      ),
-      SizedBox(width: getProportionateScreenWidth(ConstantSizes.md)),
+      // Container(
+      //   decoration: BoxDecoration(
+      //     color: ConstantColors.white,
+      //     borderRadius: BorderRadius.circular(50),
+      //   ),
+      //   child: IconButton(
+      //     icon: SvgPicture.asset(ConstantImages.settingsAppbarIcon),
+      //     onPressed: () {
+      //       PersistentNavBarNavigator.pushNewScreen(context,
+      //           screen: OrganizationSettingsScreen(
+      //               organizationId: currentOrganization!.id!),
+      //           withNavBar: true,
+      //           pageTransitionAnimation: PageTransitionAnimation.scale);
+      //     },
+      //   ),
+      // ),
+      // SizedBox(width: getProportionateScreenWidth(ConstantSizes.md)),
       Expanded(
         flex: 2,
         child: AnimatedOrganizationHeader(
