@@ -58,15 +58,15 @@ class DraggableScrollSheetOptions extends StatelessWidget {
         ),
         const SizedBox(height: ConstantSizes.spaceBtwItems),
         GestureDetector(
-          onTap: () async {
+          onTap: () {
 /*            int? orgId = BlocProvider.of<CurrentOrganizationCubit>(context)
                 .currentOrganization!
                 .id;
             String? role = await RoleApi().getRole(orgId!);*/
-            if (true) {
-              Navigator.pushNamed(context, AddNewBoundary.routeName);
-            }
-            else {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return AddNewBoundary();
+              }));
+            /*else {
               HelperFunctions.showCustomToast(
                 context: context,
                 title: const Text(
@@ -83,7 +83,7 @@ class DraggableScrollSheetOptions extends StatelessWidget {
                 backgroundColor: ConstantColors.secondary,
               );
 
-            }
+            }*/
           },
           child: const OrganizationOption(
             optionName: 'Manage boundaries',

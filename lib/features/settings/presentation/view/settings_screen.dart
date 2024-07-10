@@ -17,7 +17,7 @@ import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
-  void logoutHandler(BuildContext context) async {
+  void logoutHandler(BuildContext context) {
     BlocProvider.of<UserCubit>(context).logout(context);
   }
 

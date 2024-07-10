@@ -9,6 +9,7 @@ import 'package:estegatha/features/add_place/presentation/views/widgets/place_op
 import 'package:estegatha/responsive/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -19,18 +20,12 @@ import '../../../../utils/services/api_service.dart';
 class AddNewBoundary extends StatelessWidget {
   static const String routeName = '/add_new_boundary';
 
-  const AddNewBoundary({super.key});
-
+  AddNewBoundary({super.key, this.parentContext});
+  BuildContext ?parentContext;
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return BlocProvider(
-      create: (context) =>
-          BoundaryCubit(AddBoundaryUseCase(
-              BoundaryRepoImp(BoundaryRemoteDataSource(ApiService(Dio())))),
-              GetBoundariesUseCase(BoundaryRepoImp(
-                  BoundaryRemoteDataSource(ApiService(Dio()))))),
-      child: Scaffold(
+    return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: const Text('Add a new boundary',
@@ -87,7 +82,9 @@ class AddNewBoundary extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, AddBoundaryView.routeName);
+                  Navigator.push(parentContext ?? context, MaterialPageRoute(builder: (context) {
+                    return AddBoundaryView();
+                  }));
                 },
                 child: const PlaceOption(optionText: "Locate on Map",
                     icon: FontAwesomeIcons.mapLocationDot,
@@ -156,7 +153,6 @@ class AddNewBoundary extends StatelessWidget {
               // ))
             ]
         ),
-      ),
-    );
+      );
   }
 }

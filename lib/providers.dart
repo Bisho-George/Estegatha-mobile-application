@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:estegatha/features/add_place/domain/use_cases/add_boundary_use_case.dart';
+import 'package:estegatha/features/add_place/presentation/view_models/boundary_cubit.dart';
 import 'package:estegatha/features/catalog/persentation/view-model/catalog_cubit.dart';
 import 'package:estegatha/features/home/presentation/view_models/organization_member_cubit.dart';
 import 'package:estegatha/features/organization/presentation/view_model/user_organizations_cubit.dart';
@@ -14,6 +16,9 @@ import 'package:estegatha/utils/services/api_service.dart';
 import 'package:flutter_bloc/src/bloc_provider.dart';
 import 'package:provider/single_child_widget.dart';
 
+import 'features/add_place/data/data_source/boundary_remote_data_source.dart';
+import 'features/add_place/data/repos/boundary_repo_imp.dart';
+import 'features/add_place/domain/use_cases/get_boundaries_use_case.dart';
 import 'features/edit_account/presentation/view_models/edit_account_cubit.dart';
 import 'features/edit_account/presentation/view_models/edit_password_cubit.dart';
 import 'features/edit_account/presentation/view_models/edit_phone_cubit.dart';
@@ -116,4 +121,8 @@ List<SingleChildWidget> providers = [
   BlocProvider<TrackCubit>(
     create: (context) => TrackCubit(),
   ),
+  BlocProvider<BoundaryCubit>(create: (context) => BoundaryCubit(AddBoundaryUseCase(
+      BoundaryRepoImp(BoundaryRemoteDataSource(ApiService(Dio())))),
+      GetBoundariesUseCase(BoundaryRepoImp(
+          BoundaryRemoteDataSource(ApiService(Dio())))))),
 ];

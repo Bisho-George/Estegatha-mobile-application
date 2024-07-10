@@ -208,7 +208,7 @@ class _HomePageState extends State<HomePage> {
               width: 300,
               child: CustomElevatedButton(
                 labelText: 'Logout',
-                onPressed: () async {
+                onPressed: () {
                   BlocProvider.of<UserCubit>(context).logout(context);
                 },
               ),

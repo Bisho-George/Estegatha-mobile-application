@@ -5,6 +5,7 @@ import 'package:estegatha/features/home/presentation/views/home_view.dart';
 import 'package:estegatha/features/organization/domain/models/member.dart';
 import 'package:estegatha/features/sign-in/presentation/pages/sign_in_page.dart';
 import 'package:estegatha/features/sign-up/presentation/views/personal_info_view.dart';
+import 'package:estegatha/main_menu.dart';
 import 'package:estegatha/providers.dart';
 import 'package:estegatha/responsive/size_config.dart';
 import 'package:estegatha/utils/helpers/helper_functions.dart';
@@ -57,7 +58,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final ValueNotifier<Widget> home = ValueNotifier<Widget>(HomeView());
+  final ValueNotifier<Widget> home = ValueNotifier<Widget>(MainNavMenu());
   final String initialRoute = HomeView.routeName;
   @override
   void initState() {
